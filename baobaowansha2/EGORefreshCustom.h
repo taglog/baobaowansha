@@ -23,41 +23,75 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
+//  EGORefreshCustom.h
+//  baobaowansha2
+//
+//  Created by 刘昕 on 14/11/18.
+//  Copyright (c) 2014年 刘昕. All rights reserved.
+//
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+//Position of EGORefresh
+typedef enum {
+    EGORefreshHeader = 0,
+    EGORefreshFooter,
+}EGORefreshPosition;
+
+//state of EGORefresh
 typedef enum{
-	EGOOPullRefreshPulling = 0,
-	EGOOPullRefreshNormal,
-	EGOOPullRefreshLoading,	
+    EGOOPullRefreshPulling = 0,
+    EGOOPullRefreshNormal,
+    EGOOPullRefreshLoading,
 } EGOPullRefreshState;
 
-@protocol EGORefreshTableHeaderDelegate;
-@interface EGORefreshTableHeaderView : UIView {
-	
-	id _delegate;
-	EGOPullRefreshState _state;
+@protocol EGORefreshDelegate;
 
-	UILabel *_lastUpdatedLabel;
-	UILabel *_statusLabel;
-	CALayer *_arrowImage;
-	UIActivityIndicatorView *_activityView;
-	
+@interface EGORefreshCustom : UIView
 
-}
+//属性
+@property(nonatomic,assign) EGOPullRefreshState state;
+@property(nonatomic,assign) EGORefreshPosition position;
 
-@property(nonatomic,assign) id <EGORefreshTableHeaderDelegate> delegate;
+//判断是上拉还是下拉
+@property(nonatomic,assign) BOOL pullUp;
+@property(nonatomic,assign) BOOL pullDown;
 
-- (void)refreshLastUpdatedDate;
+
+@property(nonatomic,retain) UITableView *tableView;
+
+@property(nonatomic,strong) UILabel *lastUpdatedLabel;
+
+@property(nonatomic,strong) UILabel *statusLabel;
+
+@property(nonatomic,strong) CALayer *arrowImage;
+
+@property(nonatomic,strong) UIActivityIndicatorView *activityView;
+
+@property(nonatomic,retain)id <EGORefreshDelegate> delegate;
+
+//方法
+- (id)initWithTableView:(UIScrollView *)scrollView position:(EGORefreshPosition)position;
+
 - (void)egoRefreshScrollViewDidScroll:(UIScrollView *)scrollView;
+
 - (void)egoRefreshScrollViewDidEndDragging:(UIScrollView *)scrollView;
+
 - (void)egoRefreshScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView;
 
 @end
-@protocol EGORefreshTableHeaderDelegate
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view;
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view;
+
+//委托的方法
+@protocol EGORefreshDelegate <NSObject>
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshCustom *)view;
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshCustom *)view;
+
 @optional
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view;
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshCustom *)view;
+
 @end
+
+

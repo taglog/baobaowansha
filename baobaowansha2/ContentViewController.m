@@ -7,8 +7,20 @@
 //
 
 #import "ContentViewController.h"
+#import "HomeTableViewCell.h"
+#import "PostViewController.h"
 
 @interface ContentViewController ()
+
+@property (nonatomic,assign)BOOL reloading;
+
+@property (nonatomic,strong)NSMutableArray *homeTableViewCell;
+
+@property (nonatomic,retain)EGORefreshCustom *refreshHeaderView;
+
+@property (nonatomic,retain)EGORefreshCustom *refreshFooterView;
+
+@property (nonatomic,strong)NSArray *addOnCell;
 
 @end
 
@@ -16,7 +28,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    //设置测试的homeTableViewCell
+    NSArray *initArray = @[@{@"image":@"test.jpg",@"title":@"宝宝玩啥",@"introduction":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"age":@"14-24个月",@"collectionNumber":@100,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200}];
+    self.addOnCell = @[@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
+                       ];
+
+    self.homeTableViewCell = [[NSMutableArray alloc] initWithArray:initArray];
+
+    
+    self.view.backgroundColor = [UIColor clearColor];
+    [self initTableView];
+    [self initRefreshView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +57,134 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+//初始化tableView
+-(void)initTableView{
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    
+    if(!_homeTableView){
+        _homeTableView = [[UITableView alloc] init];
+        _homeTableView.frame =CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height - 104);
+        _homeTableView.delegate = self;
+        _homeTableView.dataSource = self;
+    }
+    [self.view addSubview:_homeTableView];
 }
-*/
+
+//初始化下拉刷新header
+-(void)initRefreshView{
+    
+    //初始化headerView
+    _refreshHeaderView = [[EGORefreshCustom alloc] initWithTableView:_homeTableView position:EGORefreshHeader ];
+    _refreshHeaderView.delegate = self;
+    
+    
+    _refreshFooterView = [[EGORefreshCustom alloc] initWithTableView:_homeTableView position:EGORefreshFooter];
+    _refreshFooterView.delegate = self;
+    
+    [_homeTableView addSubview:_refreshHeaderView];
+    _homeTableView.tableFooterView = _refreshFooterView;
+   
+    
+}
+
+#pragma mark - tableView dataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // Return the number of sections.
+    return 1;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    // Return the number of rows in the section.
+    return self.homeTableViewCell.count;
+}
+
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    static  NSString *ID = @"List";
+    
+    //创建cell
+    HomeTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:ID];
+    if(cell == nil){
+        cell = [[HomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+    }
+    [cell initWithDict:self.homeTableViewCell[indexPath.row]];
+    return cell;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return 130;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    PostViewController *post = [[PostViewController alloc] init];
+    
+    [self.navigationController pushViewController:post animated:YES];
+    
+}
+
+
+#pragma mark 下拉数据刷新
+- (void)reloadTableViewDataSource{
+//下拉刷新的数据处理
+    if(_refreshHeaderView.pullDown){
+        
+    }
+//上拉刷新的数据处理
+    if(_refreshFooterView.pullUp){
+        for(NSDictionary *dict in self.addOnCell){
+            [self.homeTableViewCell addObject:dict];
+        }
+    }
+        [_homeTableView reloadData];
+    _reloading = YES;
+    [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:2.0f];
+}
+
+- (void)doneLoadingTableViewData{
+    _reloading = NO;
+    [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_homeTableView];
+    [_refreshFooterView egoRefreshScrollViewDataSourceDidFinishedLoading:_homeTableView];
+    
+   
+}
+
+
+#pragma mark - EGOPullRefreshDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    [_refreshFooterView egoRefreshScrollViewDidScroll:scrollView];
+  
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+    [_refreshFooterView egoRefreshScrollViewDidEndDragging:scrollView];
+
+}
+
+#pragma mark - EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshCustom *)view{
+    [self reloadTableViewDataSource];
+
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshCustom *)view{
+ 
+    return _reloading;
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshCustom *)view{
+    
+    return [NSDate date];
+    
+}
+
+
+
 
 @end

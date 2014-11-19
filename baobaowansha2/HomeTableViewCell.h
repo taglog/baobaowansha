@@ -10,4 +10,8 @@
 
 @interface HomeTableViewCell : UITableViewCell
 
+@property (nonatomic,strong) NSDictionary *homeTableViewCell;
+
+-(void)initWithDict:(NSDictionary *)dict;
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "PostViewController.h"
+#import "PostView.h"
 
 @interface PostViewController ()
 
@@ -17,6 +18,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    NSDictionary *dict = @{@"postTitle":@"宝宝玩啥玩具偏偏",@"postHeaderImage":@"headerImage.jpg",@"postContent":@"拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳拉动所发生的了符合就阿訇是浪费的好看就阿訇是浪费点卡季后赛的疯狂拉黑是激发和斯柯达发贺卡吉林省弗兰克矮凳"};
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
+    scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 2000.0f);
+    PostView *post = [[PostView alloc] initWithDict:dict frame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.frame.size.height)];
+    
+    [self.view addSubview:scrollView];
+    [scrollView addSubview:post];
+    
 }
 
 - (void)didReceiveMemoryWarning {

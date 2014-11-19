@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol LeftViewControllerDelegate <NSObject>
+
+-(void)pushToView:(UIButton *)leftViewMenuButton;
+
+@end
+
 @interface LeftViewController : UIViewController
+
+@property(nonatomic,retain) id<LeftViewControllerDelegate> delegate;
 
 @end

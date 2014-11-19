@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EGORefreshCustom.h"
 
-@interface ContentViewController : UIViewController
+@interface ContentViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshDelegate>
+
+@property(nonatomic,retain) UITableView *homeTableView;
+
 
 @end

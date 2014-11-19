@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "SlideViewController.h"
+#import "LeftViewController.h"
+#import "HomeViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +20,23 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    //创建左侧菜单
+    LeftViewController *leftVC = [[LeftViewController alloc] init];
+    
+    //创建带navigationController的homeViewController
+    HomeViewController *homeVC = [[HomeViewController alloc] init];
+    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:homeVC];
+    
+    //创建滑动页面
+    SlideViewController *slideVC = [[SlideViewController alloc] initWithLeftViewController:leftVC navigationController:navigation];
+    
+    self.window.rootViewController = slideVC;
+    
+    [self.window makeKeyAndVisible];
     return YES;
 }
 

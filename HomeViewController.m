@@ -9,7 +9,8 @@
 #import "HomeViewController.h"
 #import "ContentViewController.h"
 
-@interface HomeViewController () <ViewPagerDataSource, ViewPagerDelegate>
+@interface HomeViewController ()
+
 
 @end
 
@@ -23,12 +24,16 @@
     self.delegate = self;
     
     self.title =@"宝宝玩啥";
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = ({
-        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu24x24.png"] style:UIBarButtonItemStyleDone target:self action:@selector(leftBarButtonItemClicked)];
+        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu32x32.png"] style:UIBarButtonItemStylePlain target:self.leftBarButtonItemClickedDelegate action:@selector(leftBarButtonItemClicked)];
         button.tintColor = [UIColor redColor];
         button;
     });
+    
+    
+
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,14 +77,11 @@
     return label;
 }
 
-//内容视图的dataSource
+//内容视图的dataSource，交给HomeTableViewController
 - (UIViewController *)viewPager:(ViewPagerController *)viewPager contentViewControllerForTabAtIndex:(NSUInteger)index {
-    
-    ContentViewController *cvc = [self.storyboard instantiateViewControllerWithIdentifier:@"contentViewController"];
-    
-    cvc.labelString = [NSString stringWithFormat:@"Content View #%i", index];
-    
-    return cvc;
+    //初始化contentViewController
+    ContentViewController *contentViewController = [[ContentViewController alloc] init];
+    return contentViewController;
 }
 
 
@@ -121,9 +123,6 @@
     }
 }
 
-#pragma mark - navigationBarButtonItem 点击事件
--(void)leftBarButtonItemClicked{
-    
-}
+
 
 @end

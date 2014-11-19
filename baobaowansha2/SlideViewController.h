@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomeViewController.h"
+#import "LeftViewController.h"
 
-@interface SlideViewController : UIViewController
+@interface SlideViewController : UIViewController <HomeViewDelegate,LeftViewControllerDelegate>
+
+@property (nonatomic,strong) UINavigationController *navigationViewController;
+@property (nonatomic,strong) UIViewController *leftViewController;
+
+//初始化slideView
+-(id)initWithLeftViewController:(UIViewController *)leftViewController navigationController:(UINavigationController *)navigationViewController;
+
 
 @end

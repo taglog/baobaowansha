@@ -7,9 +7,17 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-
 #import "ViewPagerController.h"
 
-@interface HomeViewController : ViewPagerController
+
+@protocol HomeViewDelegate
+
+-(void)leftBarButtonItemClicked;
+
+@end
+
+@interface HomeViewController : ViewPagerController <ViewPagerDataSource, ViewPagerDelegate>
+
+@property (nonatomic,assign) id<HomeViewDelegate> leftBarButtonItemClickedDelegate;
 
 @end
