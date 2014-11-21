@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PostViewController : UIViewController
+@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 
 @end
