@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self networkTest];
+    [self setInitData];
     
     //设置测试的homeTableViewCell
     NSArray *initArray = @[@{@"image":@"test.jpg",@"title":@"宝宝玩啥",@"introduction":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"age":@"14-24个月",@"collectionNumber":@100,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200}];
@@ -61,16 +61,19 @@
 }
 
 
--(void)networkTest{
-    //static NSString *const BaseURLString = @"";
+-(void)setInitData{
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:@"http://localhost/baobaowansha/post/table?type=2" parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        NSLog(@"JSON:%@",responseObject);
+            NSArray *responseArray = [responseObject valueForKey:@"data"];
+        for(NSDictionary *responseDict in responseArray){
+            NSLog(@"%@",responseDict);
+        }
         
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
     }];
+    
 }
 
 
