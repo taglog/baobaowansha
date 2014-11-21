@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D899974F0808B2C925482CA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D693E5FE89CAEBBDBEB51F19 /* libPods.a */; };
 		4B34CF8E1A13185A00EBB784 /* menu20x20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B34CF8D1A13185A00EBB784 /* menu20x20.png */; };
 		4B34CF901A13189E00EBB784 /* menu24x24.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B34CF8F1A13189E00EBB784 /* menu24x24.png */; };
 		4B4D302F1A1486C20047B72F /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4D302E1A1486C20047B72F /* LeftViewController.m */; };
@@ -46,7 +47,8 @@
 		4BBCACBF1A1A1FFD0033DF15 /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4BBCACBE1A1A1FFD0033DF15 /* loading.gif */; };
 		4BC505771A1AD6C1006BC555 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC505761A1AD6C1006BC555 /* ContentViewController.m */; };
 		4BC796AC1A1C63CE00B6728E /* headerImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4BC796AB1A1C63CE00B6728E /* headerImage.jpg */; };
-		4BD3BC681A1C8A82001A933C /* CommentViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD3BC671A1C8A82001A933C /* CommentViewCell.m */; };
+		4BD3BC6B1A1C8D39001A933C /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD3BC6A1A1C8D39001A933C /* CommentTableViewCell.m */; };
+		4BD4DD581A1DC8C400576465 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD4DD571A1DC8C400576465 /* User.m */; };
 		4BF570CC1A14D4DB0008A2C5 /* SlideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF570CB1A14D4DB0008A2C5 /* SlideViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -80,8 +82,8 @@
 		4B58A2EF1A130704007A5E93 /* ViewPagerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewPagerController.h; sourceTree = "<group>"; };
 		4B58A2F01A130708007A5E93 /* ViewPagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewPagerController.m; sourceTree = "<group>"; };
 		4B58A2FB1A130ACE007A5E93 /* menu64x64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu64x64.png; sourceTree = "<group>"; };
-		4B6E52271A1B3E8600915F39 /* PostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostView.h; path = ../PostView.h; sourceTree = "<group>"; };
-		4B6E52281A1B3E8600915F39 /* PostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostView.m; path = ../PostView.m; sourceTree = "<group>"; };
+		4B6E52271A1B3E8600915F39 /* PostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostView.h; sourceTree = "<group>"; };
+		4B6E52281A1B3E8600915F39 /* PostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostView.m; sourceTree = "<group>"; };
 		4B6E52301A1B580B00915F39 /* EGORefreshCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGORefreshCustom.h; sourceTree = "<group>"; };
 		4B6E52311A1B580B00915F39 /* EGORefreshCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshCustom.m; sourceTree = "<group>"; };
 		4B94F95A1A15CFFC0021DBE6 /* PostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostViewController.h; sourceTree = "<group>"; };
@@ -98,8 +100,8 @@
 		4BB1E9A21A1338D100A812DC /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
 		4BB1E9A31A1338D100A812DC /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		4BB1E9A41A1338D100A812DC /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
-		4BB1E9B31A134E8900A812DC /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeViewController.m; path = ../HomeViewController.m; sourceTree = "<group>"; };
-		4BB1E9B71A134F3400A812DC /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = ../HomeViewController.h; sourceTree = "<group>"; };
+		4BB1E9B31A134E8900A812DC /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		4BB1E9B71A134F3400A812DC /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		4BB1E9BB1A137C3500A812DC /* test3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test3.jpg; sourceTree = "<group>"; };
 		4BB1E9BC1A137C3500A812DC /* test2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test2.jpg; sourceTree = "<group>"; };
 		4BB1E9BD1A137C3500A812DC /* test1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test1.jpg; sourceTree = "<group>"; };
@@ -119,10 +121,15 @@
 		4BC505751A1AD6C1006BC555 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		4BC505761A1AD6C1006BC555 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
 		4BC796AB1A1C63CE00B6728E /* headerImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = headerImage.jpg; sourceTree = "<group>"; };
-		4BD3BC661A1C8A82001A933C /* CommentViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommentViewCell.h; path = ../CommentViewCell.h; sourceTree = "<group>"; };
-		4BD3BC671A1C8A82001A933C /* CommentViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommentViewCell.m; path = ../CommentViewCell.m; sourceTree = "<group>"; };
+		4BD3BC691A1C8D39001A933C /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTableViewCell.h; sourceTree = "<group>"; };
+		4BD3BC6A1A1C8D39001A933C /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTableViewCell.m; sourceTree = "<group>"; };
+		4BD4DD561A1DC8C400576465 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		4BD4DD571A1DC8C400576465 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		4BF570CA1A14D4DB0008A2C5 /* SlideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideViewController.h; sourceTree = "<group>"; };
 		4BF570CB1A14D4DB0008A2C5 /* SlideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideViewController.m; sourceTree = "<group>"; };
+		8AB8ACB402C3A56A468554E8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		D693E5FE89CAEBBDBEB51F19 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F462C8E499B71746BD08B0EB /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D899974F0808B2C925482CA /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,12 +151,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2FC3062D4AEF8E7AB1CE702A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8AB8ACB402C3A56A468554E8 /* Pods.debug.xcconfig */,
+				F462C8E499B71746BD08B0EB /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		4B58A2B91A12EF27007A5E93 = {
 			isa = PBXGroup;
 			children = (
 				4B58A2C41A12EF27007A5E93 /* baobaowansha2 */,
 				4B58A2DE1A12EF27007A5E93 /* baobaowansha2Tests */,
 				4B58A2C31A12EF27007A5E93 /* Products */,
+				2FC3062D4AEF8E7AB1CE702A /* Pods */,
+				5171EC6D46E150119150C16B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -245,14 +264,14 @@
 				4B58A2F21A130716007A5E93 /* ICViewPager */,
 				4BF570CA1A14D4DB0008A2C5 /* SlideViewController.h */,
 				4BF570CB1A14D4DB0008A2C5 /* SlideViewController.m */,
+				4B4D302D1A1486C20047B72F /* LeftViewController.h */,
+				4B4D302E1A1486C20047B72F /* LeftViewController.m */,
 				4BB1E9B71A134F3400A812DC /* HomeViewController.h */,
 				4BB1E9B31A134E8900A812DC /* HomeViewController.m */,
 				4BC505751A1AD6C1006BC555 /* ContentViewController.h */,
 				4BC505761A1AD6C1006BC555 /* ContentViewController.m */,
 				4B94F95A1A15CFFC0021DBE6 /* PostViewController.h */,
 				4B94F95B1A15CFFC0021DBE6 /* PostViewController.m */,
-				4B4D302D1A1486C20047B72F /* LeftViewController.h */,
-				4B4D302E1A1486C20047B72F /* LeftViewController.m */,
 				4BBCACA11A19C6550033DF15 /* LeftMenuController */,
 			);
 			name = Controller;
@@ -266,8 +285,8 @@
 				4BB1E98A1A13295A00A812DC /* HomeTableViewCell.m */,
 				4B6E52271A1B3E8600915F39 /* PostView.h */,
 				4B6E52281A1B3E8600915F39 /* PostView.m */,
-				4BD3BC661A1C8A82001A933C /* CommentViewCell.h */,
-				4BD3BC671A1C8A82001A933C /* CommentViewCell.m */,
+				4BD3BC691A1C8D39001A933C /* CommentTableViewCell.h */,
+				4BD3BC6A1A1C8D39001A933C /* CommentTableViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -275,6 +294,8 @@
 		4BB1E9921A132C8C00A812DC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4BD4DD561A1DC8C400576465 /* User.h */,
+				4BD4DD571A1DC8C400576465 /* User.m */,
 				4BB1E9931A132CCF00A812DC /* HomeTableViewCellModel.h */,
 				4BB1E9941A132CCF00A812DC /* HomeTableViewCellModel.m */,
 			);
@@ -307,6 +328,14 @@
 			name = EGOPullToRefresh;
 			sourceTree = "<group>";
 		};
+		5171EC6D46E150119150C16B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D693E5FE89CAEBBDBEB51F19 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -314,9 +343,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4B58A2E51A12EF27007A5E93 /* Build configuration list for PBXNativeTarget "baobaowansha2" */;
 			buildPhases = (
+				7E9C945C76C3E98723667962 /* Check Pods Manifest.lock */,
 				4B58A2BE1A12EF27007A5E93 /* Sources */,
 				4B58A2BF1A12EF27007A5E93 /* Frameworks */,
 				4B58A2C01A12EF27007A5E93 /* Resources */,
+				3A7BAA87EE427B427F44F728 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -421,6 +452,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3A7BAA87EE427B427F44F728 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7E9C945C76C3E98723667962 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4B58A2BE1A12EF27007A5E93 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -432,7 +496,6 @@
 				4BBCACA01A19C64F0033DF15 /* FeedbackViewController.m in Sources */,
 				4B4D302F1A1486C20047B72F /* LeftViewController.m in Sources */,
 				4BB1E9951A132CCF00A812DC /* HomeTableViewCellModel.m in Sources */,
-				4BD3BC681A1C8A82001A933C /* CommentViewCell.m in Sources */,
 				4BB1E9B41A134E8900A812DC /* HomeViewController.m in Sources */,
 				4B94F95C1A15CFFC0021DBE6 /* PostViewController.m in Sources */,
 				4BB1E98B1A13295A00A812DC /* HomeTableViewCell.m in Sources */,
@@ -442,6 +505,8 @@
 				4BBCAC941A19C5E90033DF15 /* CollectionViewController.m in Sources */,
 				4BC505771A1AD6C1006BC555 /* ContentViewController.m in Sources */,
 				4BF570CC1A14D4DB0008A2C5 /* SlideViewController.m in Sources */,
+				4BD4DD581A1DC8C400576465 /* User.m in Sources */,
+				4BD3BC6B1A1C8D39001A933C /* CommentTableViewCell.m in Sources */,
 				4BBCAC9D1A19C6200033DF15 /* SettingsViewController.m in Sources */,
 				4B6E52321A1B580B00915F39 /* EGORefreshCustom.m in Sources */,
 			);
@@ -555,6 +620,7 @@
 		};
 		4B58A2E61A12EF27007A5E93 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8AB8ACB402C3A56A468554E8 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
@@ -565,6 +631,7 @@
 		};
 		4B58A2E71A12EF27007A5E93 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F462C8E499B71746BD08B0EB /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;

@@ -36,6 +36,8 @@
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self){
+        
+        self.selectionStyle = UITableViewCellSelectionStyleGray;
         //添加缩略图
         UIImageView *image = [[UIImageView alloc] init];
         [self.contentView addSubview:image];
@@ -66,13 +68,13 @@
         [self.contentView addSubview:commentNumber];
         self.commentNumber = commentNumber;
         
-        [self initWithFrame];
+        [self setFrame];
     }
     return self;
 }
 
 //给Cell中的key赋值
--(void)initWithDict:(NSDictionary *)dict{
+-(void)setDataWithDict:(NSDictionary *)dict{
     
     self.image.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
     
@@ -89,7 +91,7 @@
 }
 
 //设置Cell子控件的frame
--(void)initWithFrame{
+-(void)setFrame{
     //padding
     CGFloat padding = 15.0;
     UIColor *detailColor = [UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0];
@@ -133,7 +135,7 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+    [super setSelected:NO animated:animated];
     // Configure the view for the selected state
     
 }

@@ -12,6 +12,6 @@
 
 @property (nonatomic,strong) NSDictionary *homeTableViewCell;
 
--(void)initWithDict:(NSDictionary *)dict;
+-(void)setDataWithDict:(NSDictionary *)dict;
 
 @end

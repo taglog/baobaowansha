@@ -9,6 +9,7 @@
 #import "ContentViewController.h"
 #import "HomeTableViewCell.h"
 #import "PostViewController.h"
+#import "AFNetworking.h"
 
 @interface ContentViewController ()
 
@@ -22,12 +23,14 @@
 
 @property (nonatomic,strong)NSArray *addOnCell;
 
+
 @end
 
 @implementation ContentViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self networkTest];
     
     //设置测试的homeTableViewCell
     NSArray *initArray = @[@{@"image":@"test.jpg",@"title":@"宝宝玩啥",@"introduction":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"age":@"14-24个月",@"collectionNumber":@100,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200}];
@@ -57,6 +60,26 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+-(void)networkTest{
+    //static NSString *const BaseURLString = @"";
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:@"http://localhost/baobaowansha/post/table?type=2" parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSLog(@"JSON:%@",responseObject);
+        
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+
+
+
+
+
+
+
 //初始化tableView
 -(void)initTableView{
 
@@ -68,6 +91,8 @@
         _homeTableView.dataSource = self;
     }
     [self.view addSubview:_homeTableView];
+    
+    
 }
 
 //初始化下拉刷新header
@@ -109,7 +134,7 @@
     if(cell == nil){
         cell = [[HomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-    [cell initWithDict:self.homeTableViewCell[indexPath.row]];
+    [cell setDataWithDict:self.homeTableViewCell[indexPath.row]];
     return cell;
 }
 
