@@ -30,25 +30,18 @@
     
 
     
-    //判断是否是第一次启动app
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]){
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstStart"];
-        InitProfileViewController *initView = [[InitProfileViewController alloc] init];
-        UINavigationController *initNavigation = [[UINavigationController alloc] initWithRootViewController:initView];
-        self.window.rootViewController =initNavigation;
+    //TODO: 判断是否是第一次启动app
+
         
-    }else{
-        
-        self.drawerController = [[MMDrawerController alloc]
-                                             initWithCenterViewController:centerNavigation
-                                             leftDrawerViewController:leftSideDrawerViewController];
+    self.drawerController = [[MMDrawerController alloc]
+                                        initWithCenterViewController:centerNavigation
+                                        leftDrawerViewController:leftSideDrawerViewController];
     
     
-	    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	    self.window.backgroundColor = [UIColor whiteColor];
-	    [self.window setRootViewController:self.drawerController];
-	        
-   }
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window setRootViewController:self.drawerController];
+
     [self.window makeKeyAndVisible];
     return YES;
         
