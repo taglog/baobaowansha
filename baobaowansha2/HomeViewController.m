@@ -88,6 +88,7 @@
 - (UIViewController *)viewPager:(ViewPagerController *)viewPager contentViewControllerForTabAtIndex:(NSUInteger)index {
     //初始化contentViewController
     ContentViewController *contentViewController = [[ContentViewController alloc] init];
+    contentViewController.type = index;
     return contentViewController;
 }
 

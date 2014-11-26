@@ -12,6 +12,10 @@
 {
     CGFloat padding;
 }
+@property(nonatomic,strong)NSDictionary *dict;
+@property(nonatomic,strong)UILabel *postTitle;
+@property(nonatomic,strong)UITextView *postContent;
+
 @end
 
 @implementation PostView
@@ -20,33 +24,46 @@
 -(id)initWithDict:(NSDictionary *)dict frame:(CGRect)frame{
     
     self = [super initWithFrame:frame];
-    
+    _dict = dict;
     self.backgroundColor = [UIColor whiteColor];
     //标题栏
-    _postTitle = [[UILabel alloc] init];
-    _postTitle.text = [dict valueForKey:@"postTitle"];
-    _postTitle.textColor = [UIColor blackColor];
+    self.postTitle = [[UILabel alloc] init];
+    self.postTitle.text = [dict valueForKey:@"post_title"];
+    self.postTitle.textColor = [UIColor blackColor];
     
-    //头图
-    _postHeaderImage = [[UIImageView alloc] init];
-    _postHeaderImage.image = [UIImage imageNamed:[dict valueForKey:@"postHeaderImage"]];
     
-    //文章
-    _postContent = [[UITextView alloc] init];
-    _postContent.text = [dict valueForKey:@"postContent"];
+    _textView = [[DTAttributedTextView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 1000)];
     
-    [self initPostStyle];
+    // we draw images and links via subviews provided by delegate methods
+    _textView.shouldDrawImages = NO;
+    _textView.shouldDrawLinks = NO;
+    
+    [_textView setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+    _textView.contentInset = UIEdgeInsetsMake(20, 15, 14, 15);
+    _textView.scrollEnabled = NO;
+    _textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    
+    [self addSubview:_textView];
+    
+    
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, _textView.frame.size.height, frame.size.width,1000)];
+    
+    
+    [self addSubview:self.commentTableView];
+    
     
     [self addSubview:_postTitle];
-    [self addSubview:_postHeaderImage];
-    [self addSubview:_postContent];
+
+    
+    [self setNeedsLayout];
+    
     
     return self;
 
 
 }
 
--(void)initPostStyle{
+-(void)layoutSubviews{
     
     padding = 15.0f;
     
@@ -55,14 +72,5 @@
     _postTitle.textColor = [UIColor blackColor];
     _postTitle.font = [UIFont systemFontOfSize:20.0f];
     
-    //头图
-    CGFloat postHeaderImageHeight =(self.frame.size.width - 2 * padding) * _postHeaderImage.image.size.height/_postHeaderImage.image.size.width;
-    
-    _postHeaderImage.frame= CGRectMake(padding, _postTitle.frame.size.height + 2 * padding, self.frame.size.width - 2 * padding,postHeaderImageHeight);
-    
-    //文章
-    _postContent.frame = CGRectMake(padding, _postTitle.frame.size.height + postHeaderImageHeight + 3 * padding, self.frame.size.width - 2*padding, self.frame.size.height);
-    _postContent.font = [UIFont systemFontOfSize:14.0f];
 }
-
 @end

@@ -11,6 +11,7 @@
 
 @interface ContentViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshDelegate>
 
+@property(nonatomic,assign) NSInteger type;
 @property(nonatomic,retain) UITableView *homeTableView;
 
 
