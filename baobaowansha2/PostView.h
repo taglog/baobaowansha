@@ -7,13 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DTCoreText.h"
+#import "DTAttributedTextView.h"
+#import "DTLazyImageView.h"
+#import "DTTiledLayerWithoutFade.h"
 
-@interface PostView : UIView
+@interface PostView : UIScrollView
 
-@property(nonatomic,strong)UILabel *postTitle;
-@property(nonatomic,strong)UIImageView *postHeaderImage;
-@property(nonatomic,strong)UITextView *postContent;
+@property(nonatomic,strong)DTAttributedTextView *textView;
+@property(nonatomic,strong)UITableView *commentTableView;
 
 -(id)initWithDict:(NSDictionary *)dict frame:(CGRect)frame;
+
 
 @end

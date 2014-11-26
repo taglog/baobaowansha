@@ -7,26 +7,30 @@
 //
 
 #import "HomeTableViewCell.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface HomeTableViewCell()
 
+//postID
+@property (nonatomic,assign) NSInteger ID;
+
 //缩略图
-@property (nonatomic,weak) UIImageView *image;
+@property (nonatomic,strong) UIImageView *image;
 
 //标题
-@property (nonatomic,weak) UILabel *title;
+@property (nonatomic,strong) UILabel *title;
 
 //摘要
-@property (nonatomic,weak) UILabel *introduction;
+@property (nonatomic,strong) UILabel *introduction;
 
 //适合年龄
-@property (nonatomic,weak) UILabel *age;
+@property (nonatomic,strong) UILabel *age;
 
 //收藏人数
-@property (nonatomic,weak) UILabel *collectionNumber;
+@property (nonatomic,strong) UILabel *collectionNumber;
 
 //评论人数
-@property (nonatomic,weak) UILabel *commentNumber;
+@property (nonatomic,strong) UILabel *commentNumber;
 
 @end
 
@@ -68,7 +72,6 @@
         [self.contentView addSubview:commentNumber];
         self.commentNumber = commentNumber;
         
-        [self setFrame];
     }
     return self;
 }
@@ -76,28 +79,34 @@
 //给Cell中的key赋值
 -(void)setDataWithDict:(NSDictionary *)dict{
     
-    self.image.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
+    self.ID = [[dict objectForKey:@"ID"] integerValue];
     
-    self.title.text = [dict objectForKey:@"title"];
+    [self.imageView setImageWithURL:[dict objectForKey:@"http://blog.yhb360.com/wp-content/uploads/2014/11/米菲绘本第一辑-cover.jpg"] placeholderImage:[UIImage imageNamed:@"test1.jpg"]];;
     
-    self.introduction.text = [dict objectForKey:@"introduction"];
+    self.title.text = [dict objectForKey:@"post_title"];
     
-    self.age.text = [dict objectForKey:@"age"];
+    self.introduction.text = [dict objectForKey:@"post_excerpt"];
+    
+    self.age.text = [dict objectForKey:@"fit_month_begin_1"];
     
     self.collectionNumber.text = [NSString stringWithFormat:@"收藏 %@",[dict objectForKey:@"collectionNumber"]];
     
     self.commentNumber.text = [NSString stringWithFormat:@"评论 %@",[dict objectForKey:@"commentNumber"]];
     
+    [self setNeedsLayout];
+    
 }
 
 //设置Cell子控件的frame
--(void)setFrame{
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
     //padding
     CGFloat padding = 15.0;
     UIColor *detailColor = [UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0];
     
     //缩略图的frame
-    self.image.frame = CGRectMake(padding, padding, 100.0, 100.0);
+    self.imageView.frame = CGRectMake(padding, padding, 100.0f, 100.0f);
     self.image.contentMode = UIViewContentModeScaleToFill;
     
     //标题的frame
@@ -128,8 +137,9 @@
     self.commentNumber.textColor = detailColor;
     
     
-    
+
 }
+
 - (void)awakeFromNib {
     // Initialization code
 }

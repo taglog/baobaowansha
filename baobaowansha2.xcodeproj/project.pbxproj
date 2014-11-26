@@ -13,6 +13,9 @@
 		4B4D302F1A1486C20047B72F /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4D302E1A1486C20047B72F /* LeftViewController.m */; };
 		4B4D30321A14C79A0047B72F /* menu48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B4D30301A14C79A0047B72F /* menu48x48.png */; };
 		4B4D30331A14C79A0047B72F /* menu32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B4D30311A14C79A0047B72F /* menu32x32.png */; };
+		4B4E0BD41A230AF3004AC0E1 /* InitProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4E0BD31A230AF3004AC0E1 /* InitProfileViewController.m */; };
+		4B4E0BD81A23242E004AC0E1 /* PickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4E0BD71A23242E004AC0E1 /* PickerView.m */; };
+		4B4E0BE11A2340BC004AC0E1 /* TableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4E0BE01A2340BC004AC0E1 /* TableView.m */; };
 		4B58A2C81A12EF27007A5E93 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B58A2C71A12EF27007A5E93 /* main.m */; };
 		4B58A2CB1A12EF27007A5E93 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B58A2CA1A12EF27007A5E93 /* AppDelegate.m */; };
 		4B58A2D31A12EF27007A5E93 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B58A2D21A12EF27007A5E93 /* Images.xcassets */; };
@@ -69,6 +72,12 @@
 		4B4D302E1A1486C20047B72F /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
 		4B4D30301A14C79A0047B72F /* menu48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu48x48.png; sourceTree = "<group>"; };
 		4B4D30311A14C79A0047B72F /* menu32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu32x32.png; sourceTree = "<group>"; };
+		4B4E0BD21A230AF3004AC0E1 /* InitProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitProfileViewController.h; sourceTree = "<group>"; };
+		4B4E0BD31A230AF3004AC0E1 /* InitProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitProfileViewController.m; sourceTree = "<group>"; };
+		4B4E0BD61A23242E004AC0E1 /* PickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerView.h; sourceTree = "<group>"; };
+		4B4E0BD71A23242E004AC0E1 /* PickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerView.m; sourceTree = "<group>"; };
+		4B4E0BDF1A2340BC004AC0E1 /* TableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableView.h; sourceTree = "<group>"; };
+		4B4E0BE01A2340BC004AC0E1 /* TableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableView.m; sourceTree = "<group>"; };
 		4B58A2C21A12EF27007A5E93 /* baobaowansha2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = baobaowansha2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B58A2C61A12EF27007A5E93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B58A2C71A12EF27007A5E93 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -158,6 +167,19 @@
 				F462C8E499B71746BD08B0EB /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		4B4E0BD51A230B1C004AC0E1 /* First Lanuch Views */ = {
+			isa = PBXGroup;
+			children = (
+				4B4E0BD21A230AF3004AC0E1 /* InitProfileViewController.h */,
+				4B4E0BD31A230AF3004AC0E1 /* InitProfileViewController.m */,
+				4B4E0BDF1A2340BC004AC0E1 /* TableView.h */,
+				4B4E0BE01A2340BC004AC0E1 /* TableView.m */,
+				4B4E0BD61A23242E004AC0E1 /* PickerView.h */,
+				4B4E0BD71A23242E004AC0E1 /* PickerView.m */,
+			);
+			name = "First Lanuch Views";
 			sourceTree = "<group>";
 		};
 		4B58A2B91A12EF27007A5E93 = {
@@ -272,6 +294,7 @@
 				4BC505761A1AD6C1006BC555 /* ContentViewController.m */,
 				4B94F95A1A15CFFC0021DBE6 /* PostViewController.h */,
 				4B94F95B1A15CFFC0021DBE6 /* PostViewController.m */,
+				4B4E0BD51A230B1C004AC0E1 /* First Lanuch Views */,
 				4BBCACA11A19C6550033DF15 /* LeftMenuController */,
 			);
 			name = Controller;
@@ -503,8 +526,11 @@
 				4BBCAC9A1A19C60F0033DF15 /* BabyInfoViewController.m in Sources */,
 				4B58A2C81A12EF27007A5E93 /* main.m in Sources */,
 				4BBCAC941A19C5E90033DF15 /* CollectionViewController.m in Sources */,
+				4B4E0BD81A23242E004AC0E1 /* PickerView.m in Sources */,
 				4BC505771A1AD6C1006BC555 /* ContentViewController.m in Sources */,
+				4B4E0BD41A230AF3004AC0E1 /* InitProfileViewController.m in Sources */,
 				4BF570CC1A14D4DB0008A2C5 /* SlideViewController.m in Sources */,
+				4B4E0BE11A2340BC004AC0E1 /* TableView.m in Sources */,
 				4BD4DD581A1DC8C400576465 /* User.m in Sources */,
 				4BD3BC6B1A1C8D39001A933C /* CommentTableViewCell.m in Sources */,
 				4BBCAC9D1A19C6200033DF15 /* SettingsViewController.m in Sources */,
@@ -624,6 +650,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -635,6 +662,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

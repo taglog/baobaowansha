@@ -10,6 +10,7 @@
 #import "SlideViewController.h"
 #import "LeftViewController.h"
 #import "HomeViewController.h"
+#import "InitProfileViewController.h"
 
 @interface AppDelegate ()
 
@@ -24,20 +25,34 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    //创建左侧菜单
-    LeftViewController *leftVC = [[LeftViewController alloc] init];
     
-    //创建带navigationController的homeViewController
-    HomeViewController *homeVC = [[HomeViewController alloc] init];
-    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:homeVC];
     
-    //创建滑动页面
-    SlideViewController *slideVC = [[SlideViewController alloc] initWithLeftViewController:leftVC navigationController:navigation];
-    
-    self.window.rootViewController = slideVC;
-    
+    //判断是否是第一次启动app
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]){
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstStart"];
+        InitProfileViewController *initView = [[InitProfileViewController alloc] init];
+        UINavigationController *initNavigation = [[UINavigationController alloc] initWithRootViewController:initView];
+        self.window.rootViewController =initNavigation;
+        
+    }else{
+        
+        //创建左侧菜单
+        LeftViewController *leftVC = [[LeftViewController alloc] init];
+        
+        //创建带navigationController的homeViewController
+        HomeViewController *homeVC = [[HomeViewController alloc] init];
+        UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:homeVC];
+        
+        //创建滑动页面
+        SlideViewController *slideVC = [[SlideViewController alloc] initWithLeftViewController:leftVC navigationController:navigation];
+        
+        self.window.rootViewController = slideVC;
+        
+   }
     [self.window makeKeyAndVisible];
     return YES;
+        
+        
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

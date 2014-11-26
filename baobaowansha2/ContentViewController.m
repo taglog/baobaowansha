@@ -30,28 +30,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setInitData];
     
-    //设置测试的homeTableViewCell
-    NSArray *initArray = @[@{@"image":@"test.jpg",@"title":@"宝宝玩啥",@"introduction":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"age":@"14-24个月",@"collectionNumber":@100,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200}];
-    self.addOnCell = @[@{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       @{@"image":@"test1.jpg",@"title":@"宝宝拉拉",@"introduction":@"飞矮凳飞阿发生地方时发握握手；大家发生；打飞机阿斯顿生地方",@"age":@"1阿斯顿飞月",@"collectionNumber":@20,@"commentNumber":@200},
-                       ];
-
-    self.homeTableViewCell = [[NSMutableArray alloc] initWithArray:initArray];
-
-    
-    self.view.backgroundColor = [UIColor clearColor];
-    [self initTableView];
-    [self initRefreshView];
+    if(self){
+        self.view.backgroundColor = [UIColor clearColor];
+        [self setInitData];
+       
+    }
     
 }
 
@@ -63,23 +47,24 @@
 
 -(void)setInitData{
     
+    //初始化homeTableViewCell
+    self.homeTableViewCell = [[NSMutableArray alloc]init];
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:@"http://localhost/baobaowansha/post/table?type=2" parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
-            NSArray *responseArray = [responseObject valueForKey:@"data"];
-        for(NSDictionary *responseDict in responseArray){
-            NSLog(@"%@",responseDict);
-        }
+    [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/table?type=%lu&p=1",(unsigned long)_type] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
+        NSArray *responseArray = [responseObject valueForKey:@"data"];
+        for(NSString *responseDict in responseArray){
+            NSDictionary *dict = [responseArray valueForKey:responseDict];
+            [self.homeTableViewCell addObject:dict];
+            [self initTableView];
+            [self initRefreshView];
+        }
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
     }];
     
 }
-
-
-
-
-
 
 
 
@@ -89,9 +74,10 @@
     
     if(!_homeTableView){
         _homeTableView = [[UITableView alloc] init];
-        _homeTableView.frame =CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height - 104);
+        _homeTableView.frame =CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height);
         _homeTableView.delegate = self;
         _homeTableView.dataSource = self;
+        [_homeTableView setSeparatorInset:UIEdgeInsetsZero];
     }
     [self.view addSubview:_homeTableView];
     
@@ -137,6 +123,7 @@
     if(cell == nil){
         cell = [[HomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
+    
     [cell setDataWithDict:self.homeTableViewCell[indexPath.row]];
     return cell;
 }
@@ -149,6 +136,15 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     PostViewController *post = [[PostViewController alloc] init];
     
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/post?id=%@",[self.homeTableViewCell[indexPath.row] objectForKey:@"ID"]] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSDictionary *responseDict = [responseObject valueForKey:@"data"];
+        
+        [post setPostWithDict:responseDict];
+        
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error);
+    }];
     [self.navigationController pushViewController:post animated:YES];
     
 }
@@ -159,18 +155,45 @@
 //下拉刷新的数据处理
     if(_refreshHeaderView.pullDown){
         
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/table?type=%ld&p=1",(long)_type] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+            
+            NSArray *responseArray = [responseObject valueForKey:@"data"];
+            for(NSString *responseDict in responseArray){
+                NSDictionary *dict = [responseArray valueForKey:responseDict];
+                [self.homeTableViewCell addObject:dict];
+                [_homeTableView reloadData];
+                _reloading = YES;
+                [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+            }
+        }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"%@",error);
+        }];
+
     }
 //上拉刷新的数据处理
     if(_refreshFooterView.pullUp){
-        for(NSDictionary *dict in self.addOnCell){
-            [self.homeTableViewCell addObject:dict];
-        }
-    }
-        [_homeTableView reloadData];
-    _reloading = YES;
-    [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:2.0f];
-}
+        static int p = 2;
 
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/table?type=%ld&p=%d",(long)_type,p] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+            
+            NSArray *responseArray = [responseObject valueForKey:@"data"];
+            for(NSString *responseDict in responseArray){
+                NSDictionary *dict = [responseArray valueForKey:responseDict];
+                [self.homeTableViewCell addObject:dict];
+                [_homeTableView reloadData];
+                _reloading = YES;
+                [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+                
+            }
+        }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        ++p;
+        
+    }
+}
 - (void)doneLoadingTableViewData{
     _reloading = NO;
     [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_homeTableView];
