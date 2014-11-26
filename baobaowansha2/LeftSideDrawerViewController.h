@@ -7,7 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseSideDrawerViewController.h"
 
-@interface LeftSideDrawerViewController : UIViewController
+@interface LeftSideDrawerViewController : BaseSideDrawerViewController
+
+
+@property (nonatomic, retain) UIViewController * navHome;
+@property (nonatomic, retain) UIViewController * navCollection;
+@property (nonatomic, retain) UIViewController * navComment;
+@property (nonatomic, retain) UIViewController * navBabyInfo;
+@property (nonatomic, retain) UIViewController * navSetting;
+@property (nonatomic, retain) UIViewController * navFeedback;
+
+@property (nonatomic, retain) NSString * currentController;
+
+@property (nonatomic, retain) NSString * headerWords;
+@property (nonatomic, retain) NSString * headerImage;
 
 @end

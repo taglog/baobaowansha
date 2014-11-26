@@ -88,6 +88,7 @@
         [mmShapePath addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 0.51759 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.96761 * CGRectGetHeight(frame)) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 0.62160 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.94854 * CGRectGetHeight(frame)) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 0.57117 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.96761 * CGRectGetHeight(frame))];
         [mmShapePath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.51759 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.96761 * CGRectGetHeight(frame))];
         [mmShapePath closePath];
+        /*
         [mmShapePath moveToPoint: CGPointMake(CGRectGetMinX(frame) + 0.51965 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.81940 * CGRectGetHeight(frame))];
         [mmShapePath addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 0.49408 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.80982 * CGRectGetHeight(frame)) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 0.50999 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.81940 * CGRectGetHeight(frame)) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 0.50091 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.81600 * CGRectGetHeight(frame))];
         [mmShapePath addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 0.49408 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.76313 * CGRectGetHeight(frame)) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 0.48000 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.79686 * CGRectGetHeight(frame)) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 0.48000 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.77600 * CGRectGetHeight(frame))];
@@ -120,6 +121,7 @@
         [mmShapePath addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 0.51965 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.81940 * CGRectGetHeight(frame)) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 0.53840 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.81600 * CGRectGetHeight(frame)) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 0.52930 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.81940 * CGRectGetHeight(frame))];
         [mmShapePath addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 0.51965 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.81940 * CGRectGetHeight(frame))];
         [mmShapePath closePath];
+         */
         CGContextSaveGState(context);
         CGContextSetShadowWithColor(context, mmDropShadowOffset, mmDropShadowBlurRadius, mmDropShadow.CGColor);
         

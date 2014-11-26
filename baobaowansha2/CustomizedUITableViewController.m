@@ -6,7 +6,9 @@
 //  Copyright (c) 2014年 刘昕. All rights reserved.
 //
 
-#import "CustomizedUIViewController.h"
+#import "CustomizedUITableViewController.h"
+#import "UIViewController+MMDrawerController.h"
+#import "MMDrawerBarButtonItem.h"
 
 @interface CustomizedUIViewController ()
 
@@ -17,12 +19,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self setupLeftMenuButton];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+-(void)setupLeftMenuButton{
+    MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
+    [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
+    leftDrawerButton.tintColor = [UIColor redColor];
+    leftDrawerButton.image = [UIImage imageNamed:@"menu24x24.png"];
+}
+
+#pragma mark - Button Handlers
+-(void)leftDrawerButtonPress:(id)sender{
+    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
+}
+
 
 /*
 #pragma mark - Navigation

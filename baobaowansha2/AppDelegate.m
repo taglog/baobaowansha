@@ -7,11 +7,12 @@
 //
 
 #import "AppDelegate.h"
-#import "LeftViewController.h"
 #import "HomeViewController.h"
-#import "InitProfileViewController.h"
+#import "MMDrawerController.h"
+#import "LeftSideDrawerViewController.h"
 
 @interface AppDelegate ()
+@property (nonatomic,strong) MMDrawerController * drawerController;
 
 @end
 
@@ -19,12 +20,14 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // Override point for customization after application launch
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
+    UIViewController * leftSideDrawerViewController = [[LeftSideDrawerViewController alloc] init];
+
+    UIViewController * centerViewController = [[HomeViewController alloc] init];
+    UINavigationController *centerNavigation = [[UINavigationController alloc] initWithRootViewController:centerViewController];
     
-    
+
     
     //判断是否是第一次启动app
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]){
@@ -35,18 +38,15 @@
         
     }else{
         
-        //创建左侧菜单
-        LeftViewController *leftVC = [[LeftViewController alloc] init];
-        
-        //创建带navigationController的homeViewController
-        HomeViewController *homeVC = [[HomeViewController alloc] init];
-        UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:homeVC];
-        
-        //创建滑动页面
-        SlideViewController *slideVC = [[SlideViewController alloc] initWithLeftViewController:leftVC navigationController:navigation];
-        
-        self.window.rootViewController = slideVC;
-        
+        self.drawerController = [[MMDrawerController alloc]
+                                             initWithCenterViewController:centerNavigation
+                                             leftDrawerViewController:leftSideDrawerViewController];
+    
+    
+	    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	    self.window.backgroundColor = [UIColor whiteColor];
+	    [self.window setRootViewController:self.drawerController];
+	        
    }
     [self.window makeKeyAndVisible];
     return YES;

@@ -10,7 +10,6 @@
 		3D899974F0808B2C925482CA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D693E5FE89CAEBBDBEB51F19 /* libPods.a */; };
 		4B34CF8E1A13185A00EBB784 /* menu20x20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B34CF8D1A13185A00EBB784 /* menu20x20.png */; };
 		4B34CF901A13189E00EBB784 /* menu24x24.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B34CF8F1A13189E00EBB784 /* menu24x24.png */; };
-		4B4D302F1A1486C20047B72F /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B4D302E1A1486C20047B72F /* LeftViewController.m */; };
 		4B4D30321A14C79A0047B72F /* menu48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B4D30301A14C79A0047B72F /* menu48x48.png */; };
 		4B4D30331A14C79A0047B72F /* menu32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B4D30311A14C79A0047B72F /* menu32x32.png */; };
 		4B58A2C81A12EF27007A5E93 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B58A2C71A12EF27007A5E93 /* main.m */; };
@@ -49,7 +48,13 @@
 		4BC796AC1A1C63CE00B6728E /* headerImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4BC796AB1A1C63CE00B6728E /* headerImage.jpg */; };
 		4BD3BC6B1A1C8D39001A933C /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD3BC6A1A1C8D39001A933C /* CommentTableViewCell.m */; };
 		4BD4DD581A1DC8C400576465 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD4DD571A1DC8C400576465 /* User.m */; };
-		4BF570CC1A14D4DB0008A2C5 /* SlideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF570CB1A14D4DB0008A2C5 /* SlideViewController.m */; };
+		D93A7DF61A1F75ED00008B7C /* LeftSideDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7DF51A1F75ED00008B7C /* LeftSideDrawerViewController.m */; };
+		D93A7DF91A1F789A00008B7C /* CustomizedUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7DF81A1F789A00008B7C /* CustomizedUITableViewController.m */; };
+		D93A7DFC1A1F7EC300008B7C /* BaseSideDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7DFB1A1F7EC300008B7C /* BaseSideDrawerViewController.m */; };
+		D93A7E061A1F81E200008B7C /* MMLogoView.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7DFF1A1F81E200008B7C /* MMLogoView.m */; };
+		D93A7E071A1F81E200008B7C /* MMSideDrawerSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7E011A1F81E200008B7C /* MMSideDrawerSectionHeaderView.m */; };
+		D93A7E081A1F81E200008B7C /* MMSideDrawerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7E031A1F81E200008B7C /* MMSideDrawerTableViewCell.m */; };
+		D93A7E091A1F81E200008B7C /* MMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7E051A1F81E200008B7C /* MMTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,8 +70,6 @@
 /* Begin PBXFileReference section */
 		4B34CF8D1A13185A00EBB784 /* menu20x20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu20x20.png; sourceTree = "<group>"; };
 		4B34CF8F1A13189E00EBB784 /* menu24x24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu24x24.png; sourceTree = "<group>"; };
-		4B4D302D1A1486C20047B72F /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
-		4B4D302E1A1486C20047B72F /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
 		4B4D30301A14C79A0047B72F /* menu48x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu48x48.png; sourceTree = "<group>"; };
 		4B4D30311A14C79A0047B72F /* menu32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu32x32.png; sourceTree = "<group>"; };
 		4B58A2C21A12EF27007A5E93 /* baobaowansha2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = baobaowansha2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,10 +128,23 @@
 		4BD3BC6A1A1C8D39001A933C /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTableViewCell.m; sourceTree = "<group>"; };
 		4BD4DD561A1DC8C400576465 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		4BD4DD571A1DC8C400576465 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		4BF570CA1A14D4DB0008A2C5 /* SlideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideViewController.h; sourceTree = "<group>"; };
-		4BF570CB1A14D4DB0008A2C5 /* SlideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideViewController.m; sourceTree = "<group>"; };
 		8AB8ACB402C3A56A468554E8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		D693E5FE89CAEBBDBEB51F19 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D93A7DF41A1F75ED00008B7C /* LeftSideDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftSideDrawerViewController.h; sourceTree = "<group>"; };
+		D93A7DF51A1F75ED00008B7C /* LeftSideDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftSideDrawerViewController.m; sourceTree = "<group>"; };
+		D93A7DF71A1F789A00008B7C /* CustomizedUITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomizedUITableViewController.h; sourceTree = "<group>"; };
+		D93A7DF81A1F789A00008B7C /* CustomizedUITableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomizedUITableViewController.m; sourceTree = "<group>"; };
+		D93A7DFA1A1F7EC300008B7C /* BaseSideDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseSideDrawerViewController.h; sourceTree = "<group>"; };
+		D93A7DFB1A1F7EC300008B7C /* BaseSideDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseSideDrawerViewController.m; sourceTree = "<group>"; };
+		D93A7DFE1A1F81E200008B7C /* MMLogoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLogoView.h; sourceTree = "<group>"; };
+		D93A7DFF1A1F81E200008B7C /* MMLogoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMLogoView.m; sourceTree = "<group>"; };
+		D93A7E001A1F81E200008B7C /* MMSideDrawerSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSideDrawerSectionHeaderView.h; sourceTree = "<group>"; };
+		D93A7E011A1F81E200008B7C /* MMSideDrawerSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSideDrawerSectionHeaderView.m; sourceTree = "<group>"; };
+		D93A7E021A1F81E200008B7C /* MMSideDrawerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSideDrawerTableViewCell.h; sourceTree = "<group>"; };
+		D93A7E031A1F81E200008B7C /* MMSideDrawerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSideDrawerTableViewCell.m; sourceTree = "<group>"; };
+		D93A7E041A1F81E200008B7C /* MMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTableViewCell.h; sourceTree = "<group>"; };
+		D93A7E051A1F81E200008B7C /* MMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTableViewCell.m; sourceTree = "<group>"; };
+		D93A7E0B1A1F87F700008B7C /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = SOURCE_ROOT; };
 		F462C8E499B71746BD08B0EB /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -197,6 +213,7 @@
 		4B58A2C51A12EF27007A5E93 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D93A7E0B1A1F87F700008B7C /* PrefixHeader.pch */,
 				4B58A2D21A12EF27007A5E93 /* Images.xcassets */,
 				4B58A2D41A12EF27007A5E93 /* LaunchScreen.xib */,
 				4B58A2C61A12EF27007A5E93 /* Info.plist */,
@@ -261,11 +278,12 @@
 		4B58A2F71A130809007A5E93 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				D93A7DFD1A1F81BA00008B7C /* LeftDrawerHelper */,
+				D93A7DF41A1F75ED00008B7C /* LeftSideDrawerViewController.h */,
+				D93A7DFA1A1F7EC300008B7C /* BaseSideDrawerViewController.h */,
+				D93A7DFB1A1F7EC300008B7C /* BaseSideDrawerViewController.m */,
+				D93A7DF51A1F75ED00008B7C /* LeftSideDrawerViewController.m */,
 				4B58A2F21A130716007A5E93 /* ICViewPager */,
-				4BF570CA1A14D4DB0008A2C5 /* SlideViewController.h */,
-				4BF570CB1A14D4DB0008A2C5 /* SlideViewController.m */,
-				4B4D302D1A1486C20047B72F /* LeftViewController.h */,
-				4B4D302E1A1486C20047B72F /* LeftViewController.m */,
 				4BB1E9B71A134F3400A812DC /* HomeViewController.h */,
 				4BB1E9B31A134E8900A812DC /* HomeViewController.m */,
 				4BC505751A1AD6C1006BC555 /* ContentViewController.h */,
@@ -305,6 +323,8 @@
 		4BBCACA11A19C6550033DF15 /* LeftMenuController */ = {
 			isa = PBXGroup;
 			children = (
+				D93A7DF81A1F789A00008B7C /* CustomizedUITableViewController.m */,
+				D93A7DF71A1F789A00008B7C /* CustomizedUITableViewController.h */,
 				4BBCAC921A19C5E90033DF15 /* CollectionViewController.h */,
 				4BBCAC931A19C5E90033DF15 /* CollectionViewController.m */,
 				4BBCAC951A19C5F70033DF15 /* CommentViewController.h */,
@@ -334,6 +354,21 @@
 				D693E5FE89CAEBBDBEB51F19 /* libPods.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D93A7DFD1A1F81BA00008B7C /* LeftDrawerHelper */ = {
+			isa = PBXGroup;
+			children = (
+				D93A7DFE1A1F81E200008B7C /* MMLogoView.h */,
+				D93A7DFF1A1F81E200008B7C /* MMLogoView.m */,
+				D93A7E001A1F81E200008B7C /* MMSideDrawerSectionHeaderView.h */,
+				D93A7E011A1F81E200008B7C /* MMSideDrawerSectionHeaderView.m */,
+				D93A7E021A1F81E200008B7C /* MMSideDrawerTableViewCell.h */,
+				D93A7E031A1F81E200008B7C /* MMSideDrawerTableViewCell.m */,
+				D93A7E041A1F81E200008B7C /* MMTableViewCell.h */,
+				D93A7E051A1F81E200008B7C /* MMTableViewCell.m */,
+			);
+			name = LeftDrawerHelper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -494,21 +529,26 @@
 				4B58A2CB1A12EF27007A5E93 /* AppDelegate.m in Sources */,
 				4B6E52291A1B3E8600915F39 /* PostView.m in Sources */,
 				4BBCACA01A19C64F0033DF15 /* FeedbackViewController.m in Sources */,
-				4B4D302F1A1486C20047B72F /* LeftViewController.m in Sources */,
 				4BB1E9951A132CCF00A812DC /* HomeTableViewCellModel.m in Sources */,
 				4BB1E9B41A134E8900A812DC /* HomeViewController.m in Sources */,
 				4B94F95C1A15CFFC0021DBE6 /* PostViewController.m in Sources */,
 				4BB1E98B1A13295A00A812DC /* HomeTableViewCell.m in Sources */,
+				D93A7E081A1F81E200008B7C /* MMSideDrawerTableViewCell.m in Sources */,
 				4B58A2F11A130708007A5E93 /* ViewPagerController.m in Sources */,
 				4BBCAC9A1A19C60F0033DF15 /* BabyInfoViewController.m in Sources */,
 				4B58A2C81A12EF27007A5E93 /* main.m in Sources */,
+				D93A7DF61A1F75ED00008B7C /* LeftSideDrawerViewController.m in Sources */,
+				D93A7E061A1F81E200008B7C /* MMLogoView.m in Sources */,
 				4BBCAC941A19C5E90033DF15 /* CollectionViewController.m in Sources */,
+				D93A7DFC1A1F7EC300008B7C /* BaseSideDrawerViewController.m in Sources */,
 				4BC505771A1AD6C1006BC555 /* ContentViewController.m in Sources */,
-				4BF570CC1A14D4DB0008A2C5 /* SlideViewController.m in Sources */,
+				D93A7E091A1F81E200008B7C /* MMTableViewCell.m in Sources */,
+				D93A7DF91A1F789A00008B7C /* CustomizedUITableViewController.m in Sources */,
 				4BD4DD581A1DC8C400576465 /* User.m in Sources */,
 				4BD3BC6B1A1C8D39001A933C /* CommentTableViewCell.m in Sources */,
 				4BBCAC9D1A19C6200033DF15 /* SettingsViewController.m in Sources */,
 				4B6E52321A1B580B00915F39 /* EGORefreshCustom.m in Sources */,
+				D93A7E071A1F81E200008B7C /* MMSideDrawerSectionHeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,7 +663,10 @@
 			baseConfigurationReference = 8AB8ACB402C3A56A468554E8 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -634,7 +677,10 @@
 			baseConfigurationReference = F462C8E499B71746BD08B0EB /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

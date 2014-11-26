@@ -22,7 +22,7 @@
     
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(100, 100, 100, 100)];
-    label.text = [NSString stringWithFormat:@"this is a test"];
+    label.text = [NSString stringWithFormat:@"commentViewController"];
     label.tintColor = [UIColor blackColor];
     [self.view addSubview:label];
 }

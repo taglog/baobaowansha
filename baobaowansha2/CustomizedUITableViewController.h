@@ -6,8 +6,7 @@
 //  Copyright (c) 2014年 刘昕. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 
-@interface CustomizedUIViewController : UIViewController
+@interface CustomizedUIViewController : UITableViewController
 
 @end
