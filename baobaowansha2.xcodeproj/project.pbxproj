@@ -48,6 +48,7 @@
 		4BBCAC9D1A19C6200033DF15 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCAC9C1A19C6200033DF15 /* SettingsViewController.m */; };
 		4BBCACA01A19C64F0033DF15 /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCAC9F1A19C64F0033DF15 /* FeedbackViewController.m */; };
 		4BBCACBF1A1A1FFD0033DF15 /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4BBCACBE1A1A1FFD0033DF15 /* loading.gif */; };
+		4BC2CAD51A2579D50086D18F /* PostNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2CAD41A2579D50086D18F /* PostNavigationBar.m */; };
 		4BC505771A1AD6C1006BC555 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC505761A1AD6C1006BC555 /* ContentViewController.m */; };
 		4BC796AC1A1C63CE00B6728E /* headerImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4BC796AB1A1C63CE00B6728E /* headerImage.jpg */; };
 		4BD3BC6B1A1C8D39001A933C /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD3BC6A1A1C8D39001A933C /* CommentTableViewCell.m */; };
@@ -127,6 +128,8 @@
 		4BBCAC9E1A19C64F0033DF15 /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
 		4BBCAC9F1A19C64F0033DF15 /* FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackViewController.m; sourceTree = "<group>"; };
 		4BBCACBE1A1A1FFD0033DF15 /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
+		4BC2CAD31A2579D50086D18F /* PostNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostNavigationBar.h; sourceTree = "<group>"; };
+		4BC2CAD41A2579D50086D18F /* PostNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostNavigationBar.m; sourceTree = "<group>"; };
 		4BC505751A1AD6C1006BC555 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		4BC505761A1AD6C1006BC555 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
 		4BC796AB1A1C63CE00B6728E /* headerImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = headerImage.jpg; sourceTree = "<group>"; };
@@ -308,6 +311,8 @@
 				4BB1E98A1A13295A00A812DC /* HomeTableViewCell.m */,
 				4B6E52271A1B3E8600915F39 /* PostView.h */,
 				4B6E52281A1B3E8600915F39 /* PostView.m */,
+				4BC2CAD31A2579D50086D18F /* PostNavigationBar.h */,
+				4BC2CAD41A2579D50086D18F /* PostNavigationBar.m */,
 				4BD3BC691A1C8D39001A933C /* CommentTableViewCell.h */,
 				4BD3BC6A1A1C8D39001A933C /* CommentTableViewCell.m */,
 			);
@@ -532,6 +537,7 @@
 				4BF570CC1A14D4DB0008A2C5 /* SlideViewController.m in Sources */,
 				4B4E0BE11A2340BC004AC0E1 /* TableView.m in Sources */,
 				4BD4DD581A1DC8C400576465 /* User.m in Sources */,
+				4BC2CAD51A2579D50086D18F /* PostNavigationBar.m in Sources */,
 				4BD3BC6B1A1C8D39001A933C /* CommentTableViewCell.m in Sources */,
 				4BBCAC9D1A19C6200033DF15 /* SettingsViewController.m in Sources */,
 				4B6E52321A1B580B00915F39 /* EGORefreshCustom.m in Sources */,
