@@ -6,9 +6,9 @@
 //  Copyright (c) 2014年 刘昕. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "IntroControll.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, IntroDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

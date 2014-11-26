@@ -13,6 +13,7 @@
 
 @interface AppDelegate ()
 @property (nonatomic,strong) MMDrawerController * drawerController;
+@property (nonatomic,strong) IntroControll * introcontroller;
 
 @end
 
@@ -29,7 +30,7 @@
     
 
     
-    //TODO: 判断是否是第一次启动app
+    
 
         
     self.drawerController = [[MMDrawerController alloc]
@@ -40,6 +41,24 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window setRootViewController:self.drawerController];
+    
+    //TODO: 判断是否是第一次启动app, if yes, add splash view
+    //if (![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]) {
+    if (YES) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstStart"];
+        
+        IntroModel *model1 = [[IntroModel alloc] initWithTitle:@"Example 1" description:@"Hi, add description here" image:@"splash_image1.jpg"];
+        
+        IntroModel *model2 = [[IntroModel alloc] initWithTitle:@"Example 2" description:@"Several sample texts in Old, Middle, Early Modern, and Modern English are provided here for practice, reference, and reading." image:@"splash_image2.jpg"];
+        
+        IntroModel *model3 = [[IntroModel alloc] initWithTitle:@"Example 3" description:@"The Tempest is the first play in the First Folio edition (see the signature) even though it is a later play (namely 1610) than Hamlet (1600), for example. The first page is reproduced here" image:@"splash_image3.jpg"];
+        
+        CGRect bounds = [[UIScreen mainScreen] bounds];
+        self.introcontroller = [[IntroControll alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width, bounds.size.height) pages:@[model1, model2, model3]];
+        
+        [self.drawerController.view addSubview:self.introcontroller];
+        self.introcontroller.delegate = self;
+    }
 
     [self.window makeKeyAndVisible];
     return YES;
@@ -68,5 +87,15 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+#pragma -IntroDelegate
+- (void) IntroFinished {
+    NSLog(@"Intro finished, animated to hide");
+    [UIView animateWithDuration:0.3 animations:^{
+        self.introcontroller.alpha = 0;
+    } completion:nil];
+    
+}
+
 
 @end
