@@ -10,6 +10,7 @@
 #import "HomeViewController.h"
 #import "MMDrawerController.h"
 #import "LeftSideDrawerViewController.h"
+#import "InitProfileViewController.h"
 
 @interface AppDelegate ()
 @property (nonatomic,strong) MMDrawerController * drawerController;
