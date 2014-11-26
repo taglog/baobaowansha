@@ -55,6 +55,9 @@
 		D93A7E071A1F81E200008B7C /* MMSideDrawerSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7E011A1F81E200008B7C /* MMSideDrawerSectionHeaderView.m */; };
 		D93A7E081A1F81E200008B7C /* MMSideDrawerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7E031A1F81E200008B7C /* MMSideDrawerTableViewCell.m */; };
 		D93A7E091A1F81E200008B7C /* MMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7E051A1F81E200008B7C /* MMTableViewCell.m */; };
+		D996368C1A25924C00463116 /* InitProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D996368B1A25924C00463116 /* InitProfileViewController.m */; };
+		D996368F1A25927000463116 /* TableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D996368E1A25927000463116 /* TableView.m */; };
+		D99636921A25928D00463116 /* PickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D99636911A25928D00463116 /* PickerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +148,12 @@
 		D93A7E041A1F81E200008B7C /* MMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMTableViewCell.h; sourceTree = "<group>"; };
 		D93A7E051A1F81E200008B7C /* MMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMTableViewCell.m; sourceTree = "<group>"; };
 		D93A7E0B1A1F87F700008B7C /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = SOURCE_ROOT; };
+		D996368A1A25924C00463116 /* InitProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitProfileViewController.h; sourceTree = "<group>"; };
+		D996368B1A25924C00463116 /* InitProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitProfileViewController.m; sourceTree = "<group>"; };
+		D996368D1A25927000463116 /* TableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableView.h; sourceTree = "<group>"; };
+		D996368E1A25927000463116 /* TableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableView.m; sourceTree = "<group>"; };
+		D99636901A25928D00463116 /* PickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerView.h; sourceTree = "<group>"; };
+		D99636911A25928D00463116 /* PickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerView.m; sourceTree = "<group>"; };
 		F462C8E499B71746BD08B0EB /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -278,6 +287,7 @@
 		4B58A2F71A130809007A5E93 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				D99636891A25920800463116 /* FirstLaunchController */,
 				D93A7DFD1A1F81BA00008B7C /* LeftDrawerHelper */,
 				D93A7DF41A1F75ED00008B7C /* LeftSideDrawerViewController.h */,
 				D93A7DFA1A1F7EC300008B7C /* BaseSideDrawerViewController.h */,
@@ -369,6 +379,19 @@
 				D93A7E051A1F81E200008B7C /* MMTableViewCell.m */,
 			);
 			name = LeftDrawerHelper;
+			sourceTree = "<group>";
+		};
+		D99636891A25920800463116 /* FirstLaunchController */ = {
+			isa = PBXGroup;
+			children = (
+				D99636901A25928D00463116 /* PickerView.h */,
+				D99636911A25928D00463116 /* PickerView.m */,
+				D996368D1A25927000463116 /* TableView.h */,
+				D996368E1A25927000463116 /* TableView.m */,
+				D996368A1A25924C00463116 /* InitProfileViewController.h */,
+				D996368B1A25924C00463116 /* InitProfileViewController.m */,
+			);
+			name = FirstLaunchController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -530,10 +553,13 @@
 				4B6E52291A1B3E8600915F39 /* PostView.m in Sources */,
 				4BBCACA01A19C64F0033DF15 /* FeedbackViewController.m in Sources */,
 				4BB1E9951A132CCF00A812DC /* HomeTableViewCellModel.m in Sources */,
+				D996368F1A25927000463116 /* TableView.m in Sources */,
 				4BB1E9B41A134E8900A812DC /* HomeViewController.m in Sources */,
+				D99636921A25928D00463116 /* PickerView.m in Sources */,
 				4B94F95C1A15CFFC0021DBE6 /* PostViewController.m in Sources */,
 				4BB1E98B1A13295A00A812DC /* HomeTableViewCell.m in Sources */,
 				D93A7E081A1F81E200008B7C /* MMSideDrawerTableViewCell.m in Sources */,
+				D996368C1A25924C00463116 /* InitProfileViewController.m in Sources */,
 				4B58A2F11A130708007A5E93 /* ViewPagerController.m in Sources */,
 				4BBCAC9A1A19C60F0033DF15 /* BabyInfoViewController.m in Sources */,
 				4B58A2C81A12EF27007A5E93 /* main.m in Sources */,
@@ -666,7 +692,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -680,7 +706,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
