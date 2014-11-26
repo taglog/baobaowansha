@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "SlideViewController.h"
 #import "LeftViewController.h"
 #import "HomeViewController.h"
 #import "InitProfileViewController.h"
