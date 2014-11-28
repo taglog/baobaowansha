@@ -8,6 +8,5 @@
 
 #import "CustomizedUITableViewController.h"
 
-@interface BabyInfoViewController : CustomizedUIViewController
-
+@interface BabyInfoViewController : CustomizedUIViewController 
 @end
