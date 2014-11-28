@@ -9,13 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "BaseSideDrawerViewController.h"
 
+typedef NS_ENUM(NSInteger, MMDrawerSection){
+    MMDrawerSection1,
+    MMDrawerSection2,
+
+    
+};
+
 @interface LeftSideDrawerViewController : BaseSideDrawerViewController
 
 
 @property (nonatomic, retain) UIViewController * navHome;
 @property (nonatomic, retain) UIViewController * navCollection;
 @property (nonatomic, retain) UIViewController * navComment;
-@property (nonatomic, retain) UIViewController * navBabyInfo;
 @property (nonatomic, retain) UIViewController * navSetting;
 @property (nonatomic, retain) UIViewController * navFeedback;
 

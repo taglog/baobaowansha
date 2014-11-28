@@ -17,7 +17,7 @@
 @property (strong, readwrite, nonatomic) RESegmentedItem *sexSegmentItem;
 @property (strong, readwrite, nonatomic) RESegmentedItem *babamamaSelectItem;
 
-@property (strong, readwrite, nonatomic) RETableViewSection *buttonSection;
+//@property (strong, readwrite, nonatomic) RETableViewSection *buttonSection;
 
 
 @end
@@ -32,10 +32,9 @@
     
     self.title = @"宝贝信息";
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self createSettingTableCells];
-    });
-    NSLog(@"Back");
+    [self createSettingTableCells];
+
+    NSLog(@"back");
     
 
     
@@ -80,7 +79,7 @@
     [self.manager addSection:babySection];
     RETableViewSection *mamaSection = [RETableViewSection sectionWithHeaderTitle:@"父母设置" footerTitle:@"信息展示可能会针对父母有所不同"];
     [self.manager addSection:mamaSection];
-    self.buttonSection = [self addButton];
+    [self addButton];
     
     // Add items
     //

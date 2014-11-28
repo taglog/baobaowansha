@@ -1,38 +1,28 @@
 //
-//  CommentViewController.m
+//  AboutUsViewController.m
 //  baobaowansha2
 //
-//  Created by 刘昕 on 14/11/17.
+//  Created by PanYongfeng on 14/11/28.
 //  Copyright (c) 2014年 刘昕. All rights reserved.
 //
 
-#import "CommentViewController.h"
+#import "AboutUsViewController.h"
 
-@interface CommentViewController ()
+@interface AboutUsViewController ()
 
 @end
 
-@implementation CommentViewController
+@implementation AboutUsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor whiteColor];
-    
-    
-    
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(100, 100, 100, 100)];
-    label.text = [NSString stringWithFormat:@"commentViewController"];
-    label.tintColor = [UIColor blackColor];
-    [self.view addSubview:label];
+    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    
 }
-
 
 /*
 #pragma mark - Navigation
