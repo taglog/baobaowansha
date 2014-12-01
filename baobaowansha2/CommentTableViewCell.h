@@ -10,8 +10,8 @@
 
 @interface CommentTableViewCell : UITableViewCell
 
-@property(nonatomic,strong)NSDictionary *commentViewCell;
+-(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame;
 
--(void)setDataWithDict:(NSDictionary *)dict;
++(CGFloat)heightForCellWithDict:dict frame:(CGRect)frame;
 
 @end

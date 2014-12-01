@@ -7,61 +7,161 @@
 //
 
 #import "PostViewController.h"
-#import "PostView.h"
 #import "CommentTableViewCell.h"
+#import "DTTiledLayerWithoutFade.h"
+#import "AFNetworking.h"
+#import "CommentCreateViewController.h"
 
 @interface PostViewController ()
 {
-    DTAttributedTextView *_textView;
+    CGFloat padding;
+    CGRect _frame;
+    
 }
-@property(nonatomic,retain) PostView *post;
-@property(nonatomic,retain) UIScrollView *scrollView;
+//scrollView里放入textView和评论的tableView
+@property(nonatomic,retain) UIScrollView *postScrollView;
+@property(nonatomic,retain) DTAttributedTextView *textView;
 @property(nonatomic,retain) UITableView *commentTableView;
-@property(nonatomic,retain) NSArray *commentTableViewCell;
-@property (nonatomic,strong) NSDictionary *postDict;
+
+@property(nonatomic,retain) UIButton *commentCreateButton;
+//接收到的post数据
+@property(nonatomic,strong) NSDictionary *postDict;
+
+//把postTitle放入textView里面一起显示
+@property(nonatomic,strong)NSString *postTitle;
+@property(nonatomic,strong)NSString *postContent;
+@property(nonatomic,strong)NSString *htmlPostContent;
+
+//得到计算过后的textViewSize
+@property(nonatomic,assign)CGSize textViewSize;
+
+//上拉刷新的评论
+@property (nonatomic,retain)EGORefreshCustom *refreshFooterView;
+
+//用来更新tableViewCell的数组
+@property(nonatomic,strong)NSMutableArray *commentTableViewCell;
+
+//是否reloading标志
+@property (nonatomic,assign)BOOL reloading;
+
+//postID
+@property(nonatomic,assign)NSInteger postID;
 
 @end
 
 @implementation PostViewController
 
+-(void)loadView{
+    [super loadView];
+    self.view.backgroundColor = [UIColor whiteColor];
+    UIBarButtonItem *commentButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"comment24x24.png"] style:UIBarButtonItemStylePlain target:self action:@selector(pushCommentViewController)];
+    commentButton.tintColor = [UIColor blackColor];
+    UIBarButtonItem *fixedSpaceButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixedSpaceButton.width = 10;
+    UIBarButtonItem *collectionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"star32x32.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collect)];
+    collectionButton.tintColor = [UIColor blackColor];
+    self.navigationItem.rightBarButtonItems = @[collectionButton,fixedSpaceButton,commentButton];
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    
+    
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor whiteColor];
     
-    self.commentTableViewCell = @[
-  @{@"userName":@"啦啦啦",@"stairsNumber":@"8楼",@"userComment":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"userBabyAge":@"14-24个月",@"commentTime":@"11点10分"},
-  @{@"userName":@"啦啦啦",@"stairsNumber":@"8楼",@"userComment":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"userBabyAge":@"14-24个月",@"commentTime":@"11点10分"},
-  @{@"userName":@"啦啦啦",@"stairsNumber":@"8楼",@"userComment":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"userBabyAge":@"14-24个月",@"commentTime":@"11点10分"},
-  @{@"userName":@"啦啦啦",@"stairsNumber":@"8楼",@"userComment":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"userBabyAge":@"14-24个月",@"commentTime":@"11点10分"},
-  @{@"userName":@"啦啦啦",@"stairsNumber":@"8楼",@"userComment":@"握握手；大家发生；打飞机阿斯顿飞矮撒旦法奥迪发生地方阿斯顿飞爱疯飞",@"userBabyAge":@"14-24个月",@"commentTime":@"11点10分"},];
-    }
+}
 
--(void)setPostWithDict:(NSDictionary *)dict{
+-(void)initViewWithDict:(NSDictionary *)dict{
     
     _postDict = dict;
+    _postID = [[dict valueForKey:@"ID"]integerValue];
+    _frame = self.view.frame;
     
-    //postView
-    self.post = [[PostView alloc] initWithDict:dict frame:CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height)];
-    self.post.contentSize= CGSizeMake(self.view.frame.size.width, 2000.0f);
-    [self.view addSubview:self.post];
-    self.post.textView.delegate = self;
-    self.post.commentTableView.delegate =self;
-    self.post.commentTableView.dataSource =self;
-    self.post.textView.attributedString = [self _attributedStringForSnippetUsingiOS6Attributes:NO];
-    _textView = self.post.textView;
-   
- 
+    //初始化textView
+    [self initTextView];
+    
+    //根据textView的大小
+    _postScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 64.0f)];
+    _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, _textViewSize.height + 667);
+    _postScrollView.delegate = self;
+    
+    //初始化底部的Button
+    _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 60.0f, self.view.frame.size.width, 60.0f)];
+    _commentCreateButton.backgroundColor = [UIColor redColor];
+    [_commentCreateButton addTarget:self action:@selector(pushCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_commentCreateButton];
+    [self.view addSubview:_postScrollView];
+    //根据textView的大小，设置tableView的origin.y
+    [self initTableView];
+    [self initCommentTableView];
+    
+    [_postScrollView addSubview:_textView];
+    
+    
+        
 }
+
+//初始化textView
+-(void)initTextView{
+    
+    self.postTitle = [_postDict valueForKey:@"post_title"];
+    self.postContent = [_postDict valueForKey:@"post_content"];
+    
+    //初始化PostTitle
+    NSString *htmlPostTitleStart = @"<h2 style='font-size:26px;color:#33333;margin:10px 0'>";
+    NSString *htmlPostTitleWithStart = [htmlPostTitleStart stringByAppendingString:self.postTitle];
+    NSString *htmlPostTItleWithEnd = [htmlPostTitleWithStart stringByAppendingString:@"</h2>"];
+    self.htmlPostContent = [htmlPostTItleWithEnd stringByAppendingString:self.postContent];
+    
+    //初始化DTTextView
+    _textView = [[DTAttributedTextView alloc] init];
+    
+    
+    _textView.shouldDrawImages = NO;
+    _textView.shouldDrawLinks = NO;
+    _textView.scrollEnabled = NO;
+    _textView.textDelegate = self;
+    
+    
+    [_textView setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+    _textView.contentInset = UIEdgeInsetsMake(10, 15, 14, 15);
+    
+    _textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    
+    
+    _textView.attributedString = [self _attributedStringForSnippetUsingiOS6Attributes:NO];
+    
+    _textViewSize = [self getTextViewHeight:_textView.attributedString];
+    _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height + 128.0f);
+    
+}
+
+-(CGSize)getTextViewHeight:(NSAttributedString *)string{
+    
+    DTCoreTextLayouter *layouter = [[DTCoreTextLayouter alloc] initWithAttributedString:string];
+    
+    CGRect maxRect = CGRectMake(10, 20, _frame.size.width, CGFLOAT_HEIGHT_UNKNOWN);
+    NSRange entireString = NSMakeRange(0, [string length]);
+    DTCoreTextLayoutFrame *layoutFrame = [layouter layoutFrameWithRect:maxRect range:entireString];
+    
+    CGSize sizeNeeded = [layoutFrame frame].size;
+    
+    return sizeNeeded;
+}
+
+#pragma mark Custom Views on Text
 
 - (NSAttributedString *)_attributedStringForSnippetUsingiOS6Attributes:(BOOL)useiOS6Attributes
 {
     // Load HTML data
-    NSString *html = [_postDict valueForKey:@"post_content"];
+    NSString *html = self.htmlPostContent;
     NSData *data = [html dataUsingEncoding:NSUTF8StringEncoding];
     
     // Create attributed string from HTML
-    CGSize maxImageSize = CGSizeMake(self.view.bounds.size.width - 30.0, self.view.bounds.size.height - 280.0);
+    CGSize maxImageSize = CGSizeMake(_frame.size.width-30.0, _frame.size.height - 280.0);
     
     // example for setting a willFlushCallback, that gets called before elements are written to the generated attributed string
     void (^callBackBlock)(DTHTMLElement *element) = ^(DTHTMLElement *element) {
@@ -99,6 +199,7 @@
     //[options setObject:[NSURL fileURLWithPath:readmePath] forKey:NSBaseURLDocumentOption];
     
     NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
+    
     
     return string;
 }
@@ -159,7 +260,7 @@
         {
             // NOTE: this is a hack, you probably want to use your own image view and touch handling
             // also, this treats an image with a hyperlink by itself because we don't have the GUID of the link parts
-            imageView.userInteractionEnabled = YES;
+            imageView.userInteractionEnabled = NO;
             
             DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:imageView.bounds];
             button.URL = attachment.hyperLinkURL;
@@ -323,8 +424,73 @@
     }
 }
 
+//初始化评论栏
 
+#pragma  mark 评论 tableView delegate
+-(void)initCommentTableView{
+    
+    //初始化homeTableViewCell
+    self.commentTableViewCell = [[NSMutableArray alloc]init];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/comment/get?id=%li&p=1",(long)_postID] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSArray *responseArray = [responseObject valueForKey:@"data"];
+        if(responseArray != (id)[NSNull null]){
+            for(NSString *responseDict in responseArray){
+                NSDictionary *dict = [responseArray valueForKey:responseDict];
+                [self.commentTableViewCell addObject:dict];
+            }
+            
+            [self resetCommentTableViewHeight:self.commentTableViewCell];
+            
+            [self initRefreshView];
+            
+        }else{
+            
+            UILabel *label =[[UILabel alloc]initWithFrame:CGRectMake(100,100, 100, 100)];
+            label.text = @"没有评论";
+            [self.view addSubview:label];
+            
+            
+            
+            
+        }
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+//初始化tableView
+-(void)initTableView{
+    
+    if(!_commentTableView){
+        _commentTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 128, self.view.frame.size.width, self.view.frame.size.height)];
+        
+        _commentTableView.scrollEnabled = NO;
+        
+        _commentTableView.delegate = self;
+        _commentTableView.dataSource = self;
+        [_postScrollView addSubview:_commentTableView];
+        [_commentTableView setSeparatorInset:UIEdgeInsetsZero];
+        UIView *commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40.0f)];
+        commentTableHeader.backgroundColor = [UIColor colorWithRed:204.0f/255.0f green:204.0f/255.0f blue:204.0f/255.0 alpha:1.0];
+        UILabel *commentTableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 10.0f, 100.0f, 20.0f)];
+        commentTableHeaderLabel.text = @"评论";
+        commentTableHeaderLabel.font = [UIFont systemFontOfSize:14.0f];
+        [commentTableHeader addSubview:commentTableHeaderLabel];
+        _commentTableView.tableHeaderView = commentTableHeader;
+    }
+}
 
+//初始化下拉刷新header
+-(void)initRefreshView{
+   
+    _refreshFooterView = [[EGORefreshCustom alloc] initWithTableView:_postScrollView position:EGORefreshFooter];
+    _refreshFooterView.delegate = self;
+    _refreshFooterView.frame = CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f);
+    [_postScrollView addSubview:_refreshFooterView];
+    
+}
 
 
 #pragma mark -commentTableView 委托实现
@@ -339,19 +505,132 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-      static NSString *ID = @"Comment";
-      CommentTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-      if(cell == nil){
-          cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
-         [cell setDataWithDict:self.commentTableViewCell[indexPath.row]];
+    static NSString *ID = @"Comment";
+    CommentTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if(cell == nil){
+        cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+        [cell setDataWithDict:self.commentTableViewCell[indexPath.row] frame:_frame];
+       
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     return cell;
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 110;
+    return [CommentTableViewCell heightForCellWithDict:self.commentTableViewCell[indexPath.row] frame:self.view.frame];
 }
+
+-(void)resetCommentTableViewHeight:(NSMutableArray *)commentTableViewCell{
+    
+    CGFloat height = 0;
+    NSUInteger length = [commentTableViewCell count];
+    for(int i = 0;i < length ; i++){
+        height  += [CommentTableViewCell heightForCellWithDict:commentTableViewCell[i] frame:_frame];
+    }
+    
+    [_commentTableView reloadData];
+    
+    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height + height + 128)];
+    
+    [_commentTableView setFrame:CGRectMake(0, _textViewSize.height + 128, self.view.frame.size.width, height)];
+    [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f)];
+    
+}
+#pragma mark 下拉数据刷新
+- (void)reloadTableViewDataSource{
+
+    //上拉刷新的数据处理
+    if(_refreshFooterView.pullUp){
+        static int p = 2;
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/comment/get?id=%ld&p=%d",(long)_postID,p] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+            
+            NSArray *responseArray = [responseObject valueForKey:@"data"];
+            if(responseArray != (id)[NSNull null]){
+                for(NSString *responseDict in responseArray){
+                    NSDictionary *dict = [responseArray valueForKey:responseDict];
+                    [_commentTableViewCell addObject:dict];
+                }
+                 _reloading = YES;
+                [self resetCommentTableViewHeight:self.commentTableViewCell];
+                [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+            }
+        }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        ++p;
+        
+    }
+}
+
+- (void)doneLoadingTableViewData{
+    _reloading = NO;
+    [_refreshFooterView egoRefreshScrollViewDataSourceDidFinishedLoading:_commentTableView];
+    
+}
+
+#pragma mark - _postScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    if(scrollView.contentOffset.y > (_textViewSize.height - 400.0f)){
+        [self.view bringSubviewToFront:_commentCreateButton];
+        [UIView animateWithDuration:0.3 animations:^{
+            _commentCreateButton.frame = CGRectMake(0,self.view.frame.size.height - 60, self.view.frame.size.width, 60.0f);
+        //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
+//            _postScrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
+        }  completion:^(BOOL finished){
+            
+        }];
+
+    }else{
+        [UIView animateWithDuration:0.3 animations:^{
+            
+        _commentCreateButton.frame = CGRectMake(0, self.view.frame.size.height , self.view.frame.size.width, 60.0f);
+            
+    }  completion:^(BOOL finished){
+        
+    }];
+        
+    }
+    [_refreshFooterView egoRefreshScrollViewDidScroll:scrollView];
+    
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    
+    [_refreshFooterView egoRefreshScrollViewDidEndDragging:scrollView];
+    
+}
+
+#pragma mark - EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshCustom *)view{
+    [self reloadTableViewDataSource];
+    
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshCustom *)view{
+    
+    return _reloading;
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshCustom *)view{
+    
+    return [NSDate date];
+    
+}
+//创建评论的View
+-(void)pushCommentCreateViewController{
+    CommentCreateViewController *commentCreateViewController = [[CommentCreateViewController alloc]init];
+    [self.navigationController presentViewController:commentCreateViewController animated:YES completion:^{
+        
+    }];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -10,7 +10,7 @@
 #import "HomeViewController.h"
 #import "MMDrawerController.h"
 #import "LeftSideDrawerViewController.h"
-#import "InitProfileViewController.h"
+
 
 @interface AppDelegate ()
 @property (nonatomic,strong) MMDrawerController * drawerController;
@@ -22,24 +22,23 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch
-    
+    [[UINavigationBar appearance] setBackgroundColor:[UIColor whiteColor]];
+
     UIViewController * leftSideDrawerViewController = [[LeftSideDrawerViewController alloc] init];
 
-    UIViewController * centerViewController = [[HomeViewController alloc] init];
+    UIViewController * centerViewController = [[HomeViewController alloc] init];    
     UINavigationController *centerNavigation = [[UINavigationController alloc] initWithRootViewController:centerViewController];
-    
-
-    
+        
     //TODO: 判断是否是第一次启动app
-
+    
         
     self.drawerController = [[MMDrawerController alloc]
                                         initWithCenterViewController:centerNavigation
                                         leftDrawerViewController:leftSideDrawerViewController];
     
-    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
+    
     [self.window setRootViewController:self.drawerController];
 
     [self.window makeKeyAndVisible];

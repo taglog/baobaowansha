@@ -10,11 +10,11 @@
 #import "DTAttributedTextView.h"
 #import "DTLazyImageView.h"
 #import "DTCoreText.h"
-#import "PostView.h"
+#import "EGORefreshCustom.h"
 
-@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate, DTLazyImageViewDelegate>
+@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EGORefreshDelegate>
 
--(void)setPostWithDict:(NSDictionary *)dict;
+-(void)initViewWithDict:(NSDictionary *)dict;
 
 
 @end

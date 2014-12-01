@@ -1,6 +1,6 @@
 //
 //  HomeViewController.m
-//  baobaowansha2
+//  ;
 //
 //  Created by 刘昕 on 14/11/12.
 //  Copyright (c) 2014年 刘昕. All rights reserved.
@@ -17,26 +17,27 @@
 @end
 
 @implementation HomeViewController
-
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor  ];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.dataSource = self;
-    self.delegate = self;
-    
     self.title =@"宝宝玩啥";
     self.view.backgroundColor = [UIColor whiteColor];
+    self.dataSource = self;
+    self.delegate = self;
     [self setupLeftMenuButton];
     
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"test"
-                                                                   style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back24x24.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewControllerAnimated:)];
     self.navigationItem.backBarButtonItem = backButton;
+    
     
 }
 
@@ -142,7 +143,6 @@
 -(void)leftDrawerButtonPress:(id)sender{
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
-
 
 
 @end

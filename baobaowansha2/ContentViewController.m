@@ -21,8 +21,6 @@
 
 @property (nonatomic,retain)EGORefreshCustom *refreshFooterView;
 
-@property (nonatomic,strong)NSArray *addOnCell;
-
 
 @end
 
@@ -32,7 +30,8 @@
     [super viewDidLoad];
     
     if(self){
-        self.view.backgroundColor = [UIColor clearColor];
+        self.view.backgroundColor = [UIColor whiteColor];
+        
         [self setInitData];
        
     }
@@ -43,9 +42,11 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void)viewDidDisappear:(BOOL)animated{
-
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
 }
+
 
 -(void)setInitData{
     
@@ -59,9 +60,9 @@
         for(NSString *responseDict in responseArray){
             NSDictionary *dict = [responseArray valueForKey:responseDict];
             [self.homeTableViewCell addObject:dict];
-            [self initTableView];
-            [self initRefreshView];
         }
+        [self initTableView];
+        [self initRefreshView];
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
     }];
@@ -142,7 +143,7 @@
     [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/post?id=%@",[self.homeTableViewCell[indexPath.row] objectForKey:@"ID"]] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSDictionary *responseDict = [responseObject valueForKey:@"data"];
         
-        [post setPostWithDict:responseDict];
+        [post initViewWithDict:responseDict];
         
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
