@@ -10,12 +10,7 @@
 #import "UIViewController+MMDrawerController.h"
 
 
-typedef NS_ENUM(NSInteger, MMDrawerSection){
-    MMDrawerSection1,
-    MMDrawerSection2,
-    MMDrawerSection3,
 
-};
 
 @interface BaseSideDrawerViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) UITableView * tableView;

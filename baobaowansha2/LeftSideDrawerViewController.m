@@ -31,7 +31,7 @@
     
 
     // display parameters: setting to 240 points
-    [self.mm_drawerController setMaximumLeftDrawerWidth:220.0];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:200.0];
     
     // opener drawer gesture parameters:
     self.mm_drawerController.openDrawerGestureModeMask ^= MMOpenDrawerGestureModePanningNavigationBar^MMOpenDrawerGestureModePanningCenterView^MMOpenDrawerGestureModeBezelPanningCenterView;
@@ -89,10 +89,8 @@
     // Return the number of rows in the section.
     switch (section) {
         case MMDrawerSection1:
-            return 2;
+            return 3;
         case MMDrawerSection2:
-            return 2;
-        case MMDrawerSection3:
             return 2;
         default:
             return 0;
@@ -114,21 +112,14 @@
         case MMDrawerSection1:
             if(indexPath.row == 0){
                 [cell.textLabel setText:@"首页"];
-            } else {
-                [cell.textLabel setText:@"宝贝信息"];
-            }
-            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-            break;
-        case MMDrawerSection2:
-            if(indexPath.row == 0){
+            } else if(indexPath.row == 1) {
                 [cell.textLabel setText:@"我的收藏"];
-            }
-            else {
+            } else {
                 [cell.textLabel setText:@"我的评论"];
             }
             [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             break;
-        case MMDrawerSection3:
+        case MMDrawerSection2:
             if(indexPath.row == 0){
                 [cell.textLabel setText:@"反馈"];
             }
@@ -137,6 +128,7 @@
             }
             [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             break;
+
         default:
             break;
     }
@@ -147,11 +139,10 @@
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     switch (section) {
         case MMDrawerSection1:
-            return @"宝贝信息:";
+            return @"我的";
         case MMDrawerSection2:
-            return @"我的:";
-        case MMDrawerSection3:
-            return @"其它:";
+            return @"设置:";
+
         default:
             return nil;
     }
@@ -187,29 +178,7 @@
                 }
                 
                 
-            } else if (indexPath.row == 1){ // row == 1
-                if(self.navBabyInfo == nil) {
-                    UIViewController * babyInfoViewController = [[BabyInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                    self.navBabyInfo = [[UINavigationController alloc] initWithRootViewController:babyInfoViewController];
-                }
-                if ([self.currentController isEqual: @"BabyInfoViewControllerID"]){
-                    [self.mm_drawerController
-                     setCenterViewController:self.navBabyInfo
-                     withCloseAnimation:YES
-                     completion:nil];
-                } else {
-                    [self.mm_drawerController
-                     setCenterViewController:self.navBabyInfo
-                     withFullCloseAnimation:YES
-                     completion:nil];
-                    self.currentController = @"BabyInfoViewControllerID";
-                }
-            }
-            break;
-
-        }
-        case MMDrawerSection2:
-            if (indexPath.row == 0) {
+            } else if (indexPath.row == 1) {
                 if(self.navCollection == nil) {
                     UIViewController * collectionViewController = [[CollectionViewController alloc] initWithStyle:UITableViewStyleGrouped];
                     self.navCollection = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
@@ -229,7 +198,7 @@
                 }
                 
                 
-            } else if (indexPath.row == 1){ // row == 1
+            } else if (indexPath.row == 2){ // row == 1
                 if(self.navComment == nil) {
                     UIViewController * commentViewController = [[CommentViewController alloc] initWithStyle:UITableViewStyleGrouped];
                     self.navComment = [[UINavigationController alloc] initWithRootViewController:commentViewController];
@@ -247,10 +216,13 @@
                     self.currentController = @"CommentViewControllerID";
                 }
             }
-
-            break;
             
-        case MMDrawerSection3:
+            break;
+
+        }
+
+            
+        case MMDrawerSection2:
             if (indexPath.row == 0) {
                 if(self.navFeedback == nil) {
                     UIViewController * feedbackViewController = [[FeedbackViewController alloc] initWithStyle:UITableViewStyleGrouped];
