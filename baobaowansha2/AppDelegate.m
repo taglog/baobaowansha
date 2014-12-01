@@ -32,6 +32,10 @@
         
     //TODO: 判断是否是第一次启动app
     
+
+    
+    
+
         
     self.drawerController = [[MMDrawerController alloc]
                                         initWithCenterViewController:centerNavigation
