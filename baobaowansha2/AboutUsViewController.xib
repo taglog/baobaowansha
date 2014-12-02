@@ -25,7 +25,7 @@
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" scrollEnabled="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eiy-Xl-hJt">
                     <rect key="frame" x="40" y="341" width="240" height="128"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                    <mutableString key="text">关于我们的介绍                                                                                                                                                         关于我们的介绍多行文本的处理，使用了uitextview                                                                                              另外为了能够换行要一直加很多空格，暂时不知道其他解决办法                                                                                           uaer te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                    <string key="text">关于我们的介绍                                                                                                                                                         关于我们的介绍多行文本的处理，使用了uitextview                                                                                              另外为了能够换行要一直加很多空格，暂时不知道其他解决办法                                                                                           uaer te conscient to factor tum poen legum odioque civiuda.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     <dataDetectorType key="dataDetectorTypes" link="YES"/>
