@@ -32,6 +32,9 @@
 //评论人数
 @property (nonatomic,strong) UILabel *commentNumber;
 
+//传入的frame
+@property (nonatomic,assign)CGRect aFrame;
+
 @end
 
 @implementation HomeTableViewCell
@@ -77,11 +80,26 @@
 }
 
 //给Cell中的key赋值
--(void)setDataWithDict:(NSDictionary *)dict{
+-(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame{
     
     self.ID = [[dict objectForKey:@"ID"] integerValue];
+    self.aFrame = frame;
     
-    [self.imageView setImageWithURL:[dict objectForKey:@"http://blog.yhb360.com/wp-content/uploads/2014/11/米菲绘本第一辑-cover.jpg"] placeholderImage:[UIImage imageNamed:@"test1.jpg"]];;
+    NSString *imagePathOnServer = @"http://blog.yhb360.com/wp-content/uploads/";
+    NSString *imageGetFromServer = [dict valueForKey:@"post_cover"];
+    NSLog(@"%@",imageGetFromServer);
+    //没有设置特色图像的话会报错，所以需要检测是否为空
+    if(imageGetFromServer != (id)[NSNull null]){
+        NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];
+        NSURL *imageUrl = [NSURL URLWithString:[imageString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [self.image setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"test1.jpg"]];
+    
+    }else{
+        //没有特色图像的时候，怎么办
+        [self.image setImageWithURL:[NSURL URLWithString:@"http://blog.yhb360.com/wp-content/uploads/2014/11/%E4%BD%A0%E7%9C%8B%E5%88%B0%E6%88%91%E6%89%80%E7%9C%8B%E5%88%B0%E7%9A%84%E4%B8%9C%E8%A5%BF%E4%BA%86%E5%90%97.jpg"] placeholderImage:[UIImage imageNamed:@"test1.jpg"]];
+
+    }
+    
     
     self.title.text = [dict objectForKey:@"post_title"];
     
@@ -91,7 +109,7 @@
     
     self.collectionNumber.text = [NSString stringWithFormat:@"收藏 %@",[dict objectForKey:@"collectionNumber"]];
     
-    self.commentNumber.text = [NSString stringWithFormat:@"评论 %@",[dict objectForKey:@"commentNumber"]];
+    self.commentNumber.text = [NSString stringWithFormat:@"评论 %@",[dict objectForKey:@"comment_count"]];
     
     [self setNeedsLayout];
     
@@ -102,39 +120,45 @@
     [super layoutSubviews];
     
     //padding
-    CGFloat padding = 15.0;
-    UIColor *detailColor = [UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0];
+    CGFloat paddingHor = 15.0f;
+    CGFloat paddingVer = 10.0f;
     
     //缩略图的frame
-    self.imageView.frame = CGRectMake(padding, padding, 100.0f, 100.0f);
-    self.image.contentMode = UIViewContentModeScaleToFill;
+    self.image.frame = CGRectMake(paddingHor, paddingVer, 80.0f, 80.0f);
+    self.image.clipsToBounds  = YES;
+    self.image.contentMode = UIViewContentModeCenter;
+    
     
     //标题的frame
-    self.title.frame = CGRectMake(125.0, padding, self.frame.size.width - 100.0, 20.0);
-    self.title.textColor = [UIColor blackColor];
-    self.title.font = [UIFont systemFontOfSize:20.0];
+    self.title.frame = CGRectMake(107.0f, paddingVer, self.aFrame.size.width - 100.0, 20.0);
+    
+    self.title.textColor = [UIColor colorWithRed:17.0f/255.0f green:17.0f/255.0f blue:17.0f/255.0f alpha:1.0f];
+    self.title.font = [UIFont systemFontOfSize:17.0f];
     
     //摘要的frame
-    self.introduction.frame = CGRectMake(125.0, 30.0,self.frame.size.width - 100.0, 60.0);
-    self.introduction.font = [UIFont systemFontOfSize:14.0];
-    self.introduction.textColor = detailColor;
+    self.introduction.frame = CGRectMake(107.0, 20.0,self.aFrame.size.width - 100.0, 50.0);
+    
+    self.introduction.font = [UIFont systemFontOfSize:13.0];
+    self.introduction.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
     self.introduction.numberOfLines = 2;
     [self.introduction setLineBreakMode:NSLineBreakByWordWrapping];
     
     //年龄的frame
-    self.age.frame = CGRectMake(125.0, 86.0, 100.0, 30);
-    self.age.font = [UIFont systemFontOfSize:14.0];
-    self.age.textColor = detailColor;
+    self.age.frame = CGRectMake(107.0, 73.0, 100.0, 20);
+    
+    self.age.font = [UIFont systemFontOfSize:12.0];
+    self.age.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     
     //收藏数量的frame
-    self.collectionNumber.frame = CGRectMake(225.0, 86.0, 60.0, 30.0);
-    self.collectionNumber.font = [UIFont systemFontOfSize:14.0];
-    self.collectionNumber.textColor = detailColor;
+    self.collectionNumber.frame = CGRectMake(self.aFrame.size.width - 120, 73.0, 80.0, 20.0);
+    
+    self.collectionNumber.font = [UIFont systemFontOfSize:12.0];
+    self.collectionNumber.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     
     //评论数量的frame
-    self.commentNumber.frame = CGRectMake(285.0, 86.0, 60.0, 30.0);
-    self.commentNumber.font  = [UIFont systemFontOfSize:14.0];
-    self.commentNumber.textColor = detailColor;
+    self.commentNumber.frame = CGRectMake(self.aFrame.size.width - 55, 73.0, 80.0, 20.0);
+    self.commentNumber.font  = [UIFont systemFontOfSize:12.0];
+    self.commentNumber.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     
     
 

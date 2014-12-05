@@ -127,22 +127,33 @@
         cell = [[HomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
     
-    [cell setDataWithDict:self.homeTableViewCell[indexPath.row]];
+    [cell setDataWithDict:self.homeTableViewCell[indexPath.row] frame:self.view.frame];
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 130;
+    return 100;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    PostViewController *post = [[PostViewController alloc] init];
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/post?id=%@",[self.homeTableViewCell[indexPath.row] objectForKey:@"ID"]] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        NSDictionary *responseDict = [responseObject valueForKey:@"data"];
+    NSString *documentsDirectory = @"/Users/liuxin/Documents/documents";
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"userInfo.plist"];
+    NSDictionary *userInfo;
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        userInfo = [[NSDictionary alloc]initWithContentsOfFile:filePath];
         
+    }else{
+        //如果查不到文件，该怎么处理
+        [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
+        
+    }
+    PostViewController *post = [[PostViewController alloc] init];
+    NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[self.homeTableViewCell[indexPath.row] objectForKey:@"ID"],@"id",[userInfo valueForKey:@"userID"],@"userID",nil];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/post"] parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSDictionary *responseDict = [responseObject valueForKey:@"data"];
         [post initViewWithDict:responseDict];
         
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
