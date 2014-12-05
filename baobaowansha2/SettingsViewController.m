@@ -14,6 +14,7 @@
 @interface SettingsViewController ()
 
 @property (strong, readwrite, nonatomic) RETableViewManager *manager;
+@property (retain, nonatomic) BabyInfoViewController *babyInfoVC;
 
 @end
 
@@ -30,10 +31,13 @@
     RETableViewSection *section2 = [RETableViewSection sectionWithHeaderTitle:@"系统设置" footerTitle:@""];
     [self.manager addSection:section1];
     [self.manager addSection:section2];
+    if (self.babyInfoVC == nil) {
+        self.babyInfoVC = [[BabyInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    }
     
     [section1 addItem:[RETableViewItem itemWithTitle:@"宝贝信息" accessoryType:UITableViewCellAccessoryDisclosureIndicator selectionHandler:^(RETableViewItem *item) {
         [item deselectRowAnimated:YES];
-        [self.navigationController pushViewController:[[BabyInfoViewController alloc] initWithStyle:UITableViewStyleGrouped] animated:YES];
+        [self.navigationController pushViewController:self.babyInfoVC animated:YES];
     }]];
 
     

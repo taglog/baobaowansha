@@ -1,6 +1,8 @@
 //
 //  BabyInfoViewController.m
 //  baobaowansha2
+//  babyinfo has 2 status: stored locally/synced remotely
+//  press sync btn will only sync remotely.
 //
 //  Created by 刘昕 on 14/11/17.
 //  Copyright (c) 2014年 刘昕. All rights reserved.
@@ -8,6 +10,7 @@
 
 #import "BabyInfoViewController.h"
 #import "RETableViewManager.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @interface BabyInfoViewController ()
 
@@ -17,7 +20,10 @@
 @property (strong, readwrite, nonatomic) RESegmentedItem *sexSegmentItem;
 @property (strong, readwrite, nonatomic) RESegmentedItem *babamamaSelectItem;
 
-//@property (strong, readwrite, nonatomic) RETableViewSection *buttonSection;
+@property (strong, readwrite, nonatomic) RETableViewItem *buttonItem;
+
+// indicate whether information is synced with server end
+//@property (nonatomic) BOOL synced;
 
 
 @end
@@ -34,7 +40,9 @@
     
     [self createSettingTableCells];
 
-    NSLog(@"back");
+    //NSLog(@"NEED REMOVE this flag before publishing(in BabyInfoViewController)");
+    //TODO: remove following line after test
+    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"BabyInfoSynced"];
     
 
     
@@ -46,14 +54,20 @@
     
 }
 
-- (void) applicationWillResignActive:(NSNotification *)notification
+- (NSMutableDictionary *)formatBabyInfo
 {
-    NSString *filePath = [self dataFilePath];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:self.nameItem.value forKey:@"babyName"];
     [dict setObject:[NSNumber numberWithInteger:self.sexSegmentItem.value] forKey:@"babySex"];
     [dict setObject:[NSNumber numberWithInteger:self.babamamaSelectItem.value] forKey:@"babaOrMama"];
     [dict setObject:self.dateTimeItem.value forKey:@"babyBirthday"];
+    return dict;
+}
+
+- (void) applicationWillResignActive:(NSNotification *)notification
+{
+    NSString *filePath = [self dataFilePath];
+    NSMutableDictionary *dict = [self formatBabyInfo];
     [dict writeToFile:filePath atomically:YES];
     NSLog(@"Baby Information is persistented into plist: %@", dict);
 }
@@ -66,13 +80,7 @@
 
 - (void) createSettingTableCells
 {
-    NSLog(@"Working");
-    // Create manager
-    //
     self.manager = [[RETableViewManager alloc] initWithTableView:self.tableView];
-    NSLog(@"Working");
-    // Add a section
-    //
     
     
     RETableViewSection *babySection = [RETableViewSection sectionWithHeaderTitle:@"宝贝设置" footerTitle:@""];
@@ -83,9 +91,10 @@
     
     // Add items
     //
-    self.nameItem = [RETextItem itemWithTitle:@"宝贝昵称: " value:@"" placeholder:@""];
+    self.nameItem = [RETextItem itemWithTitle:@"宝贝昵称: " value:@" " placeholder:@""];
     
-    self.dateTimeItem = [REDateTimeItem itemWithTitle:@"宝贝生日: " value:nil placeholder:nil format:@"yyyy-MM-dd" datePickerMode:UIDatePickerModeDate];
+    NSDate *myDate = [NSDate date];
+    self.dateTimeItem = [REDateTimeItem itemWithTitle:@"宝贝生日: " value:myDate placeholder:nil format:@"yyyy-MM-dd" datePickerMode:UIDatePickerModeDate];
     self.dateTimeItem.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     self.dateTimeItem.textAlignment = NSTextAlignmentCenter;
     
@@ -131,15 +140,46 @@
 {
     RETableViewSection *section = [RETableViewSection section];
     [self.manager addSection:section];
+    
+    NSString * btnTitle = @"更新";
+    
  
-    RETableViewItem *buttonItem = [RETableViewItem itemWithTitle:@"确定" accessoryType:UITableViewCellAccessoryNone  selectionHandler:^(RETableViewItem *item) {
-            item.title = @"Need TODO!";
+    self.buttonItem = [RETableViewItem itemWithTitle:btnTitle accessoryType:UITableViewCellAccessoryNone  selectionHandler:^(RETableViewItem *item) {
+            item.title = @"更新中, 请稍后...";
+            [item setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [self syncBabyInfoSettings];
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
     }];
-    buttonItem.textAlignment = NSTextAlignmentCenter;
-    [section addItem:buttonItem];
+    self.buttonItem.textAlignment = NSTextAlignmentCenter;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"babyInfoSynced"]) {
+        btnTitle = @"已更新";
+        self.buttonItem.title = btnTitle;
+        [self.buttonItem setSelectionStyle:UITableViewCellSelectionStyleNone];
+    }
+    
+    
+    [section addItem:self.buttonItem];
  
     return section;
+}
+
+- (void) syncBabyInfoSettings
+{
+    // TODO: sync with server side
+    
+    AFHTTPRequestOperationManager *afnmanager = [AFHTTPRequestOperationManager manager];
+    afnmanager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    NSMutableDictionary *dict = [self formatBabyInfo];
+    [afnmanager POST:@"http://blogtest.yhb360.com/test/syncbabyinfo.php" parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.buttonItem s:];
+        //[self.buttonItem setSelectionStyle:UITableViewCellSelectionStyleNone];
+        //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"babyInfoSynced"];
+        NSLog(@"Sync successed: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Sync Error: %@", error);
+        //self.buttonItem.title = @"出错了, 请重试...";
+    }];
+    
 }
 
 
@@ -149,7 +189,7 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(
                                                          NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    return [documentsDirectory stringByAppendingPathComponent:@"babyInfo.plist"];
+    return [documentsDirectory stringByAppendingPathComponent:@"babyinfo.plist"];
 }
 
 

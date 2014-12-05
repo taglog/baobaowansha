@@ -29,11 +29,27 @@
 
     UIViewController * centerViewController = [[HomeViewController alloc] init];    
     UINavigationController *centerNavigation = [[UINavigationController alloc] initWithRootViewController:centerViewController];
+
     //设置服务器跟目录
     self.rootURL = @"http://blogtest.yhb360.com/baobaowansha";
     
     //TODO: 判断是否是第一次启动app
     
+
+
+        
+    // generate UserID using VenderID
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"generatedUserID"] == nil) {
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0"))
+            self.generatedUserID = [UIDevice currentDevice].identifierForVendor.UUIDString;
+        else
+            self.generatedUserID = ((__bridge NSString *)(CFUUIDCreateString(NULL, CFUUIDCreate(NULL))));
+        NSLog(@"generate UserID from UIDevice, %@", self.generatedUserID);
+        [[NSUserDefaults standardUserDefaults] setObject:self.generatedUserID forKey:@"generatedUserID"];
+    } else {
+        self.generatedUserID = [[NSUserDefaults standardUserDefaults] objectForKey:@"generatedUserID"];
+        NSLog(@"get UserID from NSUserDefaults, %@", self.generatedUserID);
+    }
 
     
     

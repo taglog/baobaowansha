@@ -37,7 +37,8 @@
 
 #pragma mark - Button Handlers
 -(void)leftDrawerButtonPress:(id)sender{
-    
+    // remove keyboard
+    [self.mm_drawerController.centerViewController.view endEditing:YES];
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
 
