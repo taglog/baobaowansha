@@ -10,6 +10,8 @@
 #import "CommentTableViewCell.h"
 #import "DTTiledLayerWithoutFade.h"
 #import "AFNetworking.h"
+#import "AppDelegate.h"
+
 @interface PostViewController ()
 {
     CGFloat padding;
@@ -53,6 +55,8 @@
 @property(nonatomic,strong)UIBarButtonItem *fixedSpaceButton;
 //没有评论的时候显示
 @property(nonatomic,strong)UILabel *noCommentLabel;
+
+@property (nonatomic,retain)AppDelegate *appDelegate;
 @end
 
 @implementation PostViewController
@@ -111,9 +115,13 @@
     
     NSDictionary *colloctParam = [NSDictionary dictionaryWithObjectsAndKeys:[userInfo valueForKey:@"userID"],@"userID",[NSNumber numberWithInteger:self.postID],@"postID", nil];
     
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    NSString *collectRouter = @"/post/collect";
+    NSString *collectRequestUrl = [self.appDelegate.rootURL stringByAppendingString:collectRouter];
     //进行收藏判断 userID,PostID
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/collect"]  parameters:colloctParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+    [manager POST:collectRequestUrl  parameters:colloctParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
         NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
         if(status == 1){
@@ -490,7 +498,8 @@
     
     // update all attachments that matchin this URL (possibly multiple images with same size)
     for (DTTextAttachment *oneAttachment in [_textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
-    {
+    {   NSLog(@"%f",size.width);
+        NSLog(@"%f",size.height);
         // update attachments that have no original size, that also sets the display size
         if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
         {
@@ -513,9 +522,12 @@
     
     //初始化homeTableViewCell
     self.commentTableViewCell = [[NSMutableArray alloc]init];
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    NSString *commentRouter = [NSString stringWithFormat:@"http://localhost/baobaowansha/comment/get?id=%li&p=1",(long)_postID];
+    NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/comment/get?id=%li&p=1",(long)_postID] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+    [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         if(responseArray != (id)[NSNull null]){
             for(NSString *responseDict in responseArray){
@@ -633,13 +645,14 @@
 }
 #pragma mark 下拉数据刷新
 - (void)reloadTableViewDataSource{
-
+    
     //上拉刷新的数据处理
     if(_refreshFooterView.pullUp){
         static int p = 2;
-        
+        NSString *commentRouter = [NSString stringWithFormat:@"http://localhost/baobaowansha/comment/get?id=%ld&p=%d",(long)_postID,p];
+        NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/comment/get?id=%ld&p=%d",(long)_postID,p] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
             
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             if(responseArray != (id)[NSNull null]){

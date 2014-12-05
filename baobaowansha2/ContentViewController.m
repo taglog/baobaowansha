@@ -10,6 +10,7 @@
 #import "HomeTableViewCell.h"
 #import "PostViewController.h"
 #import "AFNetworking.h"
+#import "AppDelegate.h"
 
 @interface ContentViewController ()
 
@@ -21,7 +22,7 @@
 
 @property (nonatomic,retain)EGORefreshCustom *refreshFooterView;
 
-
+@property (nonatomic,retain)AppDelegate *appDelegate;
 @end
 
 @implementation ContentViewController
@@ -52,9 +53,14 @@
     
     //初始化homeTableViewCell
     self.homeTableViewCell = [[NSMutableArray alloc]init];
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    NSString *postRouter = [NSString stringWithFormat:@"/post/table?type=%lu&p=1",(unsigned long)_type];
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/table?type=%lu&p=1",(unsigned long)_type] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+    NSLog(@"%@",postRequestUrl);
+    
+    [manager GET:postRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         for(NSString *responseDict in responseArray){
@@ -151,8 +157,11 @@
     }
     PostViewController *post = [[PostViewController alloc] init];
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[self.homeTableViewCell[indexPath.row] objectForKey:@"ID"],@"id",[userInfo valueForKey:@"userID"],@"userID",nil];
+    
+    NSString *postRouter = @"/post/post";
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/post"] parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+    [manager POST:postRequestUrl parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSDictionary *responseDict = [responseObject valueForKey:@"data"];
         [post initViewWithDict:responseDict];
         
@@ -169,8 +178,10 @@
 //下拉刷新的数据处理
     if(_refreshHeaderView.pullDown){
         
+        NSString *postRouter = [NSString stringWithFormat:@"/post/table?type=%lu&p=1",(unsigned long)_type];
+        NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/table?type=%ld&p=1",(long)_type] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        [manager GET:postRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
             
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             for(NSString *responseDict in responseArray){

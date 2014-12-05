@@ -8,7 +8,7 @@
 
 #import "HomeTableViewCell.h"
 #import "UIImageView+AFNetworking.h"
-
+#import "AppDelegate.h"
 @interface HomeTableViewCell()
 
 //postID
@@ -87,7 +87,6 @@
     
     NSString *imagePathOnServer = @"http://blog.yhb360.com/wp-content/uploads/";
     NSString *imageGetFromServer = [dict valueForKey:@"post_cover"];
-    NSLog(@"%@",imageGetFromServer);
     //没有设置特色图像的话会报错，所以需要检测是否为空
     if(imageGetFromServer != (id)[NSNull null]){
         NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];

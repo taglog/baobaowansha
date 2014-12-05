@@ -8,7 +8,7 @@
 
 #import "CommentCreateViewController.h"
 #import "AFNetworking.h"
-
+#import "AppDelegate.h"
 @interface CommentCreateViewController ()
 
 @property(nonatomic,strong)UITextView *commentTextView;
@@ -17,6 +17,7 @@
 //post到后台的字典
 @property(nonatomic,strong)NSDictionary *commentPostParams;
 
+@property (nonatomic,retain)AppDelegate *appDelegate;
 @end
 
 @implementation CommentCreateViewController
@@ -110,10 +111,13 @@
             userInfo = [[NSDictionary alloc]initWithContentsOfFile:filePath];
             self.commentPostParams = @{@"comment_post_ID":[NSNumber numberWithInteger:_postID],@"comment_content":text,@"comment_author":[userInfo valueForKey:@"userName"]};
          }
+        self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         
+        NSString *commentCreateRouter = @"http://localhost/baobaowansha/comment/create";
+        NSString *commentCreateRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentCreateRouter];
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        [manager POST:[NSString stringWithFormat:@"http://localhost/baobaowansha/comment/create"]  parameters:self.commentPostParams success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        [manager POST:commentCreateRequestUrl  parameters:self.commentPostParams success:^(AFHTTPRequestOperation *operation,id responseObject) {
             
             NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
             if(status == 1){
