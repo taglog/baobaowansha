@@ -11,7 +11,7 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate, IntroDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
+@property(nonatomic, retain) NSString *generatedUserID;
 
 @end
 
