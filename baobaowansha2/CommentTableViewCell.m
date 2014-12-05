@@ -53,6 +53,7 @@
     
     return self;
 }
+//给cell中得key赋值
 -(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame{
     
     _dict = dict;
@@ -68,7 +69,7 @@
     [self setNeedsLayout];
     
 }
-
+//计算cell的高度
 +(CGFloat)heightForCellWithDict:dict frame:(CGRect)frame{
     NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15.0f]};
     CGRect textRect = [[dict objectForKey:@"comment_content"]boundingRectWithSize:CGSizeMake(frame.size.width - 30.0f, CGFLOAT_MAX)
@@ -80,6 +81,7 @@
     return heightForCell;
     
 }
+//布局layout
 -(void)layoutSubviews{
     [super layoutSubviews];
     //用户昵称

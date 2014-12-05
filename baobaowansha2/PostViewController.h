@@ -11,8 +11,9 @@
 #import "DTLazyImageView.h"
 #import "DTCoreText.h"
 #import "EGORefreshCustom.h"
+#import "CommentCreateViewController.h"
 
-@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EGORefreshDelegate>
+@interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EGORefreshDelegate,CommentCreateDelegate>
 
 -(void)initViewWithDict:(NSDictionary *)dict;
 

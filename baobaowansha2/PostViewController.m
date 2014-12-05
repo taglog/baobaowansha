@@ -10,8 +10,6 @@
 #import "CommentTableViewCell.h"
 #import "DTTiledLayerWithoutFade.h"
 #import "AFNetworking.h"
-#import "CommentCreateViewController.h"
-
 @interface PostViewController ()
 {
     CGFloat padding;
@@ -45,8 +43,16 @@
 @property (nonatomic,assign)BOOL reloading;
 
 //postID
-@property(nonatomic,assign)NSInteger postID;
+@property(nonatomic,assign)NSUInteger postID;
 
+//收藏button
+@property(nonatomic,strong)UIBarButtonItem *collectionButton;
+@property(nonatomic,strong)UIBarButtonItem *collectionButtonSelected;
+//分享到的按钮
+@property(nonatomic,strong)UIBarButtonItem *socialShareButton;
+@property(nonatomic,strong)UIBarButtonItem *fixedSpaceButton;
+//没有评论的时候显示
+@property(nonatomic,strong)UILabel *noCommentLabel;
 @end
 
 @implementation PostViewController
@@ -54,17 +60,83 @@
 -(void)loadView{
     [super loadView];
     self.view.backgroundColor = [UIColor whiteColor];
-    UIBarButtonItem *commentButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"comment24x24.png"] style:UIBarButtonItemStylePlain target:self action:@selector(pushCommentViewController)];
-    commentButton.tintColor = [UIColor blackColor];
-    UIBarButtonItem *fixedSpaceButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    fixedSpaceButton.width = 10;
-    UIBarButtonItem *collectionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"star32x32.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collect)];
-    collectionButton.tintColor = [UIColor blackColor];
-    self.navigationItem.rightBarButtonItems = @[collectionButton,fixedSpaceButton,commentButton];
     
+    //自定义右侧收藏button
+    self.collectionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unstar.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collectPost:)];
+    self.collectionButton.tintColor = [UIColor redColor];
+    self.collectionButton.tag = 0;
+    
+    //收藏状态的button
+    self.collectionButtonSelected = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"star.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collectPost:)];
+     self.collectionButtonSelected.tintColor = [UIColor redColor];
+    self.collectionButtonSelected.tag = 1;
+    
+    //按钮间隔
+    self.fixedSpaceButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    self.fixedSpaceButton.width = 0;
+    
+    //社交分享按钮
+    self.socialShareButton =[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"socialshare.png"] style:UIBarButtonItemStylePlain target:self action:@selector(socialShare)];
+    
+    self.socialShareButton.tintColor = [UIColor redColor];
+    
+    
+    //自定义leftBarButtonItem以取代返回按钮
+    UIBarButtonItem *backButtonCustom = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
+    backButtonCustom.tintColor = [UIColor redColor];
+    self.navigationItem.leftBarButtonItem = backButtonCustom;
+    
+    //阻止自动调整滚轮位置，否则导航栏下会出现一段空间
     self.automaticallyAdjustsScrollViewInsets = NO;
+   
+}
+
+-(void)popViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+-(IBAction)collectPost:(id)sender{
+    UIButton *collectButtonSender =(UIButton *)sender;
+    //获取路径
+    NSString *documentsDirectory = @"/Users/liuxin/Documents/documents";
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"userInfo.plist"];
+    NSDictionary *userInfo;
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        userInfo = [[NSDictionary alloc]initWithContentsOfFile:filePath];
+        
+    }else{
+        //如果查不到文件，该怎么处理
+        [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
+        
+    }
     
+    NSDictionary *colloctParam = [NSDictionary dictionaryWithObjectsAndKeys:[userInfo valueForKey:@"userID"],@"userID",[NSNumber numberWithInteger:self.postID],@"postID", nil];
     
+    //进行收藏判断 userID,PostID
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/collect"]  parameters:colloctParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        
+        NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
+        if(status == 1){
+            if(collectButtonSender.tag == 0){
+                self.navigationItem.rightBarButtonItems =@[self.socialShareButton,self.fixedSpaceButton,self.collectionButtonSelected];
+            }else{
+                self.navigationItem.rightBarButtonItems =@[self.socialShareButton,self.fixedSpaceButton,self.collectionButton];
+            }
+        }else{
+            //否则的话，弹出一个指示层
+            
+        }
+        
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"%@",error);
+    }];
+
+    
+
+}
+
+-(void)socialShare{
     
     
 }
@@ -74,24 +146,35 @@
     
 }
 
+//初始化Controlller的View
 -(void)initViewWithDict:(NSDictionary *)dict{
     
     _postDict = dict;
     _postID = [[dict valueForKey:@"ID"]integerValue];
     _frame = self.view.frame;
     
+    //是否已收藏该Post,设置顶部按钮
+    if([[dict valueForKey:@"isCollection"]integerValue] == 1){
+        //已收藏
+        self.navigationItem.rightBarButtonItems = @[self.socialShareButton,self.fixedSpaceButton,self.collectionButtonSelected];
+    }else{
+        //未收藏
+        self.navigationItem.rightBarButtonItems = @[self.socialShareButton,self.fixedSpaceButton,self.collectionButton];
+    }
+    
     //初始化textView
     [self initTextView];
     
     //根据textView的大小
     _postScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 64.0f)];
-    _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, _textViewSize.height + 667);
+    _postScrollView.contentSize = CGSizeMake(self.view.frame.size.width, _textViewSize.height + 400);
     _postScrollView.delegate = self;
     
     //初始化底部的Button
     _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 60.0f, self.view.frame.size.width, 60.0f)];
-    _commentCreateButton.backgroundColor = [UIColor redColor];
-    [_commentCreateButton addTarget:self action:@selector(pushCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
+    _commentCreateButton.backgroundColor = [UIColor colorWithRed:221.0/255.0f green:221.0/255.0f blue:221.0/255.0f alpha:1.0f];
+    [_commentCreateButton addTarget:self action:@selector(showCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
+    
     [self.view addSubview:_commentCreateButton];
     [self.view addSubview:_postScrollView];
     //根据textView的大小，设置tableView的origin.y
@@ -135,10 +218,10 @@
     _textView.attributedString = [self _attributedStringForSnippetUsingiOS6Attributes:NO];
     
     _textViewSize = [self getTextViewHeight:_textView.attributedString];
-    _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height + 128.0f);
+    _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height + 100.0f);
     
 }
-
+//获取_textView的高度
 -(CGSize)getTextViewHeight:(NSAttributedString *)string{
     
     DTCoreTextLayouter *layouter = [[DTCoreTextLayouter alloc] initWithAttributedString:string];
@@ -152,7 +235,7 @@
     return sizeNeeded;
 }
 
-#pragma mark Custom Views on Text
+#pragma mark _textView的委托
 
 - (NSAttributedString *)_attributedStringForSnippetUsingiOS6Attributes:(BOOL)useiOS6Attributes
 {
@@ -425,7 +508,6 @@
 }
 
 //初始化评论栏
-
 #pragma  mark 评论 tableView delegate
 -(void)initCommentTableView{
     
@@ -442,15 +524,19 @@
             }
             
             [self resetCommentTableViewHeight:self.commentTableViewCell];
-            
+            [_refreshFooterView removeFromSuperview];
             [self initRefreshView];
             
         }else{
+            //没有评论的时候,显示一个label，说没有评论
             
-            UILabel *label =[[UILabel alloc]initWithFrame:CGRectMake(100,100, 100, 100)];
-            label.text = @"没有评论";
-            [self.view addSubview:label];
-            
+            _commentTableView.hidden = YES;
+            _noCommentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 168+ 70, self.view.frame.size.width, 20.0f)];
+            _noCommentLabel.text = @"还没有人评论哦，快来第一个评论吧~";
+            _noCommentLabel.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
+            _noCommentLabel.textAlignment = NSTextAlignmentCenter;
+            _noCommentLabel.font = [UIFont systemFontOfSize:14.0f];
+            [_postScrollView addSubview:_noCommentLabel];
             
             
             
@@ -460,11 +546,14 @@
     }];
     
 }
+
 //初始化tableView
 -(void)initTableView{
+
     
+    //初始化tableView
     if(!_commentTableView){
-        _commentTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 128, self.view.frame.size.width, self.view.frame.size.height)];
+        _commentTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 168, self.view.frame.size.width, 100.0)];
         
         _commentTableView.scrollEnabled = NO;
         
@@ -472,14 +561,19 @@
         _commentTableView.dataSource = self;
         [_postScrollView addSubview:_commentTableView];
         [_commentTableView setSeparatorInset:UIEdgeInsetsZero];
-        UIView *commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40.0f)];
-        commentTableHeader.backgroundColor = [UIColor colorWithRed:204.0f/255.0f green:204.0f/255.0f blue:204.0f/255.0 alpha:1.0];
-        UILabel *commentTableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 10.0f, 100.0f, 20.0f)];
-        commentTableHeaderLabel.text = @"评论";
-        commentTableHeaderLabel.font = [UIFont systemFontOfSize:14.0f];
-        [commentTableHeader addSubview:commentTableHeaderLabel];
-        _commentTableView.tableHeaderView = commentTableHeader;
+        
     }
+    
+    //初始化用户评论分隔栏
+    UIView *commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 128.0f, self.view.frame.size.width, 40.0f)];
+    commentTableHeader.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0 alpha:1.0];
+    UILabel *commentTableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 10.0f, 100.0f, 20.0f)];
+    commentTableHeaderLabel.text = @"用户评论";
+    commentTableHeaderLabel.textColor = [UIColor colorWithRed:53.0f/255.0f green:53.0f/255.0f blue:53.0f/255.0f alpha:1.0f];
+    commentTableHeaderLabel.font = [UIFont systemFontOfSize:14.0f];
+    [commentTableHeader addSubview:commentTableHeaderLabel];
+    
+    [_postScrollView addSubview:commentTableHeader];
 }
 
 //初始化下拉刷新header
@@ -493,7 +587,7 @@
 }
 
 
-#pragma mark -commentTableView 委托实现
+#pragma mark - commentTableView 委托实现
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -513,7 +607,6 @@
        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
     return cell;
 }
 
@@ -532,9 +625,9 @@
     
     [_commentTableView reloadData];
     
-    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height + height + 128)];
+    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height + height + 168)];
     
-    [_commentTableView setFrame:CGRectMake(0, _textViewSize.height + 128, self.view.frame.size.width, height)];
+    [_commentTableView setFrame:CGRectMake(0, _textViewSize.height + 168, self.view.frame.size.width, height)];
     [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f)];
     
 }
@@ -552,7 +645,7 @@
             if(responseArray != (id)[NSNull null]){
                 for(NSString *responseDict in responseArray){
                     NSDictionary *dict = [responseArray valueForKey:responseDict];
-                    [_commentTableViewCell addObject:dict];
+                    [self.commentTableViewCell addObject:dict];
                 }
                  _reloading = YES;
                 [self resetCommentTableViewHeight:self.commentTableViewCell];
@@ -578,7 +671,7 @@
     if(scrollView.contentOffset.y > (_textViewSize.height - 400.0f)){
         [self.view bringSubviewToFront:_commentCreateButton];
         [UIView animateWithDuration:0.3 animations:^{
-            _commentCreateButton.frame = CGRectMake(0,self.view.frame.size.height - 60, self.view.frame.size.width, 60.0f);
+            _commentCreateButton.frame = CGRectMake(0,self.view.frame.size.height - 45, self.view.frame.size.width, 45.0f);
         //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
 //            _postScrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
         }  completion:^(BOOL finished){
@@ -624,12 +717,28 @@
     
 }
 //创建评论的View
--(void)pushCommentCreateViewController{
-    CommentCreateViewController *commentCreateViewController = [[CommentCreateViewController alloc]init];
-    [self.navigationController presentViewController:commentCreateViewController animated:YES completion:^{
-        
-    }];
+-(void)showCommentCreateViewController{
+    CommentCreateViewController *commentCreateView = [[CommentCreateViewController alloc]initWithID:self.postID];
+    commentCreateView.delegate =self;
+    [self.navigationController pushViewController:commentCreateView animated:YES];
 }
+
+//创建评论成功的回调
+-(void)commentCreateSuccess:(NSDictionary *)dict{
+    if(_noCommentLabel){
+        [_noCommentLabel removeFromSuperview];
+        _commentTableView.hidden = NO;
+    }
+    [_commentTableView beginUpdates];
+    [self.commentTableViewCell insertObject:dict atIndex:0];
+    NSArray *commentAddRow = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [_commentTableView insertRowsAtIndexPaths:commentAddRow withRowAnimation:UITableViewRowAnimationNone];
+    [_commentTableView endUpdates];
+    [_postScrollView setContentOffset:CGPointMake(0, _textViewSize.height) animated:YES];
+    
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
