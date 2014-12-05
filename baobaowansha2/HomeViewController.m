@@ -35,9 +35,6 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back24x24.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewControllerAnimated:)];
-    self.navigationItem.backBarButtonItem = backButton;
-    
     
 }
 
@@ -136,7 +133,7 @@
     MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
     [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
     leftDrawerButton.tintColor = [UIColor redColor];
-    leftDrawerButton.image = [UIImage imageNamed:@"menu24x24.png"];
+    leftDrawerButton.image = [UIImage imageNamed:@"menu.png"];
 }
 
 #pragma mark - Button Handlers
