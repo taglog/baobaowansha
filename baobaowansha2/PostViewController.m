@@ -498,8 +498,7 @@
     
     // update all attachments that matchin this URL (possibly multiple images with same size)
     for (DTTextAttachment *oneAttachment in [_textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
-    {   NSLog(@"%f",size.width);
-        NSLog(@"%f",size.height);
+    {   
         // update attachments that have no original size, that also sets the display size
         if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
         {
@@ -524,11 +523,12 @@
     self.commentTableViewCell = [[NSMutableArray alloc]init];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSString *commentRouter = [NSString stringWithFormat:@"http://localhost/baobaowansha/comment/get?id=%li&p=1",(long)_postID];
+    NSString *commentRouter = [NSString stringWithFormat:@"/comment/get?id=%li&p=1",(long)_postID];
     NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSArray *responseArray = [responseObject valueForKey:@"data"];
+        NSLog(@"%@",responseArray);
         if(responseArray != (id)[NSNull null]){
             for(NSString *responseDict in responseArray){
                 NSDictionary *dict = [responseArray valueForKey:responseDict];

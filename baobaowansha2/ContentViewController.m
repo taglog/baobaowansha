@@ -58,7 +58,6 @@
     NSString *postRouter = [NSString stringWithFormat:@"/post/table?type=%lu&p=1",(unsigned long)_type];
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSLog(@"%@",postRequestUrl);
     
     [manager GET:postRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
