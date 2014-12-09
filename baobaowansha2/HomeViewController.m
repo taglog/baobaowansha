@@ -10,6 +10,7 @@
 #import "ContentViewController.h"
 #import "UIViewController+MMDrawerController.h"
 #import "MMDrawerBarButtonItem.h"
+#import "BabyInfoViewController.h"
 
 @interface HomeViewController ()
 
@@ -24,6 +25,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
+    // TODO: 判断是否已将信息同步，如果从来没有同步过
+    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userHasLogged"];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"userHasLogged"]) {
+        BabyInfoViewController * bbVC = [[BabyInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        UIBarButtonItem *temporaryBarButtonItem = [[UIBarButtonItem alloc] init];
+        temporaryBarButtonItem.title = @"暂不设置";
+        self.navigationItem.backBarButtonItem = temporaryBarButtonItem;
+        [self.navigationController pushViewController:bbVC animated:YES];
+        
+    }
+
+    
     
     self.title =@"宝宝玩啥";
     self.view.backgroundColor = [UIColor whiteColor];

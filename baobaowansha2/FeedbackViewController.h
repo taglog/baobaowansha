@@ -8,6 +8,7 @@
 
 #import "CustomizedUITableViewController.h"
 #import "RETableViewManager.h"
+#import "AppDelegate.h"
 
 @interface FeedbackViewController : CustomizedUIViewController
 

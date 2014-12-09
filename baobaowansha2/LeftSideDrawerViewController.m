@@ -46,32 +46,50 @@
     // stretch drawer
     [self.mm_drawerController setShouldStretchDrawer:!self.mm_drawerController.shouldStretchDrawer];
     
-    [self setHeaderImage:@"headerImage.jpg"];
-    [self setHeaderWords:@"15个月"];
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"babyBirthday"]) {
+        NSDate * babybirthday = [[NSUserDefaults standardUserDefaults] objectForKey:@"babyBirthday"];
+        NSTimeInterval intv = babybirthday.timeIntervalSinceNow;
+        //int
+        NSLog(@"intv is %f", intv);
+    }
+    
+    //[self setHeaderImage:@"headerImage.jpg"];
+    [self setHeaderWords:@"66"];
+    
     
     self.tableView.tableHeaderView = ({
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 184.0f)];
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 40, 100, 100)];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 164.0f)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 40, 90, 90)];
         imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         imageView.image = [UIImage imageNamed:self.headerImage];
         imageView.layer.masksToBounds = YES;
-        imageView.layer.cornerRadius = 50.0;
-        imageView.layer.borderColor = [UIColor whiteColor].CGColor;
-        imageView.layer.borderWidth = 3.0f;
+        //imageView.layer.cornerRadius = 5.0;
+        //imageView.layer.borderColor = [UIColor whiteColor].CGColor;
+        //imageView.layer.borderWidth = 1.0f;
         imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         imageView.layer.shouldRasterize = YES;
         imageView.clipsToBounds = YES;
+        imageView.backgroundColor = [UIColor colorWithRed:220/255.0f green:87/255.0f blue:116/255.0f alpha:0.8f];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 150, 0, 24)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 45, 0, 64)];
         label.text = self.headerWords;
-        //label.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
-        label.backgroundColor = [UIColor clearColor];
-        label.textColor = [UIColor colorWithRed:62/255.0f green:68/255.0f blue:75/255.0f alpha:1.0f];
+        label.font = [UIFont fontWithName:@"HelveticaNeue" size:52];
+        //label.backgroundColor = [UIColor clearColor];
+        label.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
         [label sizeToFit];
         label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         
+        UILabel *sublabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 0, 20)];
+        sublabel.text = @"宝贝月龄";
+        sublabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+        //label.backgroundColor = [UIColor clearColor];
+        sublabel.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
+        [sublabel sizeToFit];
+        sublabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        
         [view addSubview:imageView];
         [view addSubview:label];
+        [view addSubview:sublabel];
         view;
     });
     

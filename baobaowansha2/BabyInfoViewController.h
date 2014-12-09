@@ -7,6 +7,8 @@
 //
 
 #import "CustomizedUITableViewController.h"
+#import "AppDelegate.h"
 
 @interface BabyInfoViewController : UITableViewController
+@property (nonatomic,retain)AppDelegate *appDelegate;
 @end

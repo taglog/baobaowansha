@@ -12,6 +12,7 @@
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 
+
 @interface ContentViewController ()
 
 @property (nonatomic,assign)BOOL reloading;
@@ -30,7 +31,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     if(self){
+        
         self.view.backgroundColor = [UIColor whiteColor];
         
         [self setInitData];
