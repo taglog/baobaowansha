@@ -11,6 +11,8 @@
 #import "BabyInfoViewController.h"
 #import "RETableViewManager.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "JGProgressHUD.h"
+#import "JGProgressHUDSuccessIndicatorView.h"
 
 @interface BabyInfoViewController ()
 
@@ -20,7 +22,7 @@
 @property (strong, readwrite, nonatomic) RESegmentedItem *sexSegmentItem;
 @property (strong, readwrite, nonatomic) RESegmentedItem *babamamaSelectItem;
 
-@property (strong, readwrite, nonatomic) RETableViewItem *buttonItem;
+//@property (strong, readwrite, nonatomic) RETableViewItem *buttonItem;
 
 // indicate whether information is synced with server end
 //@property (nonatomic) BOOL synced;
@@ -39,13 +41,10 @@
     self.title = @"宝贝信息";
     
     [self createSettingTableCells];
-
-    //NSLog(@"NEED REMOVE this flag before publishing(in BabyInfoViewController)");
-    //TODO: remove following line after test
-    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"BabyInfoSynced"];
     
-
     
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -98,11 +97,11 @@
     self.dateTimeItem.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     self.dateTimeItem.textAlignment = NSTextAlignmentCenter;
     
-    self.sexSegmentItem = [RESegmentedItem itemWithTitle:@"宝贝性别: " segmentedControlTitles:@[@"男孩儿", @"女孩儿"] value:1 switchValueChangeHandler:^(RESegmentedItem *item) {
+    self.sexSegmentItem = [RESegmentedItem itemWithTitle:@"宝贝性别: " segmentedControlTitles:@[@"女孩", @"男孩", @"龙凤胎"] value:1 switchValueChangeHandler:^(RESegmentedItem *item) {
         //NSLog(@"Value: %li", (long)item.value);
     }];
     
-    self.babamamaSelectItem = [RESegmentedItem itemWithTitle:@"我是: " segmentedControlTitles:@[@"爸爸", @"妈妈", @"其他"] value:1 switchValueChangeHandler:^(RESegmentedItem *item) {
+    self.babamamaSelectItem = [RESegmentedItem itemWithTitle:@"我是: " segmentedControlTitles:@[@"妈妈", @"爸爸", @"其他"] value:1 switchValueChangeHandler:^(RESegmentedItem *item) {
         //NSLog(@"Value: %li", (long)item.value);
     }];
     
@@ -141,50 +140,81 @@
     RETableViewSection *section = [RETableViewSection section];
     [self.manager addSection:section];
     
-    NSString * btnTitle = @"更新";
+    NSString * btnTitle = @"保存";
     
  
-    self.buttonItem = [RETableViewItem itemWithTitle:btnTitle accessoryType:UITableViewCellAccessoryNone  selectionHandler:^(RETableViewItem *item) {
-            item.title = @"更新中, 请稍后...";
-            [item setSelectionStyle:UITableViewCellSelectionStyleNone];
-            [self syncBabyInfoSettings];
+    RETableViewItem * buttonItem = [RETableViewItem itemWithTitle:btnTitle accessoryType:UITableViewCellAccessoryNone  selectionHandler:^(RETableViewItem *item) {
+            item.title = @"保存中...";
+            // save baby birthday into UserDefaults for leftSideDrawerViewController header image use
+            [[NSUserDefaults standardUserDefaults] setObject:self.dateTimeItem.value forKey:@"babyBirthday"];
+            [self syncBabyInfoSettings:item];
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
     }];
-    self.buttonItem.textAlignment = NSTextAlignmentCenter;
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"babyInfoSynced"]) {
-        btnTitle = @"已更新";
-        self.buttonItem.title = btnTitle;
-        [self.buttonItem setSelectionStyle:UITableViewCellSelectionStyleNone];
-    }
+    buttonItem.textAlignment = NSTextAlignmentCenter;
     
-    
-    [section addItem:self.buttonItem];
+    [section addItem:buttonItem];
  
     return section;
 }
 
-- (void) syncBabyInfoSettings
+- (void) syncBabyInfoSettings: (RETableViewItem *)item
 {
     // TODO: sync with server side
+    JGProgressHUD *HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    HUD.textLabel.text = @"保存中...";
+    [HUD showInView:self.view];
+    HUD.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.4f];
+    
+    
+    NSString * userInfoURL = [self.appDelegate.rootURL stringByAppendingString:@"/serverside/user_info.php"];
+    
     
     AFHTTPRequestOperationManager *afnmanager = [AFHTTPRequestOperationManager manager];
     afnmanager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     NSMutableDictionary *dict = [self formatBabyInfo];
-    [afnmanager POST:@"http://blogtest.yhb360.com/test/syncbabyinfo.php" parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+//    [afnmanager POST:@"http://blogtest.yhb360.com/test/syncbabyinfo.php" parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //[self.buttonItem s:];
         //[self.buttonItem setSelectionStyle:UITableViewCellSelectionStyleNone];
         //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"babyInfoSynced"];
+
+    [dict setObject:self.appDelegate.generatedUserID forKey:@"userIdStr"];
+    NSLog(@"sending: %@", dict);
+    [afnmanager POST:userInfoURL parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+        item.title = @"保存";
+        [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
+        
+        
+
         NSLog(@"Sync successed: %@", responseObject);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userHasLogged"];
+            HUD.textLabel.text = @"保存成功";
+            HUD.detailTextLabel.text = nil;
+            
+            HUD.layoutChangeAnimationDuration = 0.4;
+            HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
+        });
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [HUD dismiss];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        //[self.navigationController popViewControllerAnimated:YES];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Sync Error: %@", error);
-        //self.buttonItem.title = @"出错了, 请重试...";
+        item.title = @"保存失败, 请重试";
+        [HUD dismiss];
+        [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
+
     }];
     
 }
 
 
 // get plist path
-- (NSString *) dataFilePath
+- (NSString *)dataFilePath
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(
                                                          NSDocumentDirectory, NSUserDomainMask, YES);

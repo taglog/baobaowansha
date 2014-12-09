@@ -65,8 +65,8 @@
     [self.window setRootViewController:self.drawerController];
     
     //TODO: 判断是否是第一次启动app, if yes, add splash view
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]) {
-    //if (YES) {
+    //if (![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]) {
+    if (NO) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstStart"];
         
         IntroModel *model1 = [[IntroModel alloc] initWithTitle:@"Example 1" description:@"Hi, add description here" image:@"splash_image1.jpg"];
@@ -81,7 +81,7 @@
         [self.drawerController.view addSubview:self.introcontroller];
         self.introcontroller.delegate = self;
     }
-
+    
     [self.window makeKeyAndVisible];
     return YES;
         

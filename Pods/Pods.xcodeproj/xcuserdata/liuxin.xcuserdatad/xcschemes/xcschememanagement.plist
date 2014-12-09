@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-JGProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-MMDrawerController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -47,82 +52,47 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0310A876D705D795353BC3CB</key>
+		<key>0782363792326C76878E105B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>290DDDF1EC110F98235C3F2A</key>
+		<key>1886DD1A4E0F8E41A619FC71</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>30D20F28E4AA86955EFFC766</key>
+		<key>518C6B988FB0DEF46FE46EA5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>34059C0F21D6A58A664C4CA6</key>
+		<key>5858B013780E15DD0E6F17BF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3BB2E69EB7F415F381197039</key>
+		<key>96FE50D8EA1B7967FEDF06C8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4075231D31191DA4E90DB4A1</key>
+		<key>B0CCDD0C0A85D06C93CA0876</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4105642724E44D015288679E</key>
+		<key>CEA72ABF63609919144F8B3A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>59EC42B84F57597094C02F96</key>
+		<key>E052132250C62AF4FBA6C451</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>64D450AD39B654ED74645511</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>7B6432606FA6AC097FA5B975</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>7D9E69404F4B3994EB3CAC37</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>8693ADE0FC704AFF1B805DA0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C3F7E9D03C8ED26CDDA869E1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C829E78C327DD67C6030A37E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EA932D69E2892FE8863E3CAF</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FDBC653009886DC9BD0CE456</key>
+		<key>F21F45ECA3D7183FB016709C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

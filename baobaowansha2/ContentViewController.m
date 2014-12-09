@@ -12,6 +12,7 @@
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 
+
 @interface ContentViewController ()
 
 @property (nonatomic,strong)NSDictionary *requestURL;
@@ -37,7 +38,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     if(self){
+        
         self.view.backgroundColor = [UIColor whiteColor];
         
         [self setInitData];
