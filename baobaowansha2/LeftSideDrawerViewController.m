@@ -45,16 +45,44 @@
     
     // stretch drawer
     [self.mm_drawerController setShouldStretchDrawer:!self.mm_drawerController.shouldStretchDrawer];
+    [self initHeaderSection];
     
+}
+
+
+- (void) initHeaderSection
+{
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"babyBirthday"]) {
         NSDate * babybirthday = [[NSUserDefaults standardUserDefaults] objectForKey:@"babyBirthday"];
-        NSTimeInterval intv = babybirthday.timeIntervalSinceNow;
-        //int
-        NSLog(@"intv is %f", intv);
+        NSTimeInterval intv = -1*babybirthday.timeIntervalSinceNow;
+        double inDays = intv/(24*3600);
+        NSLog(@"baby days is %f", inDays);
+        if (inDays < 0) {
+            [self setHeaderWords:@"0"];
+            [self setSubLableWords:@"宝贝周龄"];
+        } else if (inDays < 7*12) {
+            int inWeeks = inDays/7;
+            [self setHeaderWords:[NSString stringWithFormat:@"%d",inWeeks]];
+            [self setSubLableWords:@"宝贝周龄"];
+        } else if (inDays < 24*30) {
+            int inMonths = inDays/30;
+            NSLog(@"in months %d", inMonths);
+            [self setHeaderWords:[NSString stringWithFormat:@"%d",inMonths]];
+            [self setSubLableWords:@"宝贝月龄"];
+        } else {
+            int inYears = inDays/365;
+            int restDays = (int)inDays%365;
+            int inMonths = restDays/30;
+            NSString *stringInt = [NSString stringWithFormat:@"%d",inYears];
+            [self setHeaderWords:stringInt];
+            stringInt = [NSString stringWithFormat:@"%d岁%d个月",inYears, inMonths];
+            [self setSubLableWords:stringInt];
+        }
     }
     
     //[self setHeaderImage:@"headerImage.jpg"];
-    [self setHeaderWords:@"66"];
+    //[self setHeaderWords:@"66"];
+    //[self setSubLableWords:@"dfjd"];
     
     
     self.tableView.tableHeaderView = ({
@@ -63,7 +91,7 @@
         imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         imageView.image = [UIImage imageNamed:self.headerImage];
         imageView.layer.masksToBounds = YES;
-        //imageView.layer.cornerRadius = 5.0;
+        imageView.layer.cornerRadius = 5.0;
         //imageView.layer.borderColor = [UIColor whiteColor].CGColor;
         //imageView.layer.borderWidth = 1.0f;
         imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
@@ -80,7 +108,7 @@
         label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         
         UILabel *sublabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 0, 20)];
-        sublabel.text = @"宝贝月龄";
+        sublabel.text = self.subLableWords;
         sublabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
         //label.backgroundColor = [UIColor clearColor];
         sublabel.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
@@ -92,7 +120,7 @@
         [view addSubview:sublabel];
         view;
     });
-    
+
 }
 
 - (void)didReceiveMemoryWarning {

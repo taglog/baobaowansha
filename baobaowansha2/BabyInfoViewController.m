@@ -13,6 +13,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
+#import "LeftSideDrawerViewController.h"
 
 @interface BabyInfoViewController ()
 
@@ -147,6 +148,7 @@
             item.title = @"保存中...";
             // save baby birthday into UserDefaults for leftSideDrawerViewController header image use
             [[NSUserDefaults standardUserDefaults] setObject:self.dateTimeItem.value forKey:@"babyBirthday"];
+            [self.appDelegate.drawerController.leftDrawerViewController initHeaderSection];
             [self syncBabyInfoSettings:item];
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
     }];

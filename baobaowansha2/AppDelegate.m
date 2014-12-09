@@ -8,12 +8,12 @@
 
 #import "AppDelegate.h"
 #import "HomeViewController.h"
-#import "MMDrawerController.h"
+
 #import "LeftSideDrawerViewController.h"
 
 
 @interface AppDelegate ()
-@property (nonatomic,strong) MMDrawerController * drawerController;
+
 @property (nonatomic,strong) IntroControll * introcontroller;
 
 @end
