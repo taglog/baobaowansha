@@ -99,14 +99,19 @@
 
     }
     
-    
     self.title.text = [dict objectForKey:@"post_title"];
     
     self.introduction.text = [dict objectForKey:@"post_excerpt"];
     
+    NSMutableAttributedString * attributedString1 = [[NSMutableAttributedString alloc] initWithString:self.introduction.text];
+    NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle1 setLineSpacing:3];
+    [attributedString1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [self.introduction.text length])];
+    [self.introduction setAttributedText:attributedString1];
+    
     self.age.text = [dict objectForKey:@"fit_month_begin_1"];
     
-    self.collectionNumber.text = [NSString stringWithFormat:@"收藏 %@",[dict objectForKey:@"collectionNumber"]];
+    self.collectionNumber.text = [NSString stringWithFormat:@"收藏 %@",[dict objectForKey:@"collection_count"]];
     
     self.commentNumber.text = [NSString stringWithFormat:@"评论 %@",[dict objectForKey:@"comment_count"]];
     
@@ -125,7 +130,7 @@
     //缩略图的frame
     self.image.frame = CGRectMake(paddingHor, paddingVer, 80.0f, 80.0f);
     self.image.clipsToBounds  = YES;
-    self.image.contentMode = UIViewContentModeCenter;
+    self.image.contentMode = UIViewContentModeScaleAspectFit;
     
     
     //标题的frame
@@ -135,13 +140,12 @@
     self.title.font = [UIFont systemFontOfSize:17.0f];
     
     //摘要的frame
-    self.introduction.frame = CGRectMake(107.0, 20.0,self.aFrame.size.width - 100.0, 50.0);
+    self.introduction.frame = CGRectMake(107.0, 28.0,self.aFrame.size.width - 120.0, 50.0);
     
     self.introduction.font = [UIFont systemFontOfSize:13.0];
     self.introduction.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
     self.introduction.numberOfLines = 2;
     [self.introduction setLineBreakMode:NSLineBreakByWordWrapping];
-    
     //年龄的frame
     self.age.frame = CGRectMake(107.0, 73.0, 100.0, 20);
     
@@ -149,7 +153,7 @@
     self.age.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     
     //收藏数量的frame
-    self.collectionNumber.frame = CGRectMake(self.aFrame.size.width - 120, 73.0, 80.0, 20.0);
+    self.collectionNumber.frame = CGRectMake(self.aFrame.size.width - 110, 73.0, 80.0, 20.0);
     
     self.collectionNumber.font = [UIFont systemFontOfSize:12.0];
     self.collectionNumber.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];

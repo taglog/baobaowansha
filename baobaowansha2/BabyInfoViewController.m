@@ -174,6 +174,12 @@
     AFHTTPRequestOperationManager *afnmanager = [AFHTTPRequestOperationManager manager];
     afnmanager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     NSMutableDictionary *dict = [self formatBabyInfo];
+
+//    [afnmanager POST:@"http://blogtest.yhb360.com/test/syncbabyinfo.php" parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //[self.buttonItem s:];
+        //[self.buttonItem setSelectionStyle:UITableViewCellSelectionStyleNone];
+        //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"babyInfoSynced"];
+
     [dict setObject:self.appDelegate.generatedUserID forKey:@"userIdStr"];
     NSLog(@"sending: %@", dict);
     [afnmanager POST:userInfoURL parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -182,6 +188,7 @@
         [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         
         
+
         NSLog(@"Sync successed: %@", responseObject);
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userHasLogged"];
@@ -209,7 +216,7 @@
 
 
 // get plist path
-- (NSString *) dataFilePath
+- (NSString *)dataFilePath
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(
                                                          NSDocumentDirectory, NSUserDomainMask, YES);

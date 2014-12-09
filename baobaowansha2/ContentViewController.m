@@ -15,6 +15,8 @@
 
 @interface ContentViewController ()
 
+@property (nonatomic,strong)NSDictionary *requestURL;
+
 @property (nonatomic,assign)BOOL reloading;
 
 @property (nonatomic,strong)NSMutableArray *homeTableViewCell;
@@ -28,6 +30,11 @@
 
 @implementation ContentViewController
 
+-(id)initWithURL:(NSDictionary *)dict{
+    self = [super init];
+    self.requestURL = dict;
+    return self;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -58,7 +65,7 @@
     self.homeTableViewCell = [[NSMutableArray alloc]init];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSString *postRouter = [NSString stringWithFormat:@"/post/table?type=%lu&p=1",(unsigned long)_type];
+    NSString *postRouter = [NSString stringWithFormat:@"/%@?type=%lu&p=1",[self.requestURL valueForKey:@"requestRouter"],(unsigned long)_type];
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
@@ -166,7 +173,6 @@
     [manager POST:postRequestUrl parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSDictionary *responseDict = [responseObject valueForKey:@"data"];
         [post initViewWithDict:responseDict];
-        
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
     }];
@@ -180,7 +186,7 @@
 //下拉刷新的数据处理
     if(_refreshHeaderView.pullDown){
         
-        NSString *postRouter = [NSString stringWithFormat:@"/post/table?type=%lu&p=1",(unsigned long)_type];
+        NSString *postRouter = [NSString stringWithFormat:@"/%@?type=%lu&p=1",[self.requestURL valueForKey:@"requestRouter"],(unsigned long)_type];
         NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:postRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
@@ -201,9 +207,11 @@
 //上拉刷新的数据处理
     if(_refreshFooterView.pullUp){
         static int p = 2;
-
+        
+        NSString *postRouter = [NSString stringWithFormat:@"/%@?type=%ld&p=%d",[self.requestURL valueForKey:@"requestRouter"],(long)_type,p];
+        NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        [manager GET:[NSString stringWithFormat:@"http://localhost/baobaowansha/post/table?type=%ld&p=%d",(long)_type,p] parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        [manager GET:postRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
             
             NSArray *responseArray = [responseObject valueForKey:@"data"];
             for(NSString *responseDict in responseArray){

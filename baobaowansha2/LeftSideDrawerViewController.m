@@ -226,7 +226,7 @@
                 
             } else if (indexPath.row == 1) {
                 if(self.navCollection == nil) {
-                    UIViewController * collectionViewController = [[CollectionViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    UIViewController * collectionViewController = [[CollectionViewController alloc] init];
                     self.navCollection = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
                 }
                 
@@ -246,7 +246,7 @@
                 
             } else if (indexPath.row == 2){ // row == 1
                 if(self.navComment == nil) {
-                    UIViewController * commentViewController = [[CommentViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    UIViewController * commentViewController = [[CommentViewController alloc] init];
                     self.navComment = [[UINavigationController alloc] initWithRootViewController:commentViewController];
                 }
                 if ([self.currentController isEqual: @"CommentViewControllerID"]){

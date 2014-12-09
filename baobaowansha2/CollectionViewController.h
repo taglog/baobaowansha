@@ -7,7 +7,8 @@
 //
 
 #import "CustomizedUITableViewController.h"
+#import "HomeViewController.h"
 
-@interface CollectionViewController : CustomizedUIViewController
+@interface CollectionViewController : HomeViewController
 
 @end

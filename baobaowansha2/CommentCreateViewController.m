@@ -113,7 +113,7 @@
          }
         self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        NSString *commentCreateRouter = @"http://localhost/baobaowansha/comment/create";
+        NSString *commentCreateRouter = @"/comment/create";
         NSString *commentCreateRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentCreateRouter];
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

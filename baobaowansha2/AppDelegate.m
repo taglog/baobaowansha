@@ -31,7 +31,7 @@
     UINavigationController *centerNavigation = [[UINavigationController alloc] initWithRootViewController:centerViewController];
 
     //设置服务器跟目录
-    self.rootURL = @"http://blogtest.yhb360.com/baobaowansha";
+    self.rootURL = @"http://localhost/baobaowansha";
     
     //TODO: 判断是否是第一次启动app
     
