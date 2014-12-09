@@ -8,7 +8,9 @@
 
 #import "CommentViewController.h"
 
+
 @interface CommentViewController ()
+@property(nonatomic,strong)NSDictionary *requestURL;
 
 @end
 
@@ -18,14 +20,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    
-    
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(100, 100, 100, 100)];
-    label.text = [NSString stringWithFormat:@"commentViewController"];
-    label.tintColor = [UIColor blackColor];
-    [self.view addSubview:label];
-}
+    self.requestURL = @{@"requestRouter":@"post/collectionTable"};
+    self.title = @"评论过的文章";
+    }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -13,6 +13,6 @@
 
 @property(nonatomic,assign) NSInteger type;
 @property(nonatomic,retain) UITableView *homeTableView;
-
+-(id)initWithURL:(NSDictionary *)dict;
 
 @end

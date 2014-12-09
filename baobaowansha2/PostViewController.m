@@ -99,6 +99,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 -(IBAction)collectPost:(id)sender{
+    
     UIButton *collectButtonSender =(UIButton *)sender;
     //获取路径
     NSString *documentsDirectory = @"/Users/liuxin/Documents/documents";
@@ -124,6 +125,7 @@
     [manager POST:collectRequestUrl  parameters:colloctParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         
         NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
+        
         if(status == 1){
             if(collectButtonSender.tag == 0){
                 self.navigationItem.rightBarButtonItems =@[self.socialShareButton,self.fixedSpaceButton,self.collectionButtonSelected];
@@ -179,8 +181,9 @@
     _postScrollView.delegate = self;
     
     //初始化底部的Button
-    _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 60.0f, self.view.frame.size.width, 60.0f)];
-    _commentCreateButton.backgroundColor = [UIColor colorWithRed:221.0/255.0f green:221.0/255.0f blue:221.0/255.0f alpha:1.0f];
+    _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 40.0f, self.view.frame.size.width, 40.0f)];
+    //_commentCreateButton.backgroundColor = [UIColor colorWithRed:221.0/255.0f green:221.0/255.0f blue:221.0/255.0f alpha:1.0f];
+    [_commentCreateButton setBackgroundImage:[UIImage imageNamed:@"commentbutton.jpg"] forState:UIControlStateNormal];
     [_commentCreateButton addTarget:self action:@selector(showCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:_commentCreateButton];
@@ -226,7 +229,7 @@
     _textView.attributedString = [self _attributedStringForSnippetUsingiOS6Attributes:NO];
     
     _textViewSize = [self getTextViewHeight:_textView.attributedString];
-    _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height + 100.0f);
+    _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height + 138.0f);
     
 }
 //获取_textView的高度
@@ -494,25 +497,24 @@
     
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"contentURL == %@", url];
     
-    BOOL didUpdate = NO;
     
     // update all attachments that matchin this URL (possibly multiple images with same size)
     for (DTTextAttachment *oneAttachment in [_textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
     {   
         // update attachments that have no original size, that also sets the display size
-        if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
-        {
-            oneAttachment.originalSize = imageSize;
-            
-            didUpdate = YES;
-        }
+        
+        oneAttachment.originalSize = imageSize;
+//        float ratio = imageSize.width/imageSize.height;
+//        CGFloat imageHeight = _frame.size.width/ratio;
+//        if(imageHeight/(_frame.size.width - 30) > 1.2){
+//            imageHeight = _frame.size.width - 30;
+//        }
+//        oneAttachment.displaySize = CGSizeMake(_frame.size.width - 30, imageHeight);
+
     }
     
-    if (didUpdate)
-    {
         // layout might have changed due to image sizes
         [_textView relayoutText];
-    }
 }
 
 //初始化评论栏
@@ -528,7 +530,6 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSArray *responseArray = [responseObject valueForKey:@"data"];
-        NSLog(@"%@",responseArray);
         if(responseArray != (id)[NSNull null]){
             for(NSString *responseDict in responseArray){
                 NSDictionary *dict = [responseArray valueForKey:responseDict];
@@ -543,12 +544,14 @@
             //没有评论的时候,显示一个label，说没有评论
             
             _commentTableView.hidden = YES;
-            _noCommentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 168+ 70, self.view.frame.size.width, 20.0f)];
+            _noCommentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 178 + 70, self.view.frame.size.width, 20.0f)];
             _noCommentLabel.text = @"还没有人评论哦，快来第一个评论吧~";
             _noCommentLabel.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
             _noCommentLabel.textAlignment = NSTextAlignmentCenter;
             _noCommentLabel.font = [UIFont systemFontOfSize:14.0f];
+            
             [_postScrollView addSubview:_noCommentLabel];
+            [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height  + 368)];
             
             
             
@@ -565,7 +568,7 @@
     
     //初始化tableView
     if(!_commentTableView){
-        _commentTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 168, self.view.frame.size.width, 100.0)];
+        _commentTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 188.0f, self.view.frame.size.width, 100.0)];
         
         _commentTableView.scrollEnabled = NO;
         
@@ -577,7 +580,7 @@
     }
     
     //初始化用户评论分隔栏
-    UIView *commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 128.0f, self.view.frame.size.width, 40.0f)];
+    UIView *commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 148.0f, self.view.frame.size.width, 40.0f)];
     commentTableHeader.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0 alpha:1.0];
     UILabel *commentTableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 10.0f, 100.0f, 20.0f)];
     commentTableHeaderLabel.text = @"用户评论";
@@ -637,9 +640,9 @@
     
     [_commentTableView reloadData];
     
-    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height + height + 168)];
+    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height + height + 188)];
     
-    [_commentTableView setFrame:CGRectMake(0, _textViewSize.height + 168, self.view.frame.size.width, height)];
+    [_commentTableView setFrame:CGRectMake(0, _textViewSize.height + 188, self.view.frame.size.width, height)];
     [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f)];
     
 }
@@ -649,7 +652,7 @@
     //上拉刷新的数据处理
     if(_refreshFooterView.pullUp){
         static int p = 2;
-        NSString *commentRouter = [NSString stringWithFormat:@"http://localhost/baobaowansha/comment/get?id=%ld&p=%d",(long)_postID,p];
+        NSString *commentRouter = [NSString stringWithFormat:@"/comment/get?id=%ld&p=%d",(long)_postID,p];
         NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
@@ -681,7 +684,7 @@
 #pragma mark - _postScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
-    if(scrollView.contentOffset.y > (_textViewSize.height - 400.0f)){
+    if(scrollView.contentOffset.y > (_textViewSize.height - 300.0f)){
         [self.view bringSubviewToFront:_commentCreateButton];
         [UIView animateWithDuration:0.3 animations:^{
             _commentCreateButton.frame = CGRectMake(0,self.view.frame.size.height - 45, self.view.frame.size.width, 45.0f);

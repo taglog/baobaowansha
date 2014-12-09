@@ -12,8 +12,7 @@
 #import "MMDrawerBarButtonItem.h"
 
 @interface HomeViewController ()
-
-
+@property(nonatomic,strong)NSDictionary *requestURL;
 @end
 
 @implementation HomeViewController
@@ -25,8 +24,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title =@"宝宝玩啥";
+    self.title =@"宝贝玩啥";
     self.view.backgroundColor = [UIColor whiteColor];
+    self.requestURL = @{@"requestRouter":@"post/table"};
     self.dataSource = self;
     self.delegate = self;
     [self setupLeftMenuButton];
@@ -83,7 +83,7 @@
 //内容视图的dataSource，交给HomeTableViewController
 - (UIViewController *)viewPager:(ViewPagerController *)viewPager contentViewControllerForTabAtIndex:(NSUInteger)index {
     //初始化contentViewController
-    ContentViewController *contentViewController = [[ContentViewController alloc] init];
+    ContentViewController *contentViewController = [[ContentViewController alloc] initWithURL:self.requestURL];
     contentViewController.type = index;
     return contentViewController;
 }

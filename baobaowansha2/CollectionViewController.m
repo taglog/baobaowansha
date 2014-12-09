@@ -7,9 +7,9 @@
 //
 
 #import "CollectionViewController.h"
-
+#import "HomeViewController.h"
 @interface CollectionViewController ()
-
+@property(nonatomic,strong)NSDictionary *requestURL;
 @end
 
 @implementation CollectionViewController
@@ -18,11 +18,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(100, 100, 100, 100)];
-    label.text = [NSString stringWithFormat:@"collectionViewController"];
-    label.tintColor = [UIColor blackColor];
-    [self.view addSubview:label];
+    self.requestURL = @{@"requestRouter":@"post/collectionTable"};
+    self.title = @"我的收藏";
 
 }
 
