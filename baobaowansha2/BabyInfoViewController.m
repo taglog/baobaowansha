@@ -148,7 +148,7 @@
             item.title = @"保存中...";
             // save baby birthday into UserDefaults for leftSideDrawerViewController header image use
             [[NSUserDefaults standardUserDefaults] setObject:self.dateTimeItem.value forKey:@"babyBirthday"];
-            [self.appDelegate.drawerController.leftDrawerViewController initHeaderSection];
+            //[self.appDelegate.drawerController.leftDrawerViewController initHeaderSection];
             [self syncBabyInfoSettings:item];
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
     }];
