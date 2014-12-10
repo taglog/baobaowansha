@@ -32,6 +32,5 @@ typedef NS_ENUM(NSInteger, MMDrawerSection){
 @property (nonatomic, retain) NSString * subLableWords;
 
 
-- (void) initHeaderSection;
 
 @end

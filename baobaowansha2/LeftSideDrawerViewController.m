@@ -45,13 +45,20 @@
     
     // stretch drawer
     [self.mm_drawerController setShouldStretchDrawer:!self.mm_drawerController.shouldStretchDrawer];
-    [self initHeaderSection];
+    //[self initHeaderSection];
     
 }
 
 
-- (void) initHeaderSection
+// 此处有一点小技巧，为了能让月龄badge能在设置之后得到更新，我们故意使用了viewWillAppear方法，从而可以在MMDrawerController.left...中调用，
+// 因为left...放得是一个UIViewController类
+
+- (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
+    
+    [self setHeaderWords:@"0"];
+    [self setSubLableWords:@"宝贝年龄"];
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"babyBirthday"]) {
         NSDate * babybirthday = [[NSUserDefaults standardUserDefaults] objectForKey:@"babyBirthday"];
         NSTimeInterval intv = -1*babybirthday.timeIntervalSinceNow;

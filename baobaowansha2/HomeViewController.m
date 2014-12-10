@@ -11,6 +11,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "MMDrawerBarButtonItem.h"
 #import "BabyInfoViewController.h"
+#import "MobClick.h"
 
 @interface HomeViewController ()
 @property(nonatomic,strong)NSDictionary *requestURL;
@@ -20,6 +21,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor  ];
+    [MobClick beginLogPageView:@"HomeViewPage"];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,10 +42,6 @@
         
     }
 
-    
-    
-    self.title =@"宝宝玩啥";
-
     self.view.backgroundColor = [UIColor whiteColor];
     self.requestURL = @{@"requestRouter":@"post/table"};
     self.dataSource = self;
@@ -54,7 +52,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
+    [MobClick endLogPageView:@"HomeViewPage"];
 }
 
 
@@ -75,7 +73,7 @@
     NSString *tabTitle;
     switch(index){
             case 0 :
-                tabTitle = @"全部";
+                tabTitle = @"推荐";
             break;
             case 1 :
                 tabTitle = @"绘本";
