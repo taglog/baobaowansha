@@ -98,7 +98,7 @@
     self.dateTimeItem.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     self.dateTimeItem.textAlignment = NSTextAlignmentCenter;
     
-    self.sexSegmentItem = [RESegmentedItem itemWithTitle:@"宝贝性别: " segmentedControlTitles:@[@"女孩", @"男孩", @"龙凤胎"] value:1 switchValueChangeHandler:^(RESegmentedItem *item) {
+    self.sexSegmentItem = [RESegmentedItem itemWithTitle:@"宝贝性别: " segmentedControlTitles:@[@"女孩", @"男孩"] value:1 switchValueChangeHandler:^(RESegmentedItem *item) {
         //NSLog(@"Value: %li", (long)item.value);
     }];
     
