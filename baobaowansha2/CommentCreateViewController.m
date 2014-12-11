@@ -9,6 +9,9 @@
 #import "CommentCreateViewController.h"
 #import "AFNetworking.h"
 #import "AppDelegate.h"
+#import "JGProgressHUD.h"
+#import "JGProgressHUDSuccessIndicatorView.h"
+
 @interface CommentCreateViewController ()
 
 @property(nonatomic,strong)UITextView *commentTextView;
@@ -18,6 +21,7 @@
 @property(nonatomic,strong)NSDictionary *commentPostParams;
 
 @property (nonatomic,retain)AppDelegate *appDelegate;
+@property (nonatomic,strong)JGProgressHUD *HUD;
 @end
 
 @implementation CommentCreateViewController
@@ -25,6 +29,7 @@
 -(id)initWithID:(NSInteger)postID{
     self = [super init];
     self.postID = postID;
+    
     return self;
 }
 
@@ -42,6 +47,9 @@
     self.view.backgroundColor = [UIColor colorWithRed:236.0/255.0f green:236.0/255.0f blue:236.0/255.0f alpha:1.0f];
     
     self.title = @"写评论";
+    
+    UIView *whiteSpace = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64.0f)];
+    whiteSpace.backgroundColor =[UIColor whiteColor];
     
     _commentTextView = [[UITextView alloc]initWithFrame:CGRectMake(15.0f, 15.0f, self.view.frame.size.width - 30.0f , 250.0f)];
     
@@ -98,38 +106,38 @@
 }
 
 -(void)commentSubmit{
+    //初始化HUD
+    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    self.HUD.textLabel.text = @"保存中...";
+    [self.HUD showInView:self.view];
+    self.HUD.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.4f];
     
     NSString *text = _commentTextView.text;
-   
+    
     //如果用户输入不为空
     if(![text isEqualToString:@""] && ![text isEqualToString:@"请在此输入您的评论"]){
-        
-        NSString *documentsDirectory = @"/Users/liuxin/Documents/documents";
-        NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"userInfo.plist"];
-        NSDictionary *userInfo;
-        if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-            userInfo = [[NSDictionary alloc]initWithContentsOfFile:filePath];
-            self.commentPostParams = @{@"comment_post_ID":[NSNumber numberWithInteger:_postID],@"comment_content":text,@"comment_author":[userInfo valueForKey:@"userName"]};
-         }
+
         self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        self.commentPostParams = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:_postID],@"comment_post_ID", text,@"comment_content",self.appDelegate.generatedUserID,@"userIdStr",nil];
         
         NSString *commentCreateRouter = @"/comment/create";
         NSString *commentCreateRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentCreateRouter];
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager POST:commentCreateRequestUrl  parameters:self.commentPostParams success:^(AFHTTPRequestOperation *operation,id responseObject) {
-            
             NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
             if(status == 1){
                 
-                NSDictionary *commentToPostViewController = [NSDictionary dictionaryWithObjectsAndKeys:[userInfo valueForKey:@"userName"],@"comment_author",text,@"comment_content",[responseObject valueForKey:@"comment_date"],@"comment_date",[responseObject valueForKey:@"comment_id"],@"comment_id", nil];
+                NSDictionary *commentToPostViewController = [NSDictionary dictionaryWithObjectsAndKeys:[responseObject valueForKey:@"user"],@"comment_author",text,@"comment_content",[responseObject valueForKey:@"comment_date"],@"comment_date",[responseObject valueForKey:@"comment_id"],@"comment_id", nil];
                 //输入完成，应该跳回到上一页，同时把上一页的tableView刷新
                 [self.delegate commentCreateSuccess:commentToPostViewController];
+                [self.HUD dismiss];
                 [self.navigationController popViewControllerAnimated:YES];
                 
             }else{
                 //否则的话，弹出一个指示层
-                
+                self.HUD.textLabel.text = @"保存失败";
             }
             
         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {

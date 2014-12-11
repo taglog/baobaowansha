@@ -11,6 +11,8 @@
 #import "DTTiledLayerWithoutFade.h"
 #import "AFNetworking.h"
 #import "AppDelegate.h"
+#import "JGProgressHUD.h"
+#import "JGProgressHUDSuccessIndicatorView.h"
 
 @interface PostViewController ()
 {
@@ -57,13 +59,21 @@
 @property(nonatomic,strong)UILabel *noCommentLabel;
 
 @property (nonatomic,retain)AppDelegate *appDelegate;
+
+@property (nonatomic,strong)JGProgressHUD *HUD;
 @end
 
 @implementation PostViewController
 
 -(void)loadView{
     [super loadView];
+    
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    //初始化HUD
+    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    self.HUD.textLabel.text = @"正在加载...";
+    [self.HUD showInView:self.view];
     
     //自定义右侧收藏button
     self.collectionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unstar.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collectPost:)];
@@ -72,7 +82,7 @@
     
     //收藏状态的button
     self.collectionButtonSelected = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"star.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collectPost:)];
-     self.collectionButtonSelected.tintColor = [UIColor redColor];
+    self.collectionButtonSelected.tintColor = [UIColor redColor];
     self.collectionButtonSelected.tag = 1;
     
     //按钮间隔
@@ -100,54 +110,63 @@
 }
 -(IBAction)collectPost:(id)sender{
     
+    self.HUD.textLabel.text = @"正在保存";
+    [self.HUD showInView:self.view];
     UIButton *collectButtonSender =(UIButton *)sender;
     //获取路径
-    NSString *documentsDirectory = @"/Users/liuxin/Documents/documents";
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"userInfo.plist"];
-    NSDictionary *userInfo;
-    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-        userInfo = [[NSDictionary alloc]initWithContentsOfFile:filePath];
-        
-    }else{
-        //如果查不到文件，该怎么处理
-        [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
-        
-    }
-    
-    NSDictionary *colloctParam = [NSDictionary dictionaryWithObjectsAndKeys:[userInfo valueForKey:@"userID"],@"userID",[NSNumber numberWithInteger:self.postID],@"postID", nil];
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    NSDictionary *collectParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.postID],@"postID", nil];
     
     NSString *collectRouter = @"/post/collect";
     NSString *collectRequestUrl = [self.appDelegate.rootURL stringByAppendingString:collectRouter];
     //进行收藏判断 userID,PostID
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:collectRequestUrl  parameters:colloctParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        
+    [manager POST:collectRequestUrl  parameters:collectParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
         
         if(status == 1){
+            
             if(collectButtonSender.tag == 0){
                 self.navigationItem.rightBarButtonItems =@[self.socialShareButton,self.fixedSpaceButton,self.collectionButtonSelected];
             }else{
                 self.navigationItem.rightBarButtonItems =@[self.socialShareButton,self.fixedSpaceButton,self.collectionButton];
             }
+            [self.HUD dismiss];
         }else{
             //否则的话，弹出一个指示层
+            self.HUD.textLabel.text = @"保存失败";
+            self.HUD.detailTextLabel.text = nil;
             
+            self.HUD.layoutChangeAnimationDuration = 0.4;
+            self.HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
+            [self.HUD dismiss];
         }
         
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         NSLog(@"%@",error);
+        
+        self.HUD.textLabel.text = @"保存失败";
+        self.HUD.detailTextLabel.text = nil;
+        
+        self.HUD.layoutChangeAnimationDuration = 0.4;
+        self.HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
+        [self.HUD dismiss];
+        
     }];
 
     
 
 }
 
--(void)socialShare{
+-(void)noDataAlert{
     
+    UILabel *noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, (self.view.frame.size.height-64)/2, self.view.frame.size.width, 40.0f)];
+    noDataAlert.text = @"网络连接失败";
+    noDataAlert.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:noDataAlert];
     
 }
 - (void)viewDidLoad {
@@ -162,7 +181,6 @@
     _postDict = dict;
     _postID = [[dict valueForKey:@"ID"]integerValue];
     _frame = self.view.frame;
-    
     //是否已收藏该Post,设置顶部按钮
     if([[dict valueForKey:@"isCollection"]integerValue] == 1){
         //已收藏
@@ -194,7 +212,7 @@
     
     [_postScrollView addSubview:_textView];
     
-    
+    [self.HUD dismiss];
         
 }
 

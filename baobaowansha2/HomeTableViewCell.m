@@ -82,13 +82,18 @@
 //给Cell中的key赋值
 -(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame{
     
-    self.ID = [[dict objectForKey:@"ID"] integerValue];
+    if([dict valueForKey:@"wp_posts_id"]){
+        self.ID = [[dict valueForKey:@"ID"] integerValue];
+    }else{
+        self.ID = [[dict valueForKey:@"wp_posts_id"] integerValue];
+    }
     self.aFrame = frame;
     
     NSString *imagePathOnServer = @"http://blog.yhb360.com/wp-content/uploads/";
+    
     NSString *imageGetFromServer = [dict valueForKey:@"post_cover"];
     //没有设置特色图像的话会报错，所以需要检测是否为空
-    if(imageGetFromServer != (id)[NSNull null]){
+    if(imageGetFromServer != (id)[NSNull null]&&imageGetFromServer != nil){
         NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];
         NSURL *imageUrl = [NSURL URLWithString:[imageString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         [self.image setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"test1.jpg"]];
@@ -109,7 +114,7 @@
     [attributedString1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [self.introduction.text length])];
     [self.introduction setAttributedText:attributedString1];
     
-    self.age.text = [dict objectForKey:@"fit_month_begin_1"];
+    self.age.text = [NSString stringWithFormat:@"适合月龄: %@-%@ ",[dict valueForKey:@"fit_month_begin_1"],[dict valueForKey:@"fit_month_end_1"]];
     
     self.collectionNumber.text = [NSString stringWithFormat:@"收藏 %@",[dict objectForKey:@"collection_count"]];
     
@@ -140,26 +145,26 @@
     self.title.font = [UIFont systemFontOfSize:17.0f];
     
     //摘要的frame
-    self.introduction.frame = CGRectMake(107.0, 28.0,self.aFrame.size.width - 120.0, 50.0);
+    self.introduction.frame = CGRectMake(107.0, 27.0,self.aFrame.size.width - 120.0, 50.0);
     
     self.introduction.font = [UIFont systemFontOfSize:13.0];
     self.introduction.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
     self.introduction.numberOfLines = 2;
     [self.introduction setLineBreakMode:NSLineBreakByWordWrapping];
     //年龄的frame
-    self.age.frame = CGRectMake(107.0, 73.0, 100.0, 20);
+    self.age.frame = CGRectMake(107.0, 73.0, self.aFrame.size.width - 100, 20);
     
     self.age.font = [UIFont systemFontOfSize:12.0];
     self.age.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     
     //收藏数量的frame
-    self.collectionNumber.frame = CGRectMake(self.aFrame.size.width - 110, 73.0, 80.0, 20.0);
+    self.collectionNumber.frame = CGRectMake(self.aFrame.size.width - 100, 73.0, 60.0, 20.0);
     
     self.collectionNumber.font = [UIFont systemFontOfSize:12.0];
     self.collectionNumber.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     
     //评论数量的frame
-    self.commentNumber.frame = CGRectMake(self.aFrame.size.width - 55, 73.0, 80.0, 20.0);
+    self.commentNumber.frame = CGRectMake(self.aFrame.size.width - 55, 73.0, 60.0, 20.0);
     self.commentNumber.font  = [UIFont systemFontOfSize:12.0];
     self.commentNumber.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     
