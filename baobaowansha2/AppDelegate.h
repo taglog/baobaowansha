@@ -7,6 +7,7 @@
 //
 
 #import "IntroControll.h"
+#import "MMDrawerController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, IntroDelegate>
 
@@ -15,6 +16,8 @@
 @property (nonatomic,strong) NSString *rootURL;
 
 @property(nonatomic, retain) NSString *generatedUserID;
+
+@property (nonatomic,strong) MMDrawerController * drawerController;
 
 
 @end

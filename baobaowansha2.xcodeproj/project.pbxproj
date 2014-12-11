@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3D899974F0808B2C925482CA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D693E5FE89CAEBBDBEB51F19 /* libPods.a */; };
-		4B1CCCB61A31B15900E27EE9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B58A2D41A12EF27007A5E93 /* LaunchScreen.xib */; };
-		4B1CCCB81A31B50500E27EE9 /* commentbutton@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4B1CCCB71A31B50500E27EE9 /* commentbutton@2x.jpg */; };
 		4B58A2C81A12EF27007A5E93 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B58A2C71A12EF27007A5E93 /* main.m */; };
 		4B58A2CB1A12EF27007A5E93 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B58A2CA1A12EF27007A5E93 /* AppDelegate.m */; };
 		4B58A2D31A12EF27007A5E93 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B58A2D21A12EF27007A5E93 /* Images.xcassets */; };
@@ -69,7 +67,6 @@
 		4BBEDE5E1A3035FB0043BFCA /* sns_icon_qq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4BBEDE541A3035FB0043BFCA /* sns_icon_qq@2x.png */; };
 		4BC796AC1A1C63CE00B6728E /* headerImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4BC796AB1A1C63CE00B6728E /* headerImage.jpg */; };
 		4BD4DD581A1DC8C400576465 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BD4DD571A1DC8C400576465 /* User.m */; };
-		4BE22CBA1A355DD500DF349F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4BE22CB91A355DD500DF349F /* Default-568h@2x.png */; };
 		D93A7DF61A1F75ED00008B7C /* LeftSideDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7DF51A1F75ED00008B7C /* LeftSideDrawerViewController.m */; };
 		D93A7DF91A1F789A00008B7C /* CustomizedUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7DF81A1F789A00008B7C /* CustomizedUITableViewController.m */; };
 		D93A7DFC1A1F7EC300008B7C /* BaseSideDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D93A7DFB1A1F7EC300008B7C /* BaseSideDrawerViewController.m */; };
@@ -93,7 +90,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4B1CCCB71A31B50500E27EE9 /* commentbutton@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "commentbutton@2x.jpg"; sourceTree = "<group>"; };
 		4B58A2C21A12EF27007A5E93 /* baobaowansha2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = baobaowansha2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B58A2C61A12EF27007A5E93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B58A2C71A12EF27007A5E93 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -175,7 +171,6 @@
 		4BC796AB1A1C63CE00B6728E /* headerImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = headerImage.jpg; sourceTree = "<group>"; };
 		4BD4DD561A1DC8C400576465 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		4BD4DD571A1DC8C400576465 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		4BE22CB91A355DD500DF349F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		8AB8ACB402C3A56A468554E8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		D693E5FE89CAEBBDBEB51F19 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D93A7DF41A1F75ED00008B7C /* LeftSideDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftSideDrawerViewController.h; sourceTree = "<group>"; };
@@ -319,7 +314,6 @@
 				4BBEDE391A3035BD0043BFCA /* comment24x24.png */,
 				4BBEDE3A1A3035BD0043BFCA /* socialshare.png */,
 				4BBEDE3B1A3035BD0043BFCA /* socialshare@2x.png */,
-				4B1CCCB71A31B50500E27EE9 /* commentbutton@2x.jpg */,
 				4BC796AB1A1C63CE00B6728E /* headerImage.jpg */,
 				4BBCACBE1A1A1FFD0033DF15 /* loading.gif */,
 				4BB1E9BB1A137C3500A812DC /* test3.jpg */,
@@ -335,7 +329,6 @@
 				4BBEDE191A30325E0043BFCA /* shadow@2x.png */,
 				4BB1E9A31A1338D100A812DC /* whiteArrow.png */,
 				4BB1E9A41A1338D100A812DC /* whiteArrow@2x.png */,
-				4BE22CB91A355DD500DF349F /* Default-568h@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -553,14 +546,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B1CCCB61A31B15900E27EE9 /* LaunchScreen.xib in Resources */,
 				4BB1E9A81A1338D100A812DC /* blueArrow@2x.png in Resources */,
 				4BBEDE591A3035FB0043BFCA /* sns_icon_weixin.png in Resources */,
 				4BB1E9AB1A1338D100A812DC /* whiteArrow.png in Resources */,
 				4BBEDE3D1A3035BD0043BFCA /* unstar@2x.png in Resources */,
 				4BBEDE401A3035BD0043BFCA /* back.png in Resources */,
-				4BE22CBA1A355DD500DF349F /* Default-568h@2x.png in Resources */,
-				4B1CCCB81A31B50500E27EE9 /* commentbutton@2x.jpg in Resources */,
 				4BB1E9AA1A1338D100A812DC /* grayArrow@2x.png in Resources */,
 				4BBEDE411A3035BD0043BFCA /* back@2x.png in Resources */,
 				4BBEDE3F1A3035BD0043BFCA /* star@2x.png in Resources */,
@@ -793,7 +783,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -810,7 +800,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PrefixHeader.pch;
 				INFOPLIST_FILE = baobaowansha2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

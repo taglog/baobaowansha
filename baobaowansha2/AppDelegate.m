@@ -8,12 +8,13 @@
 
 #import "AppDelegate.h"
 #import "HomeViewController.h"
-#import "MMDrawerController.h"
+#import "AFHTTPRequestOperationManager.h"
 #import "LeftSideDrawerViewController.h"
+#import "MobClick.h"
 
 
 @interface AppDelegate ()
-@property (nonatomic,strong) MMDrawerController * drawerController;
+
 @property (nonatomic,strong) IntroControll * introcontroller;
 
 @end
@@ -33,6 +34,7 @@
     UINavigationController *centerNavigation = [[UINavigationController alloc] initWithRootViewController:centerViewController];
 
     //设置服务器跟目录
+
     self.rootURL = @"http://blogtest.yhb360.com/baobaowansha/";
     
     //TODO: 判断是否是第一次启动app
@@ -52,11 +54,35 @@
         self.generatedUserID = [[NSUserDefaults standardUserDefaults] objectForKey:@"generatedUserID"];
         NSLog(@"get UserID from NSUserDefaults, %@", self.generatedUserID);
     }
+    
+    
+    
+    
+    
+    // send information(id, and start time) to serverside
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //TODO, update db
+        AFHTTPRequestOperationManager *afnmanager = [AFHTTPRequestOperationManager manager];
+        afnmanager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+        NSString * settingURL = [self.rootURL stringByAppendingString:@"/serverside/app_statistic.php?action=app_start"];
+        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:self.generatedUserID forKey:@"userIdStr"];
+        NSLog(@"sending statistic info: %@", dict);
+        [afnmanager POST:settingURL parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"App statistic update Success: %@", responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"App statistic update Error: %@", error);
+        }];
+    });
+    
+    //embed 3rd parth analyzing code 友盟统计
+    [MobClick startWithAppkey:@"5487dc8ffd98c53799000ea9" reportPolicy:BATCH   channelId:@""];
+    
 
     
     
 
-        
+    
     self.drawerController = [[MMDrawerController alloc]
                                         initWithCenterViewController:centerNavigation
                                         leftDrawerViewController:leftSideDrawerViewController];

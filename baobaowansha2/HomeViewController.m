@@ -13,6 +13,8 @@
 #import "BabyInfoViewController.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
+#import "MobClick.h"
+
 
 @interface HomeViewController ()
 @property (nonatomic,strong)JGProgressHUD *HUD;
@@ -22,6 +24,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor  ];
+    [MobClick beginLogPageView:@"HomeViewPage"];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,10 +45,6 @@
         
     }
 
-    
-    
-    self.title =@"宝宝玩啥";
-
     self.view.backgroundColor = [UIColor whiteColor];
     self.dataSource = self;
     self.delegate = self;
@@ -55,7 +54,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
+    [MobClick endLogPageView:@"HomeViewPage"];
 }
 
 
@@ -76,7 +75,7 @@
     NSString *tabTitle;
     switch(index){
             case 0 :
-                tabTitle = @"全部";
+                tabTitle = @"推荐";
             break;
             case 1 :
                 tabTitle = @"绘本";

@@ -16,25 +16,11 @@
             <rect key="frame" x="0.0" y="20" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="关于我们" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BM7-VI-ebm">
-                    <rect key="frame" x="126" y="286" width="68" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" scrollEnabled="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eiy-Xl-hJt">
-                    <rect key="frame" x="40" y="341" width="240" height="128"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                    <string key="text">关于我们的介绍                                                                                                                                                         关于我们的介绍多行文本的处理，使用了uitextview                                                                                              另外为了能够换行要一直加很多空格，暂时不知道其他解决办法                                                                                           uaer te conscient to factor tum poen legum odioque civiuda.</string>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    <dataDetectorType key="dataDetectorTypes" link="YES"/>
-                </textView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="test1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="xGs-5U-GKd">
-                    <rect key="frame" x="93" y="100" width="134" height="119"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon152.png" translatesAutoresizingMaskIntoConstraints="NO" id="xGs-5U-GKd">
+                    <rect key="frame" x="124" y="128" width="72" height="72"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="xGs-5U-GKd" secondAttribute="height" multiplier="134:119" id="Bkv-r7-3d8"/>
-                        <constraint firstAttribute="width" constant="134" id="QZJ-Pq-pBd"/>
+                        <constraint firstAttribute="width" secondItem="xGs-5U-GKd" secondAttribute="height" multiplier="1:1" id="Bkv-r7-3d8"/>
+                        <constraint firstAttribute="width" constant="72" id="QZJ-Pq-pBd"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="版本 v1.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eG2-M5-hpx">
@@ -44,25 +30,35 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eiy-Xl-hJt">
+                    <rect key="frame" x="36" y="243" width="248" height="216.5"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                    <string key="text">宝贝玩啥
+是一款针对0-6岁孩童父母的APP。
+它可以针对孩童益智玩耍领域作出个性化的推荐，从而帮助父母针对性地选择适合孩子的玩具、童书、游戏等。
+
+宝贝玩啥的理念是: 不需要家长成为育儿专家也能为宝贝提供成长所需要的全面呵护。在我们每种推荐背后蕴藏着敏感期、测评理论、性别、地域等各种有科学依据的理论知识，我们力求为用户提供快乐没有遗憾的亲子育儿体验。</string>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                </textView>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
             <constraints>
-                <constraint firstAttribute="centerY" secondItem="eiy-Xl-hJt" secondAttribute="centerY" constant="-121" id="1Fn-FY-BfU"/>
-                <constraint firstItem="xGs-5U-GKd" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="100" id="Ii4-oU-9tO"/>
-                <constraint firstAttribute="centerY" secondItem="BM7-VI-ebm" secondAttribute="centerY" constant="-12.25" id="UMx-bx-eoV"/>
-                <constraint firstItem="eiy-Xl-hJt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="hZC-3h-th3"/>
+                <constraint firstAttribute="centerY" secondItem="xGs-5U-GKd" secondAttribute="centerY" constant="120" id="SMd-Oe-Nzq"/>
+                <constraint firstItem="eiy-Xl-hJt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="36" id="hZC-3h-th3"/>
                 <constraint firstAttribute="centerX" secondItem="eG2-M5-hpx" secondAttribute="centerX" id="mXM-Wk-fAV"/>
                 <constraint firstAttribute="bottom" secondItem="eG2-M5-hpx" secondAttribute="bottom" constant="18" id="nMl-C4-6CF"/>
+                <constraint firstAttribute="centerY" secondItem="eiy-Xl-hJt" secondAttribute="centerY" constant="-66.5" id="pmJ-is-Q9d"/>
                 <constraint firstAttribute="centerX" secondItem="eiy-Xl-hJt" secondAttribute="centerX" id="pxj-gX-vGu"/>
                 <constraint firstAttribute="centerX" secondItem="xGs-5U-GKd" secondAttribute="centerX" id="uKc-Js-9hJ"/>
-                <constraint firstAttribute="trailing" secondItem="eiy-Xl-hJt" secondAttribute="trailing" constant="40" id="ul9-jP-5Hy"/>
-                <constraint firstAttribute="centerX" secondItem="BM7-VI-ebm" secondAttribute="centerX" id="wH0-ai-f8d"/>
+                <constraint firstAttribute="trailing" secondItem="eiy-Xl-hJt" secondAttribute="trailing" constant="36" id="ul9-jP-5Hy"/>
             </constraints>
             <point key="canvasLocation" x="454" y="221"/>
         </view>
     </objects>
     <resources>
-        <image name="test1.jpg" width="400" height="400"/>
+        <image name="icon152.png" width="152" height="152"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
