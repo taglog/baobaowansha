@@ -20,7 +20,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-    self.requestURL = @{@"requestRouter":@"post/collectionTable"};
     self.title = @"评论过的文章";
     }
 

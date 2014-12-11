@@ -16,6 +16,6 @@
 @interface PostViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,EGORefreshDelegate,CommentCreateDelegate>
 
 -(void)initViewWithDict:(NSDictionary *)dict;
-
+-(void)noDataAlert;
 
 @end

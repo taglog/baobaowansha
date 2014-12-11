@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "EGORefreshCustom.h"
-
+@protocol ContentViewDelegate
+-(void)showHUD;
+-(void)dismissHUD;
+@end
 @interface ContentViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshDelegate>
 
 @property(nonatomic,assign) NSInteger type;
 @property(nonatomic,retain) UITableView *homeTableView;
--(id)initWithURL:(NSDictionary *)dict;
+
+@property(nonatomic,retain)id<ContentViewDelegate> delegate;
+-(id)initWithURL:(NSDictionary *)dict type:(NSInteger)index;
 
 @end

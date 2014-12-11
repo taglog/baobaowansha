@@ -11,10 +11,13 @@
 #import "UIViewController+MMDrawerController.h"
 #import "MMDrawerBarButtonItem.h"
 #import "BabyInfoViewController.h"
+#import "JGProgressHUD.h"
+#import "JGProgressHUDSuccessIndicatorView.h"
 #import "MobClick.h"
 
+
 @interface HomeViewController ()
-@property(nonatomic,strong)NSDictionary *requestURL;
+@property (nonatomic,strong)JGProgressHUD *HUD;
 @end
 
 @implementation HomeViewController
@@ -43,7 +46,6 @@
     }
 
     self.view.backgroundColor = [UIColor whiteColor];
-    self.requestURL = @{@"requestRouter":@"post/table"};
     self.dataSource = self;
     self.delegate = self;
     [self setupLeftMenuButton];
@@ -100,8 +102,8 @@
 //内容视图的dataSource，交给HomeTableViewController
 - (UIViewController *)viewPager:(ViewPagerController *)viewPager contentViewControllerForTabAtIndex:(NSUInteger)index {
     //初始化contentViewController
-    ContentViewController *contentViewController = [[ContentViewController alloc] initWithURL:self.requestURL];
-    contentViewController.type = index;
+    ContentViewController *contentViewController = [[ContentViewController alloc] initWithURL:self.requestURL type:index];
+    contentViewController.delegate = self;
     return contentViewController;
 }
 
@@ -157,6 +159,15 @@
 -(void)leftDrawerButtonPress:(id)sender{
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
-
-
+#pragma mark - 指示层delegate
+-(void)showHUD{
+    //初始化HUD
+    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    self.HUD.textLabel.text = @"正在加载...";
+    [self.HUD showInView:self.view];
+    
+}
+-(void)dismissHUD{
+    [self.HUD dismiss];
+}
 @end

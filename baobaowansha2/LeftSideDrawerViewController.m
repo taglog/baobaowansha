@@ -233,7 +233,9 @@
                 
             } else if (indexPath.row == 1) {
                 if(self.navCollection == nil) {
-                    UIViewController * collectionViewController = [[CollectionViewController alloc] init];
+                    CollectionViewController * collectionViewController = [[CollectionViewController alloc] init];
+                    collectionViewController.requestURL = @{@"requestRouter":@"post/mycollection"};
+
                     self.navCollection = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
                 }
                 
@@ -253,7 +255,9 @@
                 
             } else if (indexPath.row == 2){ // row == 1
                 if(self.navComment == nil) {
-                    UIViewController * commentViewController = [[CommentViewController alloc] init];
+                   CommentViewController * commentViewController = [[CommentViewController alloc] init];
+                   commentViewController.requestURL= @{@"requestRouter":@"post/mycomment"};
+
                     self.navComment = [[UINavigationController alloc] initWithRootViewController:commentViewController];
                 }
                 if ([self.currentController isEqual: @"CommentViewControllerID"]){
