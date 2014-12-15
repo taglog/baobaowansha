@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshCustom.h"
 @protocol ContentViewDelegate
--(void)showHUD;
+-(void)showHUD:(NSString *)text;
 -(void)dismissHUD;
 @end
 @interface ContentViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,EGORefreshDelegate>

@@ -7,7 +7,6 @@
 //
 
 #import "CollectionViewController.h"
-#import "HomeViewController.h"
 @interface CollectionViewController ()
 @property(nonatomic,strong)NSDictionary *requestURL;
 @end
@@ -19,6 +18,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"我的收藏";
+    
 
 }
 

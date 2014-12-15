@@ -24,7 +24,7 @@
 @property(nonatomic,retain) UIScrollView *postScrollView;
 @property(nonatomic,retain) DTAttributedTextView *textView;
 @property(nonatomic,retain) UITableView *commentTableView;
-
+@property(nonatomic,strong)UIView *commentTableHeader;
 @property(nonatomic,retain) UIButton *commentCreateButton;
 //接收到的post数据
 @property(nonatomic,strong) NSDictionary *postDict;
@@ -70,11 +70,6 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    //初始化HUD
-    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
-    self.HUD.textLabel.text = @"正在加载...";
-    [self.HUD showInView:self.view];
-    
     //自定义右侧收藏button
     self.collectionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unstar.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collectPost:)];
     self.collectionButton.tintColor = [UIColor redColor];
@@ -102,7 +97,7 @@
     
     //阻止自动调整滚轮位置，否则导航栏下会出现一段空间
     self.automaticallyAdjustsScrollViewInsets = NO;
-   
+    
 }
 
 -(void)popViewController{
@@ -110,9 +105,20 @@
 }
 -(IBAction)collectPost:(id)sender{
     
-    self.HUD.textLabel.text = @"正在保存";
-    [self.HUD showInView:self.view];
+    UIApplication *app=[UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    
     UIButton *collectButtonSender =(UIButton *)sender;
+    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    
+    if(collectButtonSender.tag == 0){
+        self.HUD.textLabel.text = @"正在收藏";
+    }else{
+        self.HUD.textLabel.text = @"正在取消";
+    }
+    
+    [self.HUD showInView:self.view];
+    
     //获取路径
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -125,7 +131,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:collectRequestUrl  parameters:collectParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
-        
+        NSLog(@"%@",responseObject);
         if(status == 1){
             
             if(collectButtonSender.tag == 0){
@@ -143,7 +149,7 @@
             self.HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
             [self.HUD dismiss];
         }
-        
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         NSLog(@"%@",error);
@@ -154,18 +160,21 @@
         self.HUD.layoutChangeAnimationDuration = 0.4;
         self.HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
         [self.HUD dismiss];
-        
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     }];
-
     
-
+    
+    
 }
 
 -(void)noDataAlert{
     
     UILabel *noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, (self.view.frame.size.height-64)/2, self.view.frame.size.width, 40.0f)];
-    noDataAlert.text = @"网络连接失败";
+    noDataAlert.text = @"暂时没有内容哦~";
     noDataAlert.textAlignment = NSTextAlignmentCenter;
+    noDataAlert.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
+    noDataAlert.textAlignment = NSTextAlignmentCenter;
+    noDataAlert.font = [UIFont systemFontOfSize:14.0f];
     [self.view addSubview:noDataAlert];
     
 }
@@ -201,9 +210,13 @@
     //初始化底部的Button
     _commentCreateButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 40.0f, self.view.frame.size.width, 40.0f)];
     //_commentCreateButton.backgroundColor = [UIColor colorWithRed:221.0/255.0f green:221.0/255.0f blue:221.0/255.0f alpha:1.0f];
-    [_commentCreateButton setBackgroundImage:[UIImage imageNamed:@"commentbutton.jpg"] forState:UIControlStateNormal];
+    [_commentCreateButton setBackgroundImage:[UIImage imageNamed:@"commentButton.png"] forState:UIControlStateNormal];
     [_commentCreateButton addTarget:self action:@selector(showCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
-    
+    UILabel *commentCreateLabel = [[UILabel alloc]initWithFrame:CGRectMake(47.0f, 12.0f, 60.0f, 20.0f)];
+    commentCreateLabel.text = @"写跟帖";
+    commentCreateLabel.textColor = [UIColor colorWithRed:73.0f/255.0f green:73.0f/255.0f blue:73.0f/255.0f alpha:1.0f];
+    commentCreateLabel.font = [UIFont systemFontOfSize:14.0f];
+    [_commentCreateButton addSubview:commentCreateLabel];
     [self.view addSubview:_commentCreateButton];
     [self.view addSubview:_postScrollView];
     //根据textView的大小，设置tableView的origin.y
@@ -212,8 +225,8 @@
     
     [_postScrollView addSubview:_textView];
     
-    [self.HUD dismiss];
-        
+    
+    
 }
 
 //初始化textView
@@ -247,7 +260,7 @@
     _textView.attributedString = [self _attributedStringForSnippetUsingiOS6Attributes:NO];
     
     _textViewSize = [self getTextViewHeight:_textView.attributedString];
-    _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height + 138.0f);
+    _textView.frame = CGRectMake(0, 0, _frame.size.width, _textViewSize.height + 100);
     
 }
 //获取_textView的高度
@@ -273,7 +286,7 @@
     NSData *data = [html dataUsingEncoding:NSUTF8StringEncoding];
     
     // Create attributed string from HTML
-    CGSize maxImageSize = CGSizeMake(_frame.size.width-30.0, _frame.size.height - 280.0);
+    CGSize maxImageSize = CGSizeMake(_frame.size.width-30.0, 1.1*(_frame.size.width-30.0));
     
     // example for setting a willFlushCallback, that gets called before elements are written to the generated attributed string
     void (^callBackBlock)(DTHTMLElement *element) = ^(DTHTMLElement *element) {
@@ -518,27 +531,68 @@
     
     // update all attachments that matchin this URL (possibly multiple images with same size)
     for (DTTextAttachment *oneAttachment in [_textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
-    {   
+    {
         // update attachments that have no original size, that also sets the display size
         
         oneAttachment.originalSize = imageSize;
-//        float ratio = imageSize.width/imageSize.height;
-//        CGFloat imageHeight = _frame.size.width/ratio;
-//        if(imageHeight/(_frame.size.width - 30) > 1.2){
-//            imageHeight = _frame.size.width - 30;
-//        }
-//        oneAttachment.displaySize = CGSizeMake(_frame.size.width - 30, imageHeight);
-
+        float ratio = imageSize.width/imageSize.height;
+        CGFloat imageHeight = _frame.size.width/ratio;
+        if(imageHeight/(_frame.size.width - 30) > 1.2){
+            imageHeight =(_frame.size.width - 30)*0.9;
+        }
+        oneAttachment.displaySize = CGSizeMake(_frame.size.width - 30, imageHeight);
+        
     }
-    
-        // layout might have changed due to image sizes
-        [_textView relayoutText];
-}
+    _textViewSize = [self getTextViewHeight:_textView.attributedString];
+    [self relayoutView:_textViewSize];
+    // layout might have changed due to image sizes
+    [_textView relayoutText];
 
+}
+-(void)relayoutView:(CGSize)textViewSize{
+    
+    //重新设置_textView的frame
+    _textView.frame = CGRectMake(0, 0, _frame.size.width, textViewSize.height +120);
+    //用户评论分隔栏
+    _commentTableHeader.frame = CGRectMake(0, textViewSize.height + 120, self.view.frame.size.width, 40.0f);
+    
+    
+    //根据改变的textViewSize，调整commentTableView的位置和scrollView的contentSize
+    if(_commentTableView){
+        [self relayoutCommentTableView:textViewSize];
+    }
+    if(_noCommentLabel){
+        _noCommentLabel.frame = CGRectMake(0, textViewSize.height + 120 + 80, self.view.frame.size.width, 20.0f);
+        [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height  + 300)];
+    }
+   
+    
+}
+-(void)relayoutCommentTableView:(CGSize)textViewSize{
+    
+    CGFloat height = [self getCommentTableViewHeight:self.commentTableViewCell];
+    
+    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, textViewSize.height + height + 160)];
+    
+    [_commentTableView setFrame:CGRectMake(0, textViewSize.height + 160, self.view.frame.size.width, height)];
+    [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f)];
+}
+-(CGFloat)getCommentTableViewHeight:(NSMutableArray *)commentTableViewCell{
+    
+    CGFloat height = 0;
+    NSUInteger length = [commentTableViewCell count];
+    for(int i = 0;i < length ; i++){
+        height  += [CommentTableViewCell heightForCellWithDict:commentTableViewCell[i] frame:_frame];
+    }
+    return height;
+    
+}
 //初始化评论栏
 #pragma  mark 评论 tableView delegate
 -(void)initCommentTableView{
     
+    UIApplication *app=[UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     //初始化homeTableViewCell
     self.commentTableViewCell = [[NSMutableArray alloc]init];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -553,8 +607,8 @@
                 NSDictionary *dict = [responseArray valueForKey:responseDict];
                 [self.commentTableViewCell addObject:dict];
             }
-            
-            [self resetCommentTableViewHeight:self.commentTableViewCell];
+            [_commentTableView reloadData];
+            [self relayoutCommentTableView:_textViewSize];
             [_refreshFooterView removeFromSuperview];
             [self initRefreshView];
             
@@ -562,27 +616,28 @@
             //没有评论的时候,显示一个label，说没有评论
             
             _commentTableView.hidden = YES;
-            _noCommentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 178 + 70, self.view.frame.size.width, 20.0f)];
+            _noCommentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 130 + 80, self.view.frame.size.width, 20.0f)];
             _noCommentLabel.text = @"还没有人评论哦，快来第一个评论吧~";
             _noCommentLabel.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
             _noCommentLabel.textAlignment = NSTextAlignmentCenter;
             _noCommentLabel.font = [UIFont systemFontOfSize:14.0f];
             
             [_postScrollView addSubview:_noCommentLabel];
-            [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height  + 368)];
+            [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height  + 330)];
             
             
-            
+            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
         }
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     }];
     
 }
 
 //初始化tableView
 -(void)initTableView{
-
+    
     
     //初始化tableView
     if(!_commentTableView){
@@ -598,20 +653,20 @@
     }
     
     //初始化用户评论分隔栏
-    UIView *commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 148.0f, self.view.frame.size.width, 40.0f)];
-    commentTableHeader.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0 alpha:1.0];
+    _commentTableHeader = [[UIView alloc]initWithFrame:CGRectMake(0, _textViewSize.height + 188.0f, self.view.frame.size.width, 40.0f)];
+    _commentTableHeader.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0 alpha:1.0];
     UILabel *commentTableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 10.0f, 100.0f, 20.0f)];
     commentTableHeaderLabel.text = @"用户评论";
     commentTableHeaderLabel.textColor = [UIColor colorWithRed:53.0f/255.0f green:53.0f/255.0f blue:53.0f/255.0f alpha:1.0f];
     commentTableHeaderLabel.font = [UIFont systemFontOfSize:14.0f];
-    [commentTableHeader addSubview:commentTableHeaderLabel];
+    [self.commentTableHeader addSubview:commentTableHeaderLabel];
     
-    [_postScrollView addSubview:commentTableHeader];
+    [_postScrollView addSubview:_commentTableHeader];
 }
 
 //初始化下拉刷新header
 -(void)initRefreshView{
-   
+    
     _refreshFooterView = [[EGORefreshCustom alloc] initWithTableView:_postScrollView position:EGORefreshFooter];
     _refreshFooterView.delegate = self;
     _refreshFooterView.frame = CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f);
@@ -637,7 +692,7 @@
     if(cell == nil){
         cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
         [cell setDataWithDict:self.commentTableViewCell[indexPath.row] frame:_frame];
-       
+        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return cell;
@@ -648,25 +703,12 @@
     return [CommentTableViewCell heightForCellWithDict:self.commentTableViewCell[indexPath.row] frame:self.view.frame];
 }
 
--(void)resetCommentTableViewHeight:(NSMutableArray *)commentTableViewCell{
-    
-    CGFloat height = 0;
-    NSUInteger length = [commentTableViewCell count];
-    for(int i = 0;i < length ; i++){
-        height  += [CommentTableViewCell heightForCellWithDict:commentTableViewCell[i] frame:_frame];
-    }
-    
-    [_commentTableView reloadData];
-    
-    [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height + height + 188)];
-    
-    [_commentTableView setFrame:CGRectMake(0, _textViewSize.height + 188, self.view.frame.size.width, height)];
-    [_refreshFooterView setFrame:CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f)];
-    
-}
+
+
 #pragma mark 下拉数据刷新
 - (void)reloadTableViewDataSource{
-    
+    UIApplication *app=[UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     //上拉刷新的数据处理
     if(_refreshFooterView.pullUp){
         static int p = 2;
@@ -681,12 +723,24 @@
                     NSDictionary *dict = [responseArray valueForKey:responseDict];
                     [self.commentTableViewCell addObject:dict];
                 }
-                 _reloading = YES;
-                [self resetCommentTableViewHeight:self.commentTableViewCell];
-                [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+                _reloading = YES;
+                [_commentTableView reloadData];
+                [self relayoutCommentTableView:_textViewSize];
+                
+            }else{
+                self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+                self.HUD.textLabel.text = @"没有评论了";
+                [self.HUD showInView:self.view];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.HUD dismiss];
+                });
             }
+            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+            
         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"%@",error);
+            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
         }];
         ++p;
         
@@ -706,20 +760,20 @@
         [self.view bringSubviewToFront:_commentCreateButton];
         [UIView animateWithDuration:0.3 animations:^{
             _commentCreateButton.frame = CGRectMake(0,self.view.frame.size.height - 45, self.view.frame.size.width, 45.0f);
-        //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
-//            _postScrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
+            //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
+            //            _postScrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
         }  completion:^(BOOL finished){
             
         }];
-
+        
     }else{
         [UIView animateWithDuration:0.3 animations:^{
             
-        _commentCreateButton.frame = CGRectMake(0, self.view.frame.size.height , self.view.frame.size.width, 60.0f);
+            _commentCreateButton.frame = CGRectMake(0, self.view.frame.size.height , self.view.frame.size.width, 60.0f);
             
-    }  completion:^(BOOL finished){
-        
-    }];
+        }  completion:^(BOOL finished){
+            
+        }];
         
     }
     [_refreshFooterView egoRefreshScrollViewDidScroll:scrollView];
@@ -752,10 +806,33 @@
 }
 //创建评论的View
 -(void)showCommentCreateViewController{
+    
+    UIApplication *app=[UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    
     CommentCreateViewController *commentCreateView = [[CommentCreateViewController alloc]initWithID:self.postID];
     commentCreateView.delegate =self;
+    
+    NSString *commentRouter = @"comment/getName";
+    NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
+    NSDictionary *postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr", nil];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:commentRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        
+        NSArray *responseArray = [responseObject valueForKey:@"data"];
+        if(responseArray != (id)[NSNull null]&&responseArray != nil){
+            [commentCreateView addUserName:responseArray];
+        }
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error);
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    }];
     [self.navigationController pushViewController:commentCreateView animated:YES];
 }
+
+
 
 //创建评论成功的回调
 -(void)commentCreateSuccess:(NSDictionary *)dict{
@@ -769,6 +846,7 @@
     [_commentTableView insertRowsAtIndexPaths:commentAddRow withRowAnimation:UITableViewRowAnimationNone];
     [_commentTableView endUpdates];
     [_postScrollView setContentOffset:CGPointMake(0, _textViewSize.height) animated:YES];
+    [self relayoutCommentTableView:_textViewSize];
     
 }
 

@@ -15,6 +15,7 @@
 @interface CommentCreateViewController ()
 
 @property(nonatomic,strong)UITextView *commentTextView;
+@property(nonatomic,strong)UITextView *commentTextField;
 //该post的ID
 @property(nonatomic,assign)NSInteger postID;
 //post到后台的字典
@@ -51,10 +52,25 @@
     UIView *whiteSpace = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64.0f)];
     whiteSpace.backgroundColor =[UIColor whiteColor];
     
-    _commentTextView = [[UITextView alloc]initWithFrame:CGRectMake(15.0f, 15.0f, self.view.frame.size.width - 30.0f , 250.0f)];
+    _commentTextField = [[UITextView alloc]initWithFrame:CGRectMake(15.0f, 15.0f, self.view.frame.size.width - 30.0f, 40.0f)];
+    _commentTextField.tag = 1;
+    _commentTextField.text = @"请输入您评论的昵称";
+    _commentTextField.textColor = [UIColor colorWithRed:192.0/255.0f green:192.0/255.0f blue:192.0/255.0f alpha:1.0f];
+    _commentTextField.delegate = self;
+    _commentTextField.backgroundColor = [UIColor whiteColor];
     
-    _commentTextView.textColor = [UIColor blackColor];
+    _commentTextField.returnKeyType = UIReturnKeyDefault;
     
+    _commentTextField.keyboardType = UIKeyboardTypeDefault;
+    _commentTextField.font = [UIFont systemFontOfSize:14.0f];
+    _commentTextField.contentInset = UIEdgeInsetsMake(10.0f, 15.0f, 4.0f, 10.0f);
+    //_commentTextField.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    _commentTextField.layer.borderWidth = 0.5f;
+    _commentTextField.layer.borderColor = [[UIColor colorWithRed:204.0f/255.0f green:204.0f/255.0f blue:204.0f/255.0f alpha:1.0f]CGColor];
+    
+    
+    _commentTextView = [[UITextView alloc]initWithFrame:CGRectMake(15.0f, 60.0f, self.view.frame.size.width - 30.0f , 250.0f)];
+    _commentTextView.tag = 2;
     _commentTextView.delegate = self;
     
     _commentTextView.backgroundColor = [UIColor whiteColor];
@@ -70,14 +86,17 @@
     
     _commentTextView.scrollEnabled = YES;
     
-    _commentTextView.contentInset = UIEdgeInsetsMake(15.0f, 0.0f, 10.0f, 10.0f);
+    _commentTextView.contentInset = UIEdgeInsetsMake(10.0f, 15.0f, 10.0f, 10.0f);
     _commentTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     
-    _commentTextView.layer.borderWidth = 1;
+    _commentTextView.layer.borderWidth = 0.5f;
     
     _commentTextView.layer.borderColor = [[UIColor colorWithRed:204.0f/255.0f green:204.0f/255.0f blue:204.0f/255.0f alpha:1.0f]CGColor];
-
+    
+    
+    [self.view addSubview:_commentTextField];
     [self.view addSubview:_commentTextView];
+    
     
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -90,9 +109,16 @@
 #pragma  mark - textViewDelegate
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    if ([textView.text isEqualToString:@"请在此输入您的评论"]) {
-        textView.text = @"";
-        textView.textColor = [UIColor blackColor];
+    if(textView.tag == 1){
+        if ([textView.text isEqualToString:@"请输入您评论的昵称"]) {
+            textView.text = @"";
+            textView.textColor = [UIColor blackColor];
+        }
+    }else{
+        if ([textView.text isEqualToString:@"请在此输入您的评论"]) {
+            textView.text = @"";
+            textView.textColor = [UIColor blackColor];
+        }
     }
     [textView becomeFirstResponder];
 }
@@ -106,20 +132,23 @@
 }
 
 -(void)commentSubmit{
+    
     //初始化HUD
     self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
     self.HUD.textLabel.text = @"保存中...";
     [self.HUD showInView:self.view];
-    self.HUD.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.4f];
     
     NSString *text = _commentTextView.text;
-    
+    NSString *userNickName = _commentTextField.text;
     //如果用户输入不为空
-    if(![text isEqualToString:@""] && ![text isEqualToString:@"请在此输入您的评论"]){
-
+    if(![text isEqualToString:@""] && ![text isEqualToString:@"请在此输入您的评论"]&&![userNickName isEqualToString:@""]&&![text isEqualToString:@"请输入您评论的昵称"]){
+        
+        UIApplication *app=[UIApplication sharedApplication];
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+        
         self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        self.commentPostParams = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:_postID],@"comment_post_ID", text,@"comment_content",self.appDelegate.generatedUserID,@"userIdStr",nil];
+        self.commentPostParams = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:_postID],@"comment_post_ID", text,@"comment_content",userNickName,@"comment_author",self.appDelegate.generatedUserID,@"userIdStr",nil];
         
         NSString *commentCreateRouter = @"/comment/create";
         NSString *commentCreateRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentCreateRouter];
@@ -129,7 +158,7 @@
             NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
             if(status == 1){
                 
-                NSDictionary *commentToPostViewController = [NSDictionary dictionaryWithObjectsAndKeys:[responseObject valueForKey:@"user"],@"comment_author",text,@"comment_content",[responseObject valueForKey:@"comment_date"],@"comment_date",[responseObject valueForKey:@"comment_id"],@"comment_id", nil];
+                NSDictionary *commentToPostViewController = [NSDictionary dictionaryWithObjectsAndKeys:userNickName,@"comment_author",text,@"comment_content",[responseObject valueForKey:@"comment_date"],@"comment_date",[responseObject valueForKey:@"comment_id"],@"comment_id", nil];
                 //输入完成，应该跳回到上一页，同时把上一页的tableView刷新
                 [self.delegate commentCreateSuccess:commentToPostViewController];
                 [self.HUD dismiss];
@@ -139,19 +168,37 @@
                 //否则的话，弹出一个指示层
                 self.HUD.textLabel.text = @"保存失败";
             }
-            
+            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
             NSLog(@"%@",error);
+            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
         }];
         
     }else{
         //用户没有输入的时候，该做些什么
-        
+        self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+        self.HUD.textLabel.text = @"内容不能为空";
+        [self.HUD showInView:self.view];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.HUD dismiss];
+        });
     }
     
 }
-
+-(void)addUserName:(NSString *)userName{
+    if([_commentTextField.text isEqualToString:@""] || [_commentTextField.text isEqualToString:@"请输入您评论的昵称"]){
+        NSString *userSex;
+        if ([userName valueForKey:@"userSex"] == 0) {
+            userSex = @"妈";
+        }else{
+            userSex = @"爸";
+        }
+        NSString *userNickName = [[userName valueForKey:@"userBabyName"] stringByAppendingString:userSex];
+        _commentTextField.text = userNickName;
+    }
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

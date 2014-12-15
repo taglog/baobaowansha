@@ -12,9 +12,10 @@
 -(void)commentCreateSuccess:(NSDictionary*)dict;
 
 @end
-@interface CommentCreateViewController : UIViewController<UITextViewDelegate>
+@interface CommentCreateViewController : UIViewController<UITextViewDelegate,UITextFieldDelegate>
 
 -(id)initWithID:(NSInteger)postID;
+-(void)addUserName:(NSArray *)userName;
 @property(nonatomic,retain)id<CommentCreateDelegate>delegate;
 
 @end
