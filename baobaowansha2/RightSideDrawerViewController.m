@@ -9,6 +9,7 @@
 #import "MMSideDrawerSectionHeaderView.h"
 #import "RightSideDrawerViewController.h"
 #import "BabyInfoViewController.h"
+#import "CollectionHeaderView.h"
 
 @interface RightSideDrawerViewController ()
 @property (nonatomic, strong) NSMutableArray *carouselItems;
@@ -65,7 +66,10 @@
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 140, 240, 400) collectionViewLayout:flowLayout];
     
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-
+    
+    [self.collectionView registerClass:[CollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
+    
+    
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
     [self.collectionView setBackgroundColor:[UIColor clearColor]];
@@ -224,14 +228,42 @@
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 2;
+    return 3;
 }
 
 //每个分区上的元素个数
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 6;
+    return 3;
+}
+
+
+// 设置 header 和 footer
+- (UICollectionReusableView *)collectionView:(UICollectionView *)tcollectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionHeader) {
+        CollectionHeaderView *headerView = [tcollectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+        switch (indexPath.section) {
+            case 0:
+                headerView.sectionHeader.text = @"按参与人数";
+                break;
+            case 1:
+                headerView.sectionHeader.text = @"按场景";
+                break;
+            case 2:
+                headerView.sectionHeader.text = @"按时长";
+                break;
+            default:
+                break;
+        }
+        
+        reusableview = headerView;
+    }
+    
+    return reusableview;
 }
 
 
@@ -248,19 +280,54 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 81, 81)];
     imageView.layer.borderColor = [UIColor colorWithRed:(94/255.0) green:(97/255.0) blue:(99/255.0) alpha:1.0f].CGColor;
     imageView.layer.borderWidth = 1.0f;
-    
     UIImageView *iconView = [[UIImageView alloc] initWithFrame:CGRectMake(28, 16, 24, 24)];
     iconView.image = [UIImage imageNamed:@"menu.png"];
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 50, 0, 16)];
-    label.text = @"tagtest";
-    label.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-    label.textColor = [UIColor whiteColor];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(22, 50, 0, 16)];
+    //label.text = @"场景分类";
+    
+    
+    switch (indexPath.section*100+indexPath.row) {
+        case 0:
+            label.text = @"两个人";
+            break;
+        case 1:
+            label.text = @"三个人";
+            break;
+        case 2:
+            label.text = @"多个人";
+            break;
+            
+        case 100:
+            label.text = @"起床时";
+            break;
+        case 101:
+            label.text = @"工作日";
+            break;
+        case 102:
+            label.text = @"晚饭后";
+            break;
+            
+        case 200:
+            label.text = @"5分钟";
+            break;
+        case 201:
+            label.text = @"半个小时";
+            break;
+        case 202:
+            label.text = @"更长";
+            break;
+            
+        default:
+            break;
+    }
+    
+    
+    label.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
+    label.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
     label.textAlignment = NSTextAlignmentCenter;
     [label sizeToFit];
     label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    
-    
 
     [cell.contentView addSubview:imageView];
     [cell.contentView addSubview:iconView];
@@ -282,7 +349,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     
-    CGSize size={5,5};
+    CGSize size={25,25};
     return size;
 }
 
