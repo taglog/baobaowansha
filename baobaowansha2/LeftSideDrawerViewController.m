@@ -96,7 +96,7 @@
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 164.0f)];
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 40, 90, 90)];
         imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        imageView.image = [UIImage imageNamed:self.headerImage];
+        //imageView.image = [UIImage imageNamed:self.headerImage];
         imageView.layer.masksToBounds = YES;
         imageView.layer.cornerRadius = 5.0;
         //imageView.layer.borderColor = [UIColor whiteColor].CGColor;
