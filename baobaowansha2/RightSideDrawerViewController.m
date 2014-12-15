@@ -10,6 +10,7 @@
 #import "RightSideDrawerViewController.h"
 #import "BabyInfoViewController.h"
 #import "CollectionHeaderView.h"
+#import "CollectionViewCell.h"
 
 @interface RightSideDrawerViewController ()
 @property (nonatomic, strong) NSMutableArray *carouselItems;
@@ -23,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
     [self.mm_drawerController setMaximumRightDrawerWidth:240.0];
     
@@ -52,7 +54,10 @@
     [self.carousel setDelegate:self];
     [self.carousel setDataSource:self];
     
-    [self.view addSubview:self.carousel];
+    UIScrollView * scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 240, self.view.frame.size.height)];
+    scrollView.contentSize = CGSizeMake(240, 600);
+    [scrollView addSubview:self.carousel];
+    //[self.view addSubview:self.carousel];
     
     [self.carousel setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     
@@ -63,9 +68,9 @@
     flowLayout.itemSize = CGSizeMake(80, 80);
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.minimumLineSpacing = 0;
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 140, 240, 400) collectionViewLayout:flowLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 140, 240, 460) collectionViewLayout:flowLayout];
     
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [self.collectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
     [self.collectionView registerClass:[CollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
     
@@ -73,8 +78,10 @@
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
     [self.collectionView setBackgroundColor:[UIColor clearColor]];
+    [self.collectionView setScrollEnabled:NO];
     
-    [self.view addSubview:self.collectionView];
+    [scrollView addSubview:self.collectionView];
+    //[self.view addSubview:self.collectionView];
     
     
     UIColor * viewBackgroundColor;
@@ -91,6 +98,7 @@
                                                    alpha:1.0];
     }
     
+    [self.view addSubview:scrollView];
     [self.view setBackgroundColor:viewBackgroundColor];
 
     
@@ -228,7 +236,7 @@
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 3;
+    return 4;
 }
 
 //每个分区上的元素个数
@@ -248,12 +256,15 @@
         CollectionHeaderView *headerView = [tcollectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
         switch (indexPath.section) {
             case 0:
-                headerView.sectionHeader.text = @"按参与人数";
+                headerView.sectionHeader.text = @"按潜能";
                 break;
             case 1:
-                headerView.sectionHeader.text = @"按场景";
+                headerView.sectionHeader.text = @"按参与人数";
                 break;
             case 2:
+                headerView.sectionHeader.text = @"按场景";
+                break;
+            case 3:
                 headerView.sectionHeader.text = @"按时长";
                 break;
             default:
@@ -274,12 +285,13 @@
 {
     static NSString *identify = @"cell";
     
-    UICollectionViewCell *cell = [tcollectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
-    
-    
+    CollectionViewCell *cell = [tcollectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
+    cell.tags = @"all";
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 81, 81)];
     imageView.layer.borderColor = [UIColor colorWithRed:(94/255.0) green:(97/255.0) blue:(99/255.0) alpha:1.0f].CGColor;
     imageView.layer.borderWidth = 1.0f;
+
+    
     UIImageView *iconView = [[UIImageView alloc] initWithFrame:CGRectMake(28, 16, 24, 24)];
     iconView.image = [UIImage imageNamed:@"menu.png"];
 
@@ -289,33 +301,49 @@
     
     switch (indexPath.section*100+indexPath.row) {
         case 0:
-            label.text = @"两个人";
+            label.text = @"运动";
+            cell.tags = @"运动";
             break;
         case 1:
-            label.text = @"三个人";
+            label.text = @"认知";
+            cell.tags = @"认知";
             break;
         case 2:
-            label.text = @"多个人";
+            label.text = @"更多...";
+            cell.tags = @"more";
             break;
             
         case 100:
-            label.text = @"起床时";
+            label.text = @"一大一下";
             break;
         case 101:
-            label.text = @"工作日";
+            label.text = @"两大一小";
             break;
         case 102:
-            label.text = @"晚饭后";
+            label.text = @"更多...";
+            cell.tags = @"more";
             break;
             
         case 200:
-            label.text = @"5分钟";
+            label.text = @"起床时";
             break;
         case 201:
-            label.text = @"半个小时";
+            label.text = @"晚饭后";
             break;
         case 202:
-            label.text = @"更长";
+            label.text = @"更多...";
+            cell.tags = @"more";
+            break;
+            
+        case 300:
+            label.text = @"5分钟";
+            break;
+        case 301:
+            label.text = @"半小时";
+            break;
+        case 302:
+            label.text = @"更长...";
+            cell.tags = @"more";
             break;
             
         default:
@@ -361,20 +389,48 @@
 }
 
 
-//UICollectionView被选中时调用的方法
--(void)collectionView:(UICollectionView *)tcollectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionViewCell * cell = (UICollectionViewCell *)[tcollectionView cellForItemAtIndexPath:indexPath];
-    cell.backgroundColor = [UIColor whiteColor];
+- (void)collectionView:(UICollectionView *)colView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
+    NSLog(@"cell tags is %@", cell.tags);
+    
+    cell.contentView.backgroundColor = [UIColor colorWithRed:217/255.0
+                                                       green:217/255.0
+                                                        blue:217/255.0
+                                                       alpha:0.9];
+    
+    if ([cell.tags  isEqual: @"more"]) {}
+    
 }
 
 
 
-//返回这个UICollectionView是否可以被选择
--(BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
+- (void)collectionView:(UICollectionView *)colView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UICollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
+    //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    //    cell.contentView.backgroundColor = nil;
+    //
+    //});
+    
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn //设置动画类型
+                     animations:^{
+                         //开始动画
+                         cell.contentView.backgroundColor = nil;
+                     }
+                     completion:^(BOOL finished){
+                         // 动画结束时的处理
+                     }];
+    
 }
+
+
+
+
+
+
 
 
 

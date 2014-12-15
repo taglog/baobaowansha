@@ -11,12 +11,7 @@
 #import "iCarousel.h"
 
 
-typedef NS_ENUM(NSInteger, RMMDrawerSection){
-    RightSection1,
-    RightSection2,
-    
-    
-};
+
 
 
 @interface RightSideDrawerViewController : UIViewController <iCarouselDataSource, iCarouselDelegate, UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>

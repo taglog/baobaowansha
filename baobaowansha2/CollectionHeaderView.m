@@ -19,7 +19,6 @@
         self.sectionHeader.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
         [self.sectionHeader sizeToFit];
         self.sectionHeader.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        
         [self addSubview:self.sectionHeader];
 
     }
