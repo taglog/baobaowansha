@@ -17,6 +17,7 @@
 @end
 
 @interface HomeViewController : ViewPagerController <ViewPagerDataSource, ViewPagerDelegate,ContentViewDelegate>
+
 @property(nonatomic,strong)NSDictionary *requestURL;
 @property (nonatomic,assign) id<HomeViewDelegate> leftBarButtonItemClickedDelegate;
 

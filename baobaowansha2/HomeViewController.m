@@ -175,10 +175,10 @@
 
 
 #pragma mark - 指示层delegate
--(void)showHUD{
+-(void)showHUD:(NSString*)text{
     //初始化HUD
     self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
-    self.HUD.textLabel.text = @"正在加载...";
+    self.HUD.textLabel.text = text;
     [self.HUD showInView:self.view];
     
 }

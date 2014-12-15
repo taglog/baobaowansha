@@ -71,7 +71,7 @@
             label.frame = CGRectMake(0.0f, frame.size.height - 48.0f, self.frame.size.width, 20.0f);
         }
         else{
-            label.frame = CGRectMake(0.0f, frame.size.height - 22.0f, self.frame.size.width, 20.0f);
+            label.frame = CGRectMake(0.0f, frame.size.height - 7.0f, self.frame.size.width, 20.0f);
         }
         label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         label.font = [UIFont boldSystemFontOfSize:13.0f];
@@ -89,7 +89,7 @@
             view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 25.0f, 20.0f, 20.0f);
         }
         else{
-            view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 45.0f, 20.0f, 20.0f);
+            view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 30.0f, 20.0f, 20.0f);
         }
         
         [self addSubview:view];

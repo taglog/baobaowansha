@@ -257,7 +257,6 @@
                 if(self.navComment == nil) {
                    CommentViewController * commentViewController = [[CommentViewController alloc] init];
                    commentViewController.requestURL= @{@"requestRouter":@"post/mycomment"};
-
                     self.navComment = [[UINavigationController alloc] initWithRootViewController:commentViewController];
                 }
                 if ([self.currentController isEqual: @"CommentViewControllerID"]){

@@ -82,18 +82,15 @@
 //给Cell中的key赋值
 -(void)setDataWithDict:(NSDictionary *)dict frame:(CGRect)frame{
     
-    if([dict valueForKey:@"wp_posts_id"]){
-        self.ID = [[dict valueForKey:@"ID"] integerValue];
-    }else{
-        self.ID = [[dict valueForKey:@"wp_posts_id"] integerValue];
-    }
+    self.ID = [[dict valueForKey:@"ID"] integerValue];
+    
     self.aFrame = frame;
     
     NSString *imagePathOnServer = @"http://blog.yhb360.com/wp-content/uploads/";
     
     NSString *imageGetFromServer = [dict valueForKey:@"post_cover"];
     //没有设置特色图像的话会报错，所以需要检测是否为空
-    if(imageGetFromServer != (id)[NSNull null]&&imageGetFromServer != nil){
+    if(imageGetFromServer != (id)[NSNull null]){
         NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];
         NSURL *imageUrl = [NSURL URLWithString:[imageString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         [self.image setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"test1.jpg"]];
