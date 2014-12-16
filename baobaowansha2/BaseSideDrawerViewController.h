@@ -14,7 +14,6 @@
 
 @interface BaseSideDrawerViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) UITableView * tableView;
-@property (nonatomic,strong) NSArray * drawerWidths;
 
 
 @end

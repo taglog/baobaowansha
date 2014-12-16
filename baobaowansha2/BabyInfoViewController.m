@@ -175,12 +175,9 @@
     afnmanager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     NSMutableDictionary *dict = [self formatBabyInfo];
 
-//    [afnmanager POST:@"http://blogtest.yhb360.com/test/syncbabyinfo.php" parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //[self.buttonItem s:];
-        //[self.buttonItem setSelectionStyle:UITableViewCellSelectionStyleNone];
-        //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"babyInfoSynced"];
 
     [dict setObject:self.appDelegate.generatedUserID forKey:@"userIdStr"];
+    [self applicationWillResignActive:nil];
     NSLog(@"sending: %@", dict);
     [afnmanager POST:userInfoURL parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
 

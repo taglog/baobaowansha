@@ -49,6 +49,7 @@
     self.dataSource = self;
     self.delegate = self;
     [self setupLeftMenuButton];
+    [self setupRightFilterButton];
     
 }
 
@@ -159,6 +160,20 @@
 -(void)leftDrawerButtonPress:(id)sender{
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
+
+
+- (void)setupRightFilterButton {
+    MMDrawerBarButtonItem * rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
+    [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:YES];
+    rightDrawerButton.tintColor = [UIColor redColor];
+    rightDrawerButton.image = [UIImage imageNamed:@"filter.png"];
+}
+
+-(void)rightDrawerButtonPress:(id)sender{
+    [self.mm_drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:nil];
+}
+
+
 #pragma mark - 指示层delegate
 -(void)showHUD:(NSString*)text{
     //初始化HUD

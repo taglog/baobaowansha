@@ -10,6 +10,7 @@
 #import "HomeViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "LeftSideDrawerViewController.h"
+#import "RightSideDrawerViewController.h"
 #import "MobClick.h"
 
 
@@ -27,6 +28,7 @@
     [[UINavigationBar appearance] setBackgroundColor:[UIColor whiteColor]];
 
     UIViewController * leftSideDrawerViewController = [[LeftSideDrawerViewController alloc] init];
+    UIViewController * rightSideDrawerViewController = [[RightSideDrawerViewController alloc] init];
 
     HomeViewController * centerViewController = [[HomeViewController alloc] init];
     centerViewController.requestURL = @{@"requestRouter":@"post/table"};
@@ -85,7 +87,8 @@
     
     self.drawerController = [[MMDrawerController alloc]
                                         initWithCenterViewController:centerNavigation
-                                        leftDrawerViewController:leftSideDrawerViewController];
+                                        leftDrawerViewController:leftSideDrawerViewController
+                                        rightDrawerViewController:rightSideDrawerViewController];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
