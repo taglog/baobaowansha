@@ -734,10 +734,12 @@
             }else{
                 
                 self.HUD.textLabel.text = @"没有评论了";
-                [self.HUD showInView:self.view];
+                    [self.HUD showInView:self.view];
+                
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self.HUD dismiss];
                 });
+                
             }
             [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
             app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;

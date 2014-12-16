@@ -138,7 +138,7 @@
     
     switch (component) {
         case ViewPagerIndicator:
-            return [[UIColor colorWithRed:50.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0] colorWithAlphaComponent:1.0];
+            return [[UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0] colorWithAlphaComponent:1.0];
         case ViewPagerTabsView:
             return [[UIColor whiteColor] colorWithAlphaComponent:1.0];
         default:
@@ -151,7 +151,7 @@
 -(void)setupLeftMenuButton{
     MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
     [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
-    leftDrawerButton.tintColor = [UIColor colorWithRed:50.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
+    leftDrawerButton.tintColor = [UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
     leftDrawerButton.image = [UIImage imageNamed:@"menu.png"];
 }
 
