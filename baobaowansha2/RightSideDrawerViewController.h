@@ -18,5 +18,9 @@
 
 @property (nonatomic, strong) iCarousel * carousel;
 @property (nonatomic, strong) UICollectionView * collectionView;
+@property (nonatomic, retain) NSDictionary* rightDrawerModelInJson;
+@property (nonatomic, retain) NSMutableArray * sectionFoldFlags;
+
 
 @end
+

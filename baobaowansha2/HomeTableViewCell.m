@@ -93,11 +93,11 @@
     if(imageGetFromServer != (id)[NSNull null]){
         NSString *imageString = [imagePathOnServer stringByAppendingString:imageGetFromServer];
         NSURL *imageUrl = [NSURL URLWithString:[imageString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        [self.image setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"test1.jpg"]];
+        [self.image setImageWithURL:imageUrl placeholderImage:[UIImage imageNamed:@"loadingbackground.png"]];
     
     }else{
         //没有特色图像的时候，怎么办
-        [self.image setImageWithURL:[NSURL URLWithString:@"http://blog.yhb360.com/wp-content/uploads/2014/11/%E4%BD%A0%E7%9C%8B%E5%88%B0%E6%88%91%E6%89%80%E7%9C%8B%E5%88%B0%E7%9A%84%E4%B8%9C%E8%A5%BF%E4%BA%86%E5%90%97.jpg"] placeholderImage:[UIImage imageNamed:@"test1.jpg"]];
+        [self.image setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"loadingbackground.png"]];
 
     }
     

@@ -14,19 +14,73 @@
 
 @interface RightSideDrawerViewController ()
 @property (nonatomic, strong) NSMutableArray *carouselItems;
+@property (nonatomic, retain) UIScrollView * scrollView;
 @end
 
 @implementation RightSideDrawerViewController
 
+
+
 @synthesize carousel;
 @synthesize carouselItems;
 @synthesize collectionView;
+@synthesize scrollView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // Do any additional setup after loading the view.
     [self.mm_drawerController setMaximumRightDrawerWidth:240.0];
+    
+    NSString * responseData = \
+    @"{\"banner\":[\
+        {\"imgurl\":\"christmas.jpg\", \"title\":\"圣诞节\"}, \
+        {\"imgurl\":\"newyear.jpg\", \"title\":\"新年\"},\
+        {\"imgurl\":\"chun.jpg\", \"title\":\"春节\"},\
+        {\"imgurl\":\"travel.jpg\", \"title\":\"旅行\"}\
+    ],\
+    \"collections\": [\
+        {\"sectionTitle\":\"潜能\", \"sectionItems\": [\
+            {\"title\":\"运动\", \"tags\":\"运动\"},\
+            {\"title\":\"认知\", \"tags\":\"认知\"},\
+            {\"title\":\"动手能力\", \"tags\":\"动手能力\"},\
+            {\"title\":\"测试\", \"tags\":\"测试\"}\
+        ]},\
+        {\"sectionTitle\":\"参与人数\", \"sectionItems\": [\
+            {\"title\":\"一大一小\", \"tags\":\"一大一小\"},\
+            {\"title\":\"两大一小\", \"tags\":\"两大一小\"},\
+            {\"title\":\"测试\", \"tags\":\"测试\"},\
+            {\"title\":\"全部参与\", \"tags\":\"全部参与\"}\
+        ]},\
+        {\"sectionTitle\":\"场景\", \"sectionItems\": [\
+            {\"title\":\"起床时\", \"tags\":\"起床时\"},\
+            {\"title\":\"晚饭后\", \"tags\":\"晚饭后\"},\
+            {\"title\":\"公园\", \"tags\":\"公园\"}\
+        ]},\
+        {\"sectionTitle\":\"时长\", \"sectionItems\": [\
+            {\"title\":\"5分钟\", \"tags\":\"5分钟\"},\
+            {\"title\":\"半小时\", \"tags\":\"半小时\"},\
+            {\"title\":\"周末\", \"tags\":\"周末\"}\
+        ]}\
+    ]\
+    }";
+    
+
+    
+    NSData *data = [responseData   dataUsingEncoding:NSUTF8StringEncoding];
+
+    NSError* error;
+    self.rightDrawerModelInJson = [NSJSONSerialization
+                                            JSONObjectWithData:data
+                                            options:NSJSONReadingAllowFragments
+                                            error:&error];
+    
+    //NSLog(@"Json parsed with Error code: %@", error);
+    NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+    self.sectionFoldFlags = [[NSMutableArray alloc] initWithCapacity:collections.count];
+    for (int i=0; i<collections.count; i++) {
+        [self.sectionFoldFlags addObject:[NSNumber numberWithBool:YES]];
+    }
     
     self.carouselItems = [NSMutableArray array];
     UIImageView *imageView1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 90)];
@@ -54,7 +108,7 @@
     [self.carousel setDelegate:self];
     [self.carousel setDataSource:self];
     
-    UIScrollView * scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 240, self.view.frame.size.height)];
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 240, self.view.frame.size.height)];
     scrollView.contentSize = CGSizeMake(240, 600);
     [scrollView addSubview:self.carousel];
     //[self.view addSubview:self.carousel];
@@ -70,7 +124,7 @@
     flowLayout.minimumLineSpacing = 0;
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 140, 240, 460) collectionViewLayout:flowLayout];
     
-    [self.collectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [self.collectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:@"ttcell"];
     
     [self.collectionView registerClass:[CollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
     
@@ -236,14 +290,25 @@
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 4;
+    NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+    //NSLog(@"number of sections in right drawer is %d", collections.count);
+    return collections.count;
 }
 
 //每个分区上的元素个数
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 3;
+    NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+    NSArray* items =  [[collections objectAtIndex:section] objectForKey:@"sectionItems"];
+    //NSLog(@"after init section value:%hhd", [[self.sectionFoldFlags objectAtIndex:section] boolValue]);
+    if (YES == [[self.sectionFoldFlags objectAtIndex:section] boolValue]) {
+        //NSLog(@"Items number in section is 3");
+        return 3;
+    } else {
+        //NSLog(@"use itemcount Items number in section is %d", items.count);
+        return items.count;
+    }
 }
 
 
@@ -254,23 +319,9 @@
     
     if (kind == UICollectionElementKindSectionHeader) {
         CollectionHeaderView *headerView = [tcollectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
-        switch (indexPath.section) {
-            case 0:
-                headerView.sectionHeader.text = @"按潜能";
-                break;
-            case 1:
-                headerView.sectionHeader.text = @"按参与人数";
-                break;
-            case 2:
-                headerView.sectionHeader.text = @"按场景";
-                break;
-            case 3:
-                headerView.sectionHeader.text = @"按时长";
-                break;
-            default:
-                break;
-        }
-        
+        NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+        headerView.sectionHeader.text =  [[collections objectAtIndex:indexPath.section] objectForKey:@"sectionTitle"];
+
         reusableview = headerView;
     }
     
@@ -283,83 +334,23 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)tcollectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *identify = @"cell";
+    static NSString *identify = @"ttcell";
     
     CollectionViewCell *cell = [tcollectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
     cell.tags = @"all";
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 81, 81)];
-    imageView.layer.borderColor = [UIColor colorWithRed:(94/255.0) green:(97/255.0) blue:(99/255.0) alpha:1.0f].CGColor;
-    imageView.layer.borderWidth = 1.0f;
-
-    
-    UIImageView *iconView = [[UIImageView alloc] initWithFrame:CGRectMake(28, 16, 24, 24)];
-    iconView.image = [UIImage imageNamed:@"menu.png"];
-
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(22, 50, 0, 16)];
-    //label.text = @"场景分类";
+    [cell setSel:NO];
     
     
-    switch (indexPath.section*100+indexPath.row) {
-        case 0:
-            label.text = @"运动";
-            cell.tags = @"运动";
-            break;
-        case 1:
-            label.text = @"认知";
-            cell.tags = @"认知";
-            break;
-        case 2:
-            label.text = @"更多...";
-            cell.tags = @"more";
-            break;
-            
-        case 100:
-            label.text = @"一大一下";
-            break;
-        case 101:
-            label.text = @"两大一小";
-            break;
-        case 102:
-            label.text = @"更多...";
-            cell.tags = @"more";
-            break;
-            
-        case 200:
-            label.text = @"起床时";
-            break;
-        case 201:
-            label.text = @"晚饭后";
-            break;
-        case 202:
-            label.text = @"更多...";
-            cell.tags = @"more";
-            break;
-            
-        case 300:
-            label.text = @"5分钟";
-            break;
-        case 301:
-            label.text = @"半小时";
-            break;
-        case 302:
-            label.text = @"更长...";
-            cell.tags = @"more";
-            break;
-            
-        default:
-            break;
+    NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+    NSArray* items =  [[collections objectAtIndex:indexPath.section] objectForKey:@"sectionItems"];
+    cell.label.text = [[items objectAtIndex:indexPath.row] objectForKey:@"title"];
+    cell.tags = [[items objectAtIndex:indexPath.row] objectForKey:@"tags"];
+    
+    if (indexPath.row == 2 && (YES == [[self.sectionFoldFlags objectAtIndex:indexPath.section] boolValue])) {
+        cell.label.text = @"更多...";
+        cell.tags = @"more";
     }
     
-    
-    label.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
-    label.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
-    label.textAlignment = NSTextAlignmentCenter;
-    [label sizeToFit];
-    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-
-    [cell.contentView addSubview:imageView];
-    [cell.contentView addSubview:iconView];
-    [cell.contentView addSubview:label];
 
     return cell;
     
@@ -399,7 +390,43 @@
                                                         blue:217/255.0
                                                        alpha:0.9];
     
-    if ([cell.tags  isEqual: @"more"]) {}
+    if ([cell.tags isEqual: @"more"]) {
+        self.sectionFoldFlags[indexPath.section] = [NSNumber numberWithBool:NO];
+        NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+        NSArray* items =  [[collections objectAtIndex:indexPath.section] objectForKey:@"sectionItems"];
+        [self.collectionView performBatchUpdates:^{
+            NSArray *deleteItems = @[indexPath];
+            [self.collectionView reloadItemsAtIndexPaths:deleteItems];
+            
+            NSMutableArray *arrayWithIndexPaths = [NSMutableArray array];
+            for (int i = 3; i < items.count; i++)
+                [arrayWithIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+            
+            [self.collectionView insertItemsAtIndexPaths:arrayWithIndexPaths];
+            
+            
+            // 重新设置高度
+            CGRect newFrame = CGRectMake(0.0, 140.0, 240.0, collectionView.contentSize.height+81*(items.count/3+(items.count%3>0?1:0)-1));
+            collectionView.frame = newFrame;
+
+            scrollView.contentSize = CGSizeMake(240, scrollView.contentSize.height+81*(items.count/3+(items.count%3>0?1:0)-1));
+            
+            NSLog(@"new height %f", scrollView.contentSize.height);
+
+            [UIView animateWithDuration:0.3
+                                  delay:0.0
+                                options:UIViewAnimationOptionCurveEaseIn //设置动画类型
+                             animations:^{
+                                 //开始动画
+                                 cell.contentView.backgroundColor = nil;
+                             }
+                             completion:^(BOOL finished){
+                                 // 动画结束时的处理
+                             }];
+
+        } completion:nil];
+        
+    }
     
 }
 
@@ -407,11 +434,8 @@
 
 - (void)collectionView:(UICollectionView *)colView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    UICollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
-    //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    //    cell.contentView.backgroundColor = nil;
-    //
-    //});
+    CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
+    NSLog(@"un highlight");
     
     [UIView animateWithDuration:0.3
                           delay:0.0
@@ -424,13 +448,34 @@
                          // 动画结束时的处理
                      }];
     
+
 }
 
 
 
+- (void)collectionView:(UICollectionView *)colView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"Selected item of section:%d, row:%d", indexPath.section, indexPath.row);
+    // TODO: add a selected mark
+    CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
+    if ([cell isSel]) {
+        [cell setSel:NO];
+    } else {
+        [cell setSel:YES];
+    }
 
+    [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
+                                   withCloseAnimation:YES
+                                           completion:nil];
+    
+}
 
-
+- (void)collectionView:(UICollectionView *)colView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"Deselecte at section:%d, row:%d", indexPath.section, indexPath.row);
+    CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
+    [cell setSel:NO];
+}
 
 
 

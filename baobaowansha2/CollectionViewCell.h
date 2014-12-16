@@ -12,4 +12,10 @@
 
 @property (nonatomic, retain) NSString * tags;
 
+@property (nonatomic, retain) UIImageView *iconView;
+@property (nonatomic, retain) UILabel *label;
+
+- (BOOL) isSel;
+- (void) setSel:(BOOL) bs;
+
 @end
