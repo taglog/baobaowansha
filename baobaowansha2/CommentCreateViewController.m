@@ -154,6 +154,7 @@
         NSString *commentCreateRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentCreateRouter];
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        manager.requestSerializer.timeoutInterval = 20;
         [manager POST:commentCreateRequestUrl  parameters:self.commentPostParams success:^(AFHTTPRequestOperation *operation,id responseObject) {
             NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
             if(status == 1){
@@ -167,17 +168,26 @@
             }else{
                 //否则的话，弹出一个指示层
                 self.HUD.textLabel.text = @"保存失败";
+                [self.HUD showInView:self.view];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.HUD dismiss];
+                });
+
+
             }
             app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            
+            self.HUD.textLabel.text = @"网络请求失败";
+            [self.HUD showInView:self.view];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.HUD dismiss];
+            });
             NSLog(@"%@",error);
             app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
         }];
         
     }else{
         //用户没有输入的时候，该做些什么
-        self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
         self.HUD.textLabel.text = @"内容不能为空";
         [self.HUD showInView:self.view];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -186,7 +196,7 @@
     }
     
 }
--(void)addUserName:(NSString *)userName{
+-(void)addUserName:(NSArray *)userName{
     if([_commentTextField.text isEqualToString:@""] || [_commentTextField.text isEqualToString:@"请输入您评论的昵称"]){
         NSString *userSex;
         if ([userName valueForKey:@"userSex"] == 0) {
@@ -195,7 +205,11 @@
             userSex = @"爸";
         }
         NSString *userNickName = [[userName valueForKey:@"userBabyName"] stringByAppendingString:userSex];
-        _commentTextField.text = userNickName;
+        //如果用户存得宝宝昵称不为空，就读出来显示
+        if(![[userName valueForKey:@"userBabyName"]isEqualToString:@""]&&![[userName valueForKey:@"userBabyName"]isEqualToString:@" "]){
+            _commentTextField.text = userNickName;
+            _commentTextField.textColor = [UIColor blackColor];
+        }
     }
     
 }

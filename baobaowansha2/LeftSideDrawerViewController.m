@@ -185,7 +185,7 @@
         default:
             break;
     }
-    
+    cell.textLabel.font = [UIFont systemFontOfSize:16.0f];
     return cell;
 }
 
