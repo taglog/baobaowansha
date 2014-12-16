@@ -19,6 +19,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"我的收藏";
     
+    
 
 }
 

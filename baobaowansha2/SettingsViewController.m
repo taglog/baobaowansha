@@ -27,11 +27,12 @@
     
     
     self.title = @"设置";
+    
     self.manager = [[RETableViewManager alloc] initWithTableView:self.tableView];
     RETableViewSection *section1 = [RETableViewSection sectionWithHeaderTitle:@"宝贝信息" footerTitle:@""];
     RETableViewSection *section2 = [RETableViewSection sectionWithHeaderTitle:@"系统设置" footerTitle:@""];
     RETableViewSection *section3 = [RETableViewSection sectionWithHeaderTitle:@"" footerTitle:@""];
-
+    
     [self.manager addSection:section1];
     [self.manager addSection:section2];
     [self.manager addSection:section3];

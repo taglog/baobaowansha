@@ -17,5 +17,6 @@
 
 -(void)initViewWithDict:(NSDictionary *)dict;
 -(void)noDataAlert;
-
+-(void)showHUD;
+-(void)dismissHUD;
 @end

@@ -32,7 +32,7 @@
     MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
     [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
     leftDrawerButton.tintColor = [UIColor redColor];
-    leftDrawerButton.image = [UIImage imageNamed:@"menu24x24.png"];
+    leftDrawerButton.image = [UIImage imageNamed:@"menu.png"];
 }
 
 #pragma mark - Button Handlers

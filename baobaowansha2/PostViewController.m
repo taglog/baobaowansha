@@ -80,15 +80,6 @@
     self.collectionButtonSelected.tintColor = [UIColor redColor];
     self.collectionButtonSelected.tag = 1;
     
-    //按钮间隔
-    self.fixedSpaceButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    self.fixedSpaceButton.width = 0;
-    
-    //社交分享按钮
-    self.socialShareButton =[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"socialshare.png"] style:UIBarButtonItemStylePlain target:self action:@selector(socialShare)];
-    
-    self.socialShareButton.tintColor = [UIColor redColor];
-    
     
     //自定义leftBarButtonItem以取代返回按钮
     UIBarButtonItem *backButtonCustom = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
@@ -129,20 +120,21 @@
     NSString *collectRequestUrl = [self.appDelegate.rootURL stringByAppendingString:collectRouter];
     //进行收藏判断 userID,PostID
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
     [manager POST:collectRequestUrl  parameters:collectParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
         NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
         NSLog(@"%@",responseObject);
         if(status == 1){
             
             if(collectButtonSender.tag == 0){
-                self.navigationItem.rightBarButtonItems =@[self.socialShareButton,self.fixedSpaceButton,self.collectionButtonSelected];
+                self.navigationItem.rightBarButtonItem =self.collectionButtonSelected;
             }else{
-                self.navigationItem.rightBarButtonItems =@[self.socialShareButton,self.fixedSpaceButton,self.collectionButton];
+                self.navigationItem.rightBarButtonItem =self.collectionButton;
             }
             [self.HUD dismiss];
         }else{
             //否则的话，弹出一个指示层
-            self.HUD.textLabel.text = @"保存失败";
+            self.HUD.textLabel.text = @"没有用户信息";
             self.HUD.detailTextLabel.text = nil;
             
             self.HUD.layoutChangeAnimationDuration = 0.4;
@@ -154,7 +146,7 @@
         
         NSLog(@"%@",error);
         
-        self.HUD.textLabel.text = @"保存失败";
+        self.HUD.textLabel.text = @"网络请求失败";
         self.HUD.detailTextLabel.text = nil;
         
         self.HUD.layoutChangeAnimationDuration = 0.4;
@@ -180,23 +172,31 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
 }
-
+-(void)showHUD{
+    //显示hud层
+    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+    self.HUD.textLabel.text = @"正在加载";
+    [self.HUD showInView:self.view];
+}
+-(void)dismissHUD{
+    [self.HUD dismiss];
+}
 //初始化Controlller的View
 -(void)initViewWithDict:(NSDictionary *)dict{
-    
+
     _postDict = dict;
     _postID = [[dict valueForKey:@"ID"]integerValue];
     _frame = self.view.frame;
+    
     //是否已收藏该Post,设置顶部按钮
     if([[dict valueForKey:@"isCollection"]integerValue] == 1){
         //已收藏
-        self.navigationItem.rightBarButtonItems = @[self.socialShareButton,self.fixedSpaceButton,self.collectionButtonSelected];
+        self.navigationItem.rightBarButtonItem = self.collectionButtonSelected;
     }else{
         //未收藏
-        self.navigationItem.rightBarButtonItems = @[self.socialShareButton,self.fixedSpaceButton,self.collectionButton];
+        self.navigationItem.rightBarButtonItem = self.collectionButton;
     }
     
     //初始化textView
@@ -600,7 +600,9 @@
     NSString *commentRouter = [NSString stringWithFormat:@"/comment/get?id=%li&p=1",(long)_postID];
     NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
     [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
+
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         if(responseArray != (id)[NSNull null]){
             for(NSString *responseDict in responseArray){
@@ -630,6 +632,7 @@
         }
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
+        
         app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     }];
     
@@ -715,6 +718,7 @@
         NSString *commentRouter = [NSString stringWithFormat:@"/comment/get?id=%ld&p=%d",(long)_postID,p];
         NSString *commentRequestUrl = [self.appDelegate.rootURL stringByAppendingString:commentRouter];
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        manager.requestSerializer.timeoutInterval = 20;
         [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
             
             NSArray *responseArray = [responseObject valueForKey:@"data"];
@@ -728,7 +732,7 @@
                 [self relayoutCommentTableView:_textViewSize];
                 
             }else{
-                self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+                
                 self.HUD.textLabel.text = @"没有评论了";
                 [self.HUD showInView:self.view];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -740,6 +744,15 @@
             
         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"%@",error);
+            
+            self.HUD.textLabel.text = @"网络请求失败~";
+            [self.HUD showInView:self.view];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.HUD dismiss];
+            });
+            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+            
             app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
         }];
         ++p;
@@ -761,7 +774,7 @@
         [UIView animateWithDuration:0.3 animations:^{
             _commentCreateButton.frame = CGRectMake(0,self.view.frame.size.height - 45, self.view.frame.size.width, 45.0f);
             //如果更改scrollView的frame，那么就会发生底部的抖动，这该怎么办
-            //            _postScrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
+            //            scrollView.frame = CGRectMake(0, 64.0f, self.view.frame.size.width, self.view.frame.size.height - 124.0f);
         }  completion:^(BOOL finished){
             
         }];
@@ -769,7 +782,7 @@
     }else{
         [UIView animateWithDuration:0.3 animations:^{
             
-            _commentCreateButton.frame = CGRectMake(0, self.view.frame.size.height , self.view.frame.size.width, 60.0f);
+            _commentCreateButton.frame = CGRectMake(0, self.view.frame.size.height , self.view.frame.size.width, 45.0f);
             
         }  completion:^(BOOL finished){
             
