@@ -58,9 +58,11 @@
 //没有评论的时候显示
 @property(nonatomic,strong)UILabel *noCommentLabel;
 
-@property (nonatomic,retain)AppDelegate *appDelegate;
+@property(nonatomic,retain)AppDelegate *appDelegate;
 
-@property (nonatomic,strong)JGProgressHUD *HUD;
+@property(nonatomic,strong)JGProgressHUD *HUD;
+
+@property(nonatomic,assign)BOOL collectButtonEnabled;
 @end
 
 @implementation PostViewController
@@ -72,20 +74,20 @@
     
     //自定义右侧收藏button
     self.collectionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unstar.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collectPost:)];
-    self.collectionButton.tintColor = [UIColor redColor];
+    self.collectionButton.tintColor = [UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
     self.collectionButton.tag = 0;
     
     //收藏状态的button
     self.collectionButtonSelected = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"star.png"] style:UIBarButtonItemStylePlain target:self action:@selector(collectPost:)];
-    self.collectionButtonSelected.tintColor = [UIColor redColor];
+    self.collectionButtonSelected.tintColor = [UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
     self.collectionButtonSelected.tag = 1;
     
     
-    //自定义leftBarButtonItem以取代返回按钮
     UIBarButtonItem *backButtonCustom = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    backButtonCustom.tintColor = [UIColor redColor];
+    backButtonCustom.tintColor = [UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
     self.navigationItem.leftBarButtonItem = backButtonCustom;
     
+    self.collectButtonEnabled = YES;
     //阻止自动调整滚轮位置，否则导航栏下会出现一段空间
     self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -96,66 +98,80 @@
 }
 -(IBAction)collectPost:(id)sender{
     
-    UIApplication *app=[UIApplication sharedApplication];
-    app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-    
-    UIButton *collectButtonSender =(UIButton *)sender;
-    self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
-    
-    if(collectButtonSender.tag == 0){
-        self.HUD.textLabel.text = @"正在收藏";
-    }else{
-        self.HUD.textLabel.text = @"正在取消";
-    }
-    
-    [self.HUD showInView:self.view];
-    
-    //获取路径
-    
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSDictionary *collectParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.postID],@"postID", nil];
-    
-    NSString *collectRouter = @"/post/collect";
-    NSString *collectRequestUrl = [self.appDelegate.rootURL stringByAppendingString:collectRouter];
-    //进行收藏判断 userID,PostID
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer.timeoutInterval = 20;
-    [manager POST:collectRequestUrl  parameters:collectParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-        NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
-        NSLog(@"%@",responseObject);
-        if(status == 1){
-            
-            if(collectButtonSender.tag == 0){
-                self.navigationItem.rightBarButtonItem =self.collectionButtonSelected;
-            }else{
-                self.navigationItem.rightBarButtonItem =self.collectionButton;
-            }
-            [self.HUD dismiss];
+    if(self.collectButtonEnabled == YES){
+        self.collectButtonEnabled = NO;
+        UIApplication *app=[UIApplication sharedApplication];
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+        
+        UIButton *collectButtonSender =(UIButton *)sender;
+        self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
+        
+        if(collectButtonSender.tag == 0){
+            self.HUD.textLabel.text = @"正在收藏";
         }else{
-            //否则的话，弹出一个指示层
-            self.HUD.textLabel.text = @"没有用户信息";
-            self.HUD.detailTextLabel.text = nil;
-            
-            self.HUD.layoutChangeAnimationDuration = 0.4;
-            self.HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
-            [self.HUD dismiss];
+            self.HUD.textLabel.text = @"正在取消";
         }
-        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        NSLog(@"%@",error);
+        [self.HUD showInView:self.view];
         
-        self.HUD.textLabel.text = @"网络请求失败";
-        self.HUD.detailTextLabel.text = nil;
+        //获取路径
         
-        self.HUD.layoutChangeAnimationDuration = 0.4;
-        self.HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
-        [self.HUD dismiss];
-        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-    }];
-    
-    
+        self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSDictionary *collectParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.postID],@"postID", nil];
+        
+        NSString *collectRouter = @"/post/collect";
+        NSString *collectRequestUrl = [self.appDelegate.rootURL stringByAppendingString:collectRouter];
+        //进行收藏判断 userID,PostID
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        manager.requestSerializer.timeoutInterval = 20;
+        [manager POST:collectRequestUrl  parameters:collectParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+            NSInteger status = [[responseObject valueForKey:@"status"]integerValue];
+            NSLog(@"%@",responseObject);
+            if(status == 1){
+                
+                if(collectButtonSender.tag == 0){
+                    self.navigationItem.rightBarButtonItem =self.collectionButtonSelected;
+                    self.HUD.textLabel.text = @"收藏成功";
+                }else{
+                    self.navigationItem.rightBarButtonItem =self.collectionButton;
+                    self.HUD.textLabel.text = @"取消成功";
+                }
+                self.HUD.layoutChangeAnimationDuration = 0.4;
+                self.HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
+                self.HUD.detailTextLabel.text = nil;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.HUD dismiss];
+                    self.collectButtonEnabled = YES;
+                });
+            }else{
+                //否则的话，弹出一个指示层
+                self.HUD.textLabel.text = @"没有用户信息";
+                self.HUD.detailTextLabel.text = nil;
+                
+                self.HUD.layoutChangeAnimationDuration = 0.4;
+                self.HUD.indicatorView = [[JGProgressHUDSuccessIndicatorView alloc] init];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.HUD dismiss];
+                });
+            }
+            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+            
+        }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+            NSLog(@"%@",error);
+            
+            self.HUD.textLabel.text = @"网络请求失败";
+            self.HUD.detailTextLabel.text = nil;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.HUD dismiss];
+                self.collectButtonEnabled = YES;
+            });
+            
+            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+        }];
+        
+    }
     
 }
 
@@ -185,11 +201,11 @@
 }
 //初始化Controlller的View
 -(void)initViewWithDict:(NSDictionary *)dict{
-
+    
     _postDict = dict;
     _postID = [[dict valueForKey:@"ID"]integerValue];
     _frame = self.view.frame;
-    
+    NSLog(@"%@",[dict valueForKey:@"isCollection"]);
     //是否已收藏该Post,设置顶部按钮
     if([[dict valueForKey:@"isCollection"]integerValue] == 1){
         //已收藏
@@ -214,7 +230,7 @@
     [_commentCreateButton addTarget:self action:@selector(showCommentCreateViewController) forControlEvents:UIControlEventTouchUpInside];
     UILabel *commentCreateLabel = [[UILabel alloc]initWithFrame:CGRectMake(47.0f, 12.0f, 60.0f, 20.0f)];
     commentCreateLabel.text = @"写跟帖";
-    commentCreateLabel.textColor = [UIColor colorWithRed:73.0f/255.0f green:73.0f/255.0f blue:73.0f/255.0f alpha:1.0f];
+    commentCreateLabel.textColor = [UIColor colorWithRed:80.0f/255.0f green:80.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
     commentCreateLabel.font = [UIFont systemFontOfSize:14.0f];
     [_commentCreateButton addSubview:commentCreateLabel];
     [self.view addSubview:_commentCreateButton];
@@ -547,7 +563,7 @@
     [self relayoutView:_textViewSize];
     // layout might have changed due to image sizes
     [_textView relayoutText];
-
+    
 }
 -(void)relayoutView:(CGSize)textViewSize{
     
@@ -565,7 +581,7 @@
         _noCommentLabel.frame = CGRectMake(0, textViewSize.height + 120 + 80, self.view.frame.size.width, 20.0f);
         [_postScrollView setContentSize:CGSizeMake(self.view.frame.size.width, _textViewSize.height  + 300)];
     }
-   
+    
     
 }
 -(void)relayoutCommentTableView:(CGSize)textViewSize{
@@ -602,7 +618,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager GET:commentRequestUrl parameters:nil success:^(AFHTTPRequestOperation *operation,id responseObject) {
-
+        
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         if(responseArray != (id)[NSNull null]){
             for(NSString *responseDict in responseArray){
@@ -734,11 +750,8 @@
             }else{
                 
                 self.HUD.textLabel.text = @"没有评论了";
-                    [self.HUD showInView:self.view];
-                
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.HUD dismiss];
-                });
+                [self.HUD showInView:self.view];
+                [self.HUD dismissAfterDelay:1.0f];
                 
             }
             [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
@@ -749,10 +762,7 @@
             
             self.HUD.textLabel.text = @"网络请求失败~";
             [self.HUD showInView:self.view];
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.HUD dismiss];
-            });
+            [self.HUD dismissAfterDelay:1.0];
             [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
             
             app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;

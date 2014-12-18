@@ -18,4 +18,5 @@
 - (BOOL) isSel;
 - (void) setSel:(BOOL) bs;
 
+-(void)setDataWithDict:(NSDictionary *)dict;
 @end

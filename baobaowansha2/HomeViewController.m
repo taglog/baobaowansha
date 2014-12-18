@@ -16,11 +16,20 @@
 #import "MobClick.h"
 
 
+
 @interface HomeViewController ()
 @property (nonatomic,strong)JGProgressHUD *HUD;
+@property (nonatomic,assign)BOOL isHudShow;
+
+@property (nonatomic,strong)ContentViewController *contentViewControllerFirst;
+@property (nonatomic,strong)ContentViewController *contentViewControllerSecond;
+@property (nonatomic,strong)ContentViewController *contentViewControllerThird;
+@property (nonatomic,strong)ContentViewController *contentViewControllerFourth;
+
 @end
 
 @implementation HomeViewController
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor  ];
@@ -29,7 +38,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
 
     self.title =@"宝贝玩啥";
 
@@ -44,13 +52,23 @@
         [self.navigationController pushViewController:bbVC animated:YES];
         
     }
-
+    //4个标签，需要4个实例
+    self.contentViewControllerFirst = [[ContentViewController alloc] initWithURL:self.requestURL type:0];
+    self.contentViewControllerFirst.delegate = self;
+    self.contentViewControllerSecond = [[ContentViewController alloc] initWithURL:self.requestURL type:1];
+    self.contentViewControllerSecond.delegate = self;
+    self.contentViewControllerThird = [[ContentViewController alloc] initWithURL:self.requestURL type:2];
+    self.contentViewControllerThird.delegate = self;
+    self.contentViewControllerFourth = [[ContentViewController alloc] initWithURL:self.requestURL type:3];
+    self.contentViewControllerFourth.delegate = self;
+    
     self.view.backgroundColor = [UIColor whiteColor];
     self.dataSource = self;
     self.delegate = self;
     [self setupLeftMenuButton];
     [self setupRightFilterButton];
     
+    self.isHudShow = NO;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -103,9 +121,25 @@
 //内容视图的dataSource，交给HomeTableViewController
 - (UIViewController *)viewPager:(ViewPagerController *)viewPager contentViewControllerForTabAtIndex:(NSUInteger)index {
     //初始化contentViewController
-    ContentViewController *contentViewController = [[ContentViewController alloc] initWithURL:self.requestURL type:index];
-    contentViewController.delegate = self;
-    return contentViewController;
+    ContentViewController *viewController;
+    switch (index) {
+        case 0:
+            viewController = self.contentViewControllerFirst;
+            break;
+        case 1:
+            viewController = self.contentViewControllerSecond;
+            break;
+        case 2:
+            viewController = self.contentViewControllerThird;
+            break;
+        case 3:
+            viewController = self.contentViewControllerFourth;
+            break;
+        default:
+            break;
+    }
+    
+    return viewController;
 }
 
 
@@ -165,24 +199,33 @@
 - (void)setupRightFilterButton {
     MMDrawerBarButtonItem * rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
     [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:YES];
-    rightDrawerButton.tintColor = [UIColor redColor];
+    rightDrawerButton.tintColor = [UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
     rightDrawerButton.image = [UIImage imageNamed:@"filter.png"];
 }
 
 -(void)rightDrawerButtonPress:(id)sender{
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:nil];
 }
-
-
+#pragma mark - 标签栏delegate
+-(void)tagSelected{
+    [self selectTabAtIndex:0];
+    [self.contentViewControllerFirst simulatePullDownRefresh];
+}
 #pragma mark - 指示层delegate
 -(void)showHUD:(NSString*)text{
     //初始化HUD
+    if(self.isHudShow == YES){
+        [self.HUD dismissAnimated:NO];
+    }
+    
     self.HUD = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
     self.HUD.textLabel.text = text;
     [self.HUD showInView:self.view];
+    self.isHudShow = YES;
     
 }
 -(void)dismissHUD{
-    [self.HUD dismiss];
+    [self.HUD dismissAfterDelay:1.0];
+    self.isHudShow = NO;
 }
 @end

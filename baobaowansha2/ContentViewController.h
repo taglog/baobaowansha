@@ -19,5 +19,5 @@
 
 @property(nonatomic,retain)id<ContentViewDelegate> delegate;
 -(id)initWithURL:(NSDictionary *)dict type:(NSInteger)index;
-
+-(void)simulatePullDownRefresh;
 @end

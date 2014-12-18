@@ -38,14 +38,14 @@
     [super loadView];
     //提交按钮
     UIBarButtonItem *submitButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark.png"] style:UIBarButtonItemStylePlain target:self action:@selector(commentSubmit)];
-    submitButton.tintColor = [UIColor redColor];
+    submitButton.tintColor = [UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
     self.navigationItem.rightBarButtonItem = submitButton;
     
     //自定义leftBarButtonItem以取代返回按钮
     UIBarButtonItem *backButtonCustom = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    backButtonCustom.tintColor = [UIColor redColor];
+    backButtonCustom.tintColor = [UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
     self.navigationItem.leftBarButtonItem = backButtonCustom;
-    self.view.backgroundColor = [UIColor colorWithRed:236.0/255.0f green:236.0/255.0f blue:236.0/255.0f alpha:1.0f];
+    self.view.backgroundColor = [UIColor colorWithRed:245.0/255.0f green:245.0/255.0f blue:245.0/255.0f alpha:1.0f];
     
     self.title = @"写评论";
     
@@ -58,7 +58,8 @@
     _commentTextField.textColor = [UIColor colorWithRed:192.0/255.0f green:192.0/255.0f blue:192.0/255.0f alpha:1.0f];
     _commentTextField.delegate = self;
     _commentTextField.backgroundColor = [UIColor whiteColor];
-    
+    _commentTextField.scrollEnabled = NO;
+
     _commentTextField.returnKeyType = UIReturnKeyDefault;
     
     _commentTextField.keyboardType = UIKeyboardTypeDefault;

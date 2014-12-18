@@ -80,6 +80,8 @@ typedef enum{
 
 - (void)egoRefreshScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView;
 
+- (void)setState:(EGOPullRefreshState)aState;
+
 @end
 
 //委托的方法

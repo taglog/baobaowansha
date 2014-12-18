@@ -21,23 +21,16 @@
 {
     self = [super initWithFrame:frame];
     if(self){
-        self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 81, 81)];
-        self.imageView.layer.borderColor = [UIColor colorWithRed:(94/255.0) green:(97/255.0) blue:(99/255.0) alpha:1.0f].CGColor;
-        self.imageView.layer.borderWidth = 1.0f;
         
+        self.imageView = [[UIImageView alloc] init];
         
-        self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(28, 16, 24, 24)];
-        self.iconView.image = [UIImage imageNamed:@"wanclearbg80.png"];
+        self.iconView = [[UIImageView alloc] init];
         
-        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 80, 16)];
-        
-        self.label.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
-        self.label.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
-        self.label.textAlignment = NSTextAlignmentCenter;
-        self.label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        self.label = [[UILabel alloc] init];
         
         self.bSel = NO;
-        self.badgeView = [[UIImageView alloc] initWithFrame:CGRectMake(60, 5, 15, 15)];
+        
+        self.badgeView = [[UIImageView alloc] init];
         
         [self.contentView addSubview:self.imageView];
         [self.contentView addSubview:self.iconView];
@@ -46,8 +39,14 @@
     }
     return self;
 }
-
-
+-(void)setDataWithDict:(NSDictionary *)dict{
+    
+    self.iconView.image = [UIImage imageNamed:@"wanclearbg80.png"];
+    
+    self.label.text = [dict valueForKey:@"tag"];
+    
+    [self setNeedsLayout];
+}
 
 - (BOOL) isSel
 {
@@ -65,5 +64,24 @@
     }
 }
 
-
+//设置frame
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    
+    self.imageView.frame = CGRectMake(0, 0, 81, 81);
+    self.imageView.layer.borderColor = [UIColor colorWithRed:(94/255.0) green:(97/255.0) blue:(99/255.0) alpha:1.0f].CGColor;
+    self.imageView.layer.borderWidth = 1.0f;
+    
+    self.iconView.frame = CGRectMake(28, 16, 24, 24);
+    
+    
+    self.label.frame = CGRectMake(0, 50, 80, 16);
+    self.label.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
+    self.label.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
+    self.label.textAlignment = NSTextAlignmentCenter;
+    self.label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    
+    self.badgeView.frame = CGRectMake(60, 5, 15, 15);
+    
+}
 @end
