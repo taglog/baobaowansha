@@ -12,7 +12,7 @@
 
 @protocol RightSideDrawerDelegate <NSObject>
 
--(void)tagSelected;
+-(void)tagSelected:(NSString *)string;
 
 @end
 

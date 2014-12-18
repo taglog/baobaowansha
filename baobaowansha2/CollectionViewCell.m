@@ -41,9 +41,15 @@
 }
 -(void)setDataWithDict:(NSDictionary *)dict{
     
-    self.iconView.image = [UIImage imageNamed:@"wanclearbg80.png"];
     
-    self.label.text = [dict valueForKey:@"tag"];
+    self.iconView.image = [UIImage imageNamed:[dict valueForKey:@"imgurl"]];
+    
+    self.iconView.tintColor = [UIColor grayColor] ;
+    
+    self.label.text = [dict valueForKey:@"tags"];
+    
+    self.tags = [dict valueForKey:@"tags"];
+    
     
     [self setNeedsLayout];
 }

@@ -227,18 +227,25 @@
 }
 
 -(void)performPullDownRefresh{
-    
+
     _reloading = YES;
     
     UIApplication *app=[UIApplication sharedApplication];
     app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    NSString *postRouter = nil;
+    NSDictionary *postParam = nil;
+    if(self.tag){
+        
+        postRouter = @"post/getTableByTag";
+        
+        postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",self.tag,@"tag",nil];
+    }else{
+        
+        postRouter = [self.requestURL valueForKey:@"requestRouter"];
+        postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",nil];
+    }
     
-    NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
-    
-    NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",nil];
-    NSLog(@"%@",postParam);
-    NSLog(@"%@",postRequestUrl);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
@@ -289,11 +296,22 @@
     
     static int p = 2;
     
-    NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
+    NSString *postRouter = nil;
+    NSDictionary *postParam = nil;
+    if(self.tag){
+        
+        postRouter = @"post/getTableByTag";
+        
+        postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:p],@"p",self.tag,@"tag",nil];
+
+    }else{
+        
+        postRouter = [self.requestURL valueForKey:@"requestRouter"];
+        postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:p],@"p",nil];
+
+    }
+    
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
-    
-    NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:p],@"p",nil];
-    
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
