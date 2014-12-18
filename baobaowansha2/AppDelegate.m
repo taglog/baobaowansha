@@ -11,7 +11,8 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "LeftSideDrawerViewController.h"
 #import "RightSideDrawerViewController.h"
-#import "MobClick.h"
+
+#import <AVOSCloud/AVOSCloud.h>
 
 
 @interface AppDelegate ()
@@ -77,12 +78,26 @@
         }];
     });
     
-    //embed 3rd parth analyzing code 友盟统计
-    [MobClick startWithAppkey:@"5487dc8ffd98c53799000ea9" reportPolicy:BATCH   channelId:@""];
+    //push notification setting
+    [AVOSCloud setApplicationId:@"zul2tbfbwbfhtzka27mea6ozakqg3m86v2dpk349e7hh9syv"
+                      clientKey:@"0mikvyvihrejfctvqarlhwvuet67pahni8fjvrse8sai4okj"];
+    [AVAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        // Register for push notifications: refer to https://leancloud.cn/docs/push_guide.html
+        [application registerForRemoteNotificationTypes:
+         UIRemoteNotificationTypeBadge |
+         UIRemoteNotificationTypeAlert |
+         UIRemoteNotificationTypeSound];
+    } else {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert
+                                                | UIUserNotificationTypeBadge
+                                                | UIUserNotificationTypeSound
+                                                                                 categories:nil];
+        [application registerUserNotificationSettings:settings];
+        [application registerForRemoteNotifications];
+    }
 
-    
-    
 
     
     self.drawerController = [[MMDrawerController alloc]
@@ -135,6 +150,11 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+    if (currentInstallation.badge != 0) {
+        currentInstallation.badge = 0;
+        [currentInstallation saveEventually];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -148,6 +168,17 @@
         self.introcontroller.alpha = 0;
     } completion:nil];
     
+}
+
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+    NSLog(@"applicate device token is called with tocken:%@", deviceToken);
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"register notification failed with code: %@", error);
 }
 
 

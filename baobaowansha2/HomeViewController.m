@@ -13,7 +13,7 @@
 #import "BabyInfoViewController.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
-#import "MobClick.h"
+#import <AVOSCloud/AVOSCloud.h>
 
 
 @interface HomeViewController ()
@@ -24,7 +24,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor  ];
-    [MobClick beginLogPageView:@"HomeViewPage"];
+    [AVAnalytics beginLogPageView:@"HomeViewPage"];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -51,11 +51,13 @@
     [self setupLeftMenuButton];
     [self setupRightFilterButton];
     
+    
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [MobClick endLogPageView:@"HomeViewPage"];
+    [AVAnalytics endLogPageView:@"HomeViewPage"];
 }
 
 
