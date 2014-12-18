@@ -10,7 +10,11 @@
 #import "MMSideDrawerTableViewCell.h"
 #import "iCarousel.h"
 
+@protocol RightSideDrawerDelegate <NSObject>
 
+-(void)tagSelected;
+
+@end
 
 
 
@@ -18,9 +22,9 @@
 
 @property (nonatomic, strong) iCarousel * carousel;
 @property (nonatomic, strong) UICollectionView * collectionView;
-@property (nonatomic, retain) NSDictionary* rightDrawerModelInJson;
+@property (nonatomic, retain) NSDictionary* responseData;
 @property (nonatomic, retain) NSMutableArray * sectionFoldFlags;
 
-
+@property (nonatomic,retain) id <RightSideDrawerDelegate>delegate;
 @end
 

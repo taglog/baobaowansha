@@ -28,6 +28,7 @@
 @property (nonatomic,retain)AppDelegate *appDelegate;
 
 @property (nonatomic,strong)UILabel *noDataAlert;
+
 @end
 
 @implementation ContentViewController
@@ -38,16 +39,17 @@
     self.type = index;
     return self;
 }
-- (void)viewDidLoad {
+- (void)viewDidLoad{
     [super viewDidLoad];
     
-        self.view.backgroundColor = [UIColor whiteColor];
-        
-        [self.delegate showHUD:@"正在加载"];
-        //初始化数据
-        [self setInitData];
-
+    self.view.backgroundColor = [UIColor whiteColor];
     
+    if(self){
+        self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        //初始化数据
+        [self initViews];
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,69 +61,25 @@
     
 }
 
-
--(void)setInitData{
-    
+-(void)initViews{
     //初始化homeTableViewCell
     self.homeTableViewCell = [[NSMutableArray alloc]init];
     
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
-    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
-    
-    NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",nil];
-    
-    UIApplication *app=[UIApplication sharedApplication];
-    app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-    
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer.timeoutInterval = 20;
-    [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-
-        NSArray *responseArray = [responseObject valueForKey:@"data"];
-        //如果存在数据，那么就初始化tableView
-        if(responseArray != (id)[NSNull null] ){
-            for(NSDictionary *responseDict in responseArray){
-                [self.homeTableViewCell addObject:responseDict];
-            }
-            [self initTableView];
-            if([self.homeTableViewCell count]>5){
-                [self initRefreshFooterView];
-            }else{
-                //去除分割线
-                UIView *tableViewMask = [UIView new];
-                tableViewMask.backgroundColor =[UIColor clearColor];
-                _homeTableView.tableFooterView = tableViewMask;
-            }
-            [self initRefreshHeaderView];
-        }else{
-            [self showNoDataAlert];
-        }
-        [self.delegate dismissHUD];
-        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-
-    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@",error);
-        
-        [self.delegate dismissHUD];
-        [self showNoDataAlert];
-        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-    }];
+    [self initTableView];
+    [self initRefreshHeaderView];
+    [self simulatePullDownRefresh];
     
 }
+
+
 //如果没有数据，那么要告诉用户表是空的
 -(void)showNoDataAlert{
-    //初始化一个空的tableView
-    [self initTableView];
+    
+    
     
     UIView *tableViewMask = [UIView new];
     tableViewMask.backgroundColor =[UIColor clearColor];
     _homeTableView.tableFooterView = tableViewMask;
-    [self initRefreshHeaderView];
-    
-    
     self.noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, 164, self.view.frame.size.width, 40.0f)];
     self.noDataAlert.text = @"暂时没有内容哦~";
     self.noDataAlert.textAlignment = NSTextAlignmentCenter;
@@ -142,6 +100,11 @@
         _homeTableView.frame = CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height);
         _homeTableView.delegate = self;
         _homeTableView.dataSource = self;
+        
+        UIView *tableViewMask = [UIView new];
+        tableViewMask.backgroundColor =[UIColor clearColor];
+        _homeTableView.tableFooterView = tableViewMask;
+        
         [_homeTableView setSeparatorInset:UIEdgeInsetsZero];
     }
     [self.view addSubview:_homeTableView];
@@ -153,21 +116,25 @@
 -(void)initRefreshHeaderView{
     
     //初始化headerView
-    _refreshHeaderView = [[EGORefreshCustom alloc] initWithTableView:_homeTableView position:EGORefreshHeader ];
-    _refreshHeaderView.delegate = self;
-    
-   [_homeTableView addSubview:_refreshHeaderView];
-    
-    
+    if(!_refreshHeaderView){
+        _refreshHeaderView = [[EGORefreshCustom alloc] initWithTableView:_homeTableView position:EGORefreshHeader ];
+        _refreshHeaderView.delegate = self;
+        
+        [_homeTableView addSubview:_refreshHeaderView];
+        
+    }
     
 }
 -(void)initRefreshFooterView{
     
-    _refreshFooterView = [[EGORefreshCustom alloc] initWithTableView:_homeTableView position:EGORefreshFooter];
-    _refreshFooterView.delegate = self;
+    if(!_refreshFooterView){
+        
+        _refreshFooterView = [[EGORefreshCustom alloc] initWithTableView:_homeTableView position:EGORefreshFooter];
+        _refreshFooterView.delegate = self;
+        
+        _homeTableView.tableFooterView = _refreshFooterView;
+    }
     
-    _homeTableView.tableFooterView = _refreshFooterView;
-
 }
 
 
@@ -210,7 +177,7 @@
     app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     
     PostViewController *post = [[PostViewController alloc] init];
-
+    
     NSDictionary *requestParam = [NSDictionary dictionaryWithObjectsAndKeys:[self.homeTableViewCell[indexPath.row] objectForKey:@"ID"],@"postID",self.appDelegate.generatedUserID,@"userIdStr",nil];
     
     NSString *postRouter = @"/post/post";
@@ -219,8 +186,9 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:postRequestUrl parameters:requestParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSLog(@"%@",responseObject);
         NSDictionary *responseDict = [responseObject valueForKey:@"data"];
-
+        
         if(responseDict != (id)[NSNull null]){
             [post initViewWithDict:responseDict];
         }else{
@@ -239,100 +207,122 @@
 }
 
 
-#pragma mark 下拉数据刷新
+#pragma mark EGORefreshReloadData
 - (void)reloadTableViewDataSource{
+    
+    //下拉刷新的数据处理
+    if(_refreshHeaderView.pullDown){
+        [self performPullDownRefresh];
+    }
+    //上拉刷新的数据处理
+    if(_refreshFooterView.pullUp){
+        [self performPullUpRefresh];
+    }
+}
+
+-(void)simulatePullDownRefresh{
+    [_refreshHeaderView setState:EGOOPullRefreshLoading];
+    _homeTableView.contentOffset = CGPointMake(0, -60);
+    [self performPullDownRefresh];
+}
+
+-(void)performPullDownRefresh{
+    
+    _reloading = YES;
     
     UIApplication *app=[UIApplication sharedApplication];
     app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     
-    //下拉刷新的数据处理
-    if(_refreshHeaderView.pullDown){
-        
-        
-        NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
-        NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
-        
-        NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",nil];
-        
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        manager.requestSerializer.timeoutInterval = 20;
-        [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-            NSArray *responseArray = [responseObject valueForKey:@"data"];
-            [self.homeTableViewCell removeAllObjects];
-            if(responseArray == (id)[NSNull null]){
-                [self.delegate showHUD:@"没有内容~"];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.delegate dismissHUD];
-                });
+    NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
+    
+    NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",nil];
+    NSLog(@"%@",postParam);
+    NSLog(@"%@",postRequestUrl);
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSArray *responseArray = [responseObject valueForKey:@"data"];
+        [self.homeTableViewCell removeAllObjects];
+        //如果存在数据，那么就初始化tableView
+        if(responseArray != (id)[NSNull null] ){
             
+            [self.noDataAlert removeFromSuperview];
+            for(NSDictionary *responseDict in responseArray){
+                [self.homeTableViewCell addObject:responseDict];
+            }
+            if([self.homeTableViewCell count]>5){
+                [self initRefreshFooterView];
             }else{
-                for(NSDictionary *responseDict in responseArray){
-                    [self.homeTableViewCell addObject:responseDict];
-                }
+                //去除分割线
+                UIView *tableViewMask = [UIView new];
+                tableViewMask.backgroundColor =[UIColor clearColor];
+                _homeTableView.tableFooterView = tableViewMask;
+            }
+            
+        }else{
+            [self.delegate showHUD:@"没有内容~"];
+            [self.delegate dismissHUD];
+            [self showNoDataAlert];
+        }
+        
+        [_homeTableView reloadData];
+        [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+        
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error);
+        [self.delegate showHUD:@"网络请求失败~"];
+        [self.delegate dismissHUD];
+        [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    }];
+    
+    
+}
+-(void)performPullUpRefresh{
+    
+    _reloading = YES;
+    
+    UIApplication *app=[UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    
+    static int p = 2;
+    
+    NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
+    NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
+    
+    NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:p],@"p",nil];
+    
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        NSArray *responseArray = [responseObject valueForKey:@"data"];
+        
+        if(responseArray == (id)[NSNull null]){
+            //如果是最后一页
+            [self.delegate showHUD:@"已经是最后一页了"];
+            [self.delegate dismissHUD];
+            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
+            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+        }else{
+            for(NSDictionary *responseDict in responseArray){
+                [self.homeTableViewCell addObject:responseDict];
                 [_homeTableView reloadData];
-            }
-            _reloading = YES;
-            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
-            
-            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-        }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"%@",error);
-            
-            [self.delegate showHUD:@"网络请求失败~"];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.delegate dismissHUD];
-            });
-            _reloading = YES;
-            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
-            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-        }];
-        
-    }
-    //上拉刷新的数据处理
-    if(_refreshFooterView.pullUp){
-        static int p = 2;
-        
-        NSString *postRouter = [self.requestURL valueForKey:@"requestRouter"];
-        NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
-        
-        NSDictionary *postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:p],@"p",nil];
-        
-        
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        manager.requestSerializer.timeoutInterval = 20;
-        [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
-            NSArray *responseArray = [responseObject valueForKey:@"data"];
-
-            if(responseArray == (id)[NSNull null]){
-                //如果是最后一页
-                [self.delegate showHUD:@"已经是最后一页了"];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.delegate dismissHUD];
-                });
                 [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
-                app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-            }else{
-                for(NSDictionary *responseDict in responseArray){
-                    [self.homeTableViewCell addObject:responseDict];
-                    [_homeTableView reloadData];
-                    _reloading = YES;
-                    [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
-                }
             }
-        }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"%@",error);
-            [self.delegate showHUD:@"网络请求失败~"];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.delegate dismissHUD];
-            });
-            _reloading = YES;
-            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
-            
-            app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
-        }];
-        ++p;
+        }
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error);
+        [self.delegate showHUD:@"网络请求失败~"];
+        [self.delegate dismissHUD];
+        [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0f];
         
-    }
+        app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
+    }];
+    ++p;
+    
 }
 - (void)doneLoadingTableViewData{
     _reloading = NO;

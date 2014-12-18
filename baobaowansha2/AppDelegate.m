@@ -29,11 +29,13 @@
     [[UINavigationBar appearance] setBackgroundColor:[UIColor whiteColor]];
 
     UIViewController * leftSideDrawerViewController = [[LeftSideDrawerViewController alloc] init];
-    UIViewController * rightSideDrawerViewController = [[RightSideDrawerViewController alloc] init];
-
+    RightSideDrawerViewController * rightSideDrawerViewController = [[RightSideDrawerViewController alloc] init];
+    
     HomeViewController * centerViewController = [[HomeViewController alloc] init];
     centerViewController.requestURL = @{@"requestRouter":@"post/table"};
-
+    
+    rightSideDrawerViewController.delegate = centerViewController;
+    
     UINavigationController *centerNavigation = [[UINavigationController alloc] initWithRootViewController:centerViewController];
 
     //设置服务器跟目录

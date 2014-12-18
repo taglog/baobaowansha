@@ -15,6 +15,7 @@
 @interface RightSideDrawerViewController ()
 @property (nonatomic, strong) NSMutableArray *carouselItems;
 @property (nonatomic, retain) UIScrollView * scrollView;
+
 @end
 
 @implementation RightSideDrawerViewController
@@ -32,84 +33,104 @@
     // Do any additional setup after loading the view.
     [self.mm_drawerController setMaximumRightDrawerWidth:240.0];
     
-    NSString * responseData = \
-    @"{\"banner\":[\
-        {\"imgurl\":\"christmas.jpg\", \"title\":\"圣诞节\"}, \
-        {\"imgurl\":\"newyear.jpg\", \"title\":\"新年\"},\
-        {\"imgurl\":\"chun.jpg\", \"title\":\"春节\"},\
-        {\"imgurl\":\"travel.jpg\", \"title\":\"旅行\"}\
-    ],\
-    \"collections\": [\
-        {\"sectionTitle\":\"潜能\", \"sectionItems\": [\
-            {\"title\":\"运动\", \"tags\":\"运动\"},\
-            {\"title\":\"认知\", \"tags\":\"认知\"},\
-            {\"title\":\"动手能力\", \"tags\":\"动手能力\"},\
-            {\"title\":\"测试\", \"tags\":\"测试\"}\
-        ]},\
-        {\"sectionTitle\":\"参与人数\", \"sectionItems\": [\
-            {\"title\":\"一大一小\", \"tags\":\"一大一小\"},\
-            {\"title\":\"两大一小\", \"tags\":\"两大一小\"},\
-            {\"title\":\"测试\", \"tags\":\"测试\"},\
-            {\"title\":\"全部参与\", \"tags\":\"全部参与\"}\
-        ]},\
-        {\"sectionTitle\":\"场景\", \"sectionItems\": [\
-            {\"title\":\"起床时\", \"tags\":\"起床时\"},\
-            {\"title\":\"晚饭后\", \"tags\":\"晚饭后\"},\
-            {\"title\":\"公园\", \"tags\":\"公园\"}\
-        ]},\
-        {\"sectionTitle\":\"时长\", \"sectionItems\": [\
-            {\"title\":\"5分钟\", \"tags\":\"5分钟\"},\
-            {\"title\":\"半小时\", \"tags\":\"半小时\"},\
-            {\"title\":\"周末\", \"tags\":\"周末\"}\
-        ]}\
-    ]\
-    }";
+    self.responseData =
+    @{@"banner":
+          @{@"imgurl":@"chrismas.jpg", @"title":@"圣诞节",
+            @"imgurl":@"winter.jpeg", @"title":@"冬天",
+            @"imgurl":@"newyear.png", @"title":@"春节",
+            @"imgurl":@"halloween.jpeg", @"title":@"万圣节"
+            },
+      
+      @"collections":
+          @[ @{@"sectionTitle":@"潜能", @"sectionItems":
+                   @[@{@"title":@"运动", @"tags":@"运动",@"imgurl":@"basketball.png"},
+                     @{@"title":@"认知", @"tags":@"认知",@"imgurl":@"pen.png"},
+                     @{@"title":@"语言", @"tags":@"语言",@"imgurl":@"chrismas.jpg"},
+                     ]
+               },
+             
+             @{@"sectionTitle":@"季节", @"sectionItems":
+                   @[@{@"title":@"下雪", @"tags":@"下雪",@"imgurl":@"snow.png"},
+                     @{@"title":@"落叶", @"tags":@"落叶",@"imgurl":@"leaf.png"},
+                     @{@"title":@"雨后", @"tags":@"雨后",@"imgurl":@"rain.png"},
+                     @{@"title":@"夏日", @"tags":@"夏日",@"imgurl":@"sun"},
+                     @{@"title":@"刮风", @"tags":@"刮风",@"imgurl":@"wind"},
+                     @{@"title":@"炎热", @"tags":@"炎热",@"imgurl":@"chrismas.jpg"}
+                     ]
+               },
+             @{@"sectionTitle":@"场景", @"sectionItems":
+                   @[@{@"title":@"起床时", @"tags":@"起床时",@"imgurl":@"getup"},
+                     @{@"title":@"晚饭后", @"tags":@"晚饭后",@"imgurl":@"dinner"},
+                     @{@"title":@"公园", @"tags":@"公园",@"imgurl":@"garden"},
+                     @{@"title":@"等餐", @"tags":@"等餐",@"imgurl":@"chair"},
+                     @{@"title":@"吃饭时", @"tags":@"吃饭时",@"imgurl":@"fork"},
+                     @{@"title":@"逛街时", @"tags":@"逛街时",@"imgurl":@"walk"},
+                     ]
+               },
+             @{@"sectionTitle":@"节日", @"sectionItems":
+                   @[@{@"title":@"圣诞节", @"tags":@"圣诞节",@"imgurl":@"christmasday"},
+                     @{@"title":@"春节", @"tags":@"春节",@"imgurl":@"chrismasday"},
+                     @{@"title":@"万圣节", @"tags":@"万圣节",@"imgurl":@"halloween"},
+                     @{@"title":@"母亲节", @"tags":@"母亲节",@"imgurl":@"mama"},
+                     @{@"title":@"儿童节", @"tags":@"儿童节",@"imgurl":@"childday"},
+                     @{@"title":@"端午节", @"tags":@"端午节",@"imgurl":@"duanwu"}
+                     ]
+               },
+             @{@"sectionTitle":@"家庭成员", @"sectionItems":
+                   @[@{@"title":@"妈妈(爸爸)", @"tags":@"妈妈(爸爸)",@"imgurl":@"baba"},
+                     @{@"title":@"父母", @"tags":@"父母",@"imgurl":@"chrismas.jpg"},
+                     @{@"title":@"全部参与", @"tags":@"全部参与",@"imgurl":@"chrismas.jpg"}
+                     ]
+               }
+             
+             
+             ]
+      };
     
-
-    
-    NSData *data = [responseData   dataUsingEncoding:NSUTF8StringEncoding];
-
-    NSError* error;
-    self.rightDrawerModelInJson = [NSJSONSerialization
-                                            JSONObjectWithData:data
-                                            options:NSJSONReadingAllowFragments
-                                            error:&error];
-    
-    //NSLog(@"Json parsed with Error code: %@", error);
-    NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
-    self.sectionFoldFlags = [[NSMutableArray alloc] initWithCapacity:collections.count];
-    for (int i=0; i<collections.count; i++) {
-        [self.sectionFoldFlags addObject:[NSNumber numberWithBool:YES]];
-    }
+    //演示的时候不需要折叠
+//    NSArray* collections = [self.responseData objectForKey:@"collections"];
+//    self.sectionFoldFlags = [[NSMutableArray alloc] initWithCapacity:collections.count];
+//    for (int i=0; i<collections.count; i++) {
+//        NSArray* items =  [[collections objectAtIndex:i] objectForKey:@"sectionItems"];
+//        
+//        if([items count]>3){
+//            [self.sectionFoldFlags addObject:[NSNumber numberWithBool:YES]];
+//        }else{
+//            [self.sectionFoldFlags addObject:[NSNumber numberWithBool:NO]];
+//
+//        }
+//    }
     
     self.carouselItems = [NSMutableArray array];
-    UIImageView *imageView1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 90)];
-    imageView1.image = [UIImage imageNamed:@"christmas.jpg"];
+    UIImageView *imageView1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
+    imageView1.image = [UIImage imageNamed:@"chrismas.jpg"];
     [self.carouselItems addObject:imageView1];
     
-    UIImageView *imageView2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 90)];
-    imageView2.image = [UIImage imageNamed:@"newyear.jpg"];
+    UIImageView *imageView2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
+    imageView2.image = [UIImage imageNamed:@"winter.jpeg"];
     [self.carouselItems addObject:imageView2];
     
-    UIImageView *imageView3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 90)];
-    imageView3.image = [UIImage imageNamed:@"chun.jpg"];
+    UIImageView *imageView3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
+    imageView3.image = [UIImage imageNamed:@"newyear.png"];
     [self.carouselItems addObject:imageView3];
     
-    UIImageView *imageView4 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 90)];
-    imageView4.image = [UIImage imageNamed:@"travel.jpg"];
+    UIImageView *imageView4 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
+    imageView4.image = [UIImage imageNamed:@"halloween.jpeg"];
     [self.carouselItems addObject:imageView4];
     
     
     
     
-    self.carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 140)];
+    self.carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0.0, 34.0, self.view.frame.size.width,180)];
     self.carousel.type = 1;
-    
     [self.carousel setDelegate:self];
     [self.carousel setDataSource:self];
-    
+    self.carousel.type = iCarouselTypeLinear;
+    self.carousel.pagingEnabled = YES;
+    self.carousel.clipsToBounds = YES;
+    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(carouselSlide:) userInfo:nil repeats:YES];
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 240, self.view.frame.size.height)];
-    scrollView.contentSize = CGSizeMake(240, 600);
+    scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
     [scrollView addSubview:self.carousel];
     //[self.view addSubview:self.carousel];
     
@@ -122,7 +143,7 @@
     flowLayout.itemSize = CGSizeMake(80, 80);
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.minimumLineSpacing = 0;
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 140, 240, 460) collectionViewLayout:flowLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 200, 240, 800) collectionViewLayout:flowLayout];
     
     [self.collectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:@"ttcell"];
     
@@ -141,22 +162,22 @@
     UIColor * viewBackgroundColor;
     if(OSVersionIsAtLeastiOS7()){
         viewBackgroundColor = [UIColor colorWithRed:110.0/255.0
-                                                   green:113.0/255.0
-                                                    blue:115.0/255.0
-                                                   alpha:1.0];
+                                              green:113.0/255.0
+                                               blue:115.0/255.0
+                                              alpha:1.0];
     }
     else {
         viewBackgroundColor = [UIColor colorWithRed:77.0/255.0
-                                                   green:79.0/255.0
-                                                    blue:80.0/255.0
-                                                   alpha:1.0];
+                                              green:79.0/255.0
+                                               blue:80.0/255.0
+                                              alpha:1.0];
     }
     
     [self.view addSubview:scrollView];
     [self.view setBackgroundColor:viewBackgroundColor];
-
     
-
+    
+    
     
 }
 
@@ -165,8 +186,17 @@
     // Dispose of any resources that can be recreated.
 }
 
- #pragma mark - Table view data source
- 
+-(void)carouselSlide:(NSTimer*)timer{
+    static int i = 0;
+    if(i>3)
+        {
+            i=0;
+        }
+    [self.carousel scrollToItemAtIndex:i animated:YES];
+    i++;
+}
+#pragma mark - Table view data source
+
 
 
 
@@ -185,10 +215,10 @@
     //create new view if no view is available for recycling
     if (view == nil)
     {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 90)];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 34, self.view.frame.size.width, 180)];
         UIImageView *imageView = [self.carouselItems objectAtIndex:index];
         [view addSubview:imageView];
-
+        
         
         label = [[UILabel alloc] initWithFrame:view.bounds];
         label.backgroundColor = [UIColor clearColor];
@@ -240,7 +270,7 @@
         case iCarouselOptionSpacing:
         {
             //add a bit of spacing between the item views
-            return value * 1.05f;
+            return value * 1.0f;
         }
         case iCarouselOptionFadeMax:
         {
@@ -290,7 +320,7 @@
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+    NSArray* collections = [self.responseData objectForKey:@"collections"];
     //NSLog(@"number of sections in right drawer is %d", collections.count);
     return collections.count;
 }
@@ -299,7 +329,7 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+    NSArray* collections = [self.responseData objectForKey:@"collections"];
     NSArray* items =  [[collections objectAtIndex:section] objectForKey:@"sectionItems"];
     //NSLog(@"after init section value:%hhd", [[self.sectionFoldFlags objectAtIndex:section] boolValue]);
     if (YES == [[self.sectionFoldFlags objectAtIndex:section] boolValue]) {
@@ -319,9 +349,9 @@
     
     if (kind == UICollectionElementKindSectionHeader) {
         CollectionHeaderView *headerView = [tcollectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
-        NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+        NSArray* collections = [self.responseData objectForKey:@"collections"];
         headerView.sectionHeader.text =  [[collections objectAtIndex:indexPath.section] objectForKey:@"sectionTitle"];
-
+        
         reusableview = headerView;
     }
     
@@ -341,8 +371,9 @@
     [cell setSel:NO];
     
     
-    NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+    NSArray* collections = [self.responseData objectForKey:@"collections"];
     NSArray* items =  [[collections objectAtIndex:indexPath.section] objectForKey:@"sectionItems"];
+ 
     cell.label.text = [[items objectAtIndex:indexPath.row] objectForKey:@"title"];
     cell.tags = [[items objectAtIndex:indexPath.row] objectForKey:@"tags"];
     
@@ -351,7 +382,7 @@
         cell.tags = @"more";
     }
     
-
+    
     return cell;
     
 }
@@ -392,7 +423,7 @@
     
     if ([cell.tags isEqual: @"more"]) {
         self.sectionFoldFlags[indexPath.section] = [NSNumber numberWithBool:NO];
-        NSArray* collections = [self.rightDrawerModelInJson objectForKey:@"collections"];
+        NSArray* collections = [self.responseData objectForKey:@"collections"];
         NSArray* items =  [[collections objectAtIndex:indexPath.section] objectForKey:@"sectionItems"];
         [self.collectionView performBatchUpdates:^{
             NSArray *deleteItems = @[indexPath];
@@ -408,11 +439,11 @@
             // 重新设置高度
             CGRect newFrame = CGRectMake(0.0, 140.0, 240.0, collectionView.contentSize.height+81*(items.count/3+(items.count%3>0?1:0)-1));
             collectionView.frame = newFrame;
-
+            
             scrollView.contentSize = CGSizeMake(240, scrollView.contentSize.height+81*(items.count/3+(items.count%3>0?1:0)-1));
             
             NSLog(@"new height %f", scrollView.contentSize.height);
-
+            
             [UIView animateWithDuration:0.3
                                   delay:0.0
                                 options:UIViewAnimationOptionCurveEaseIn //设置动画类型
@@ -423,7 +454,7 @@
                              completion:^(BOOL finished){
                                  // 动画结束时的处理
                              }];
-
+            
         } completion:nil];
         
     }
@@ -448,7 +479,7 @@
                          // 动画结束时的处理
                      }];
     
-
+    
 }
 
 
@@ -463,11 +494,11 @@
     } else {
         [cell setSel:YES];
     }
-
+    
     [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
                                    withCloseAnimation:YES
                                            completion:nil];
-    
+    [self.delegate tagSelected];
 }
 
 - (void)collectionView:(UICollectionView *)colView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
