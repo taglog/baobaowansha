@@ -14,6 +14,7 @@
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
 #import <AVOSCloud/AVOSCloud.h>
+#import "CollectionViewCell.h"
 
 
 
@@ -207,9 +208,16 @@
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:nil];
 }
 #pragma mark - 标签栏delegate
--(void)tagSelected{
+-(void)tagSelected:(NSString *)string{
+    
+    NSLog(@"%@",string);
+    
     [self selectTabAtIndex:0];
+
+    self.contentViewControllerFirst.tag = string;
+    
     [self.contentViewControllerFirst simulatePullDownRefresh];
+    
 }
 #pragma mark - 指示层delegate
 -(void)showHUD:(NSString*)text{

@@ -17,6 +17,8 @@
 @property(nonatomic,assign) NSInteger type;
 @property(nonatomic,retain) UITableView *homeTableView;
 
+@property(nonatomic,strong) NSString *tag;
+
 @property(nonatomic,retain)id<ContentViewDelegate> delegate;
 -(id)initWithURL:(NSDictionary *)dict type:(NSInteger)index;
 -(void)simulatePullDownRefresh;

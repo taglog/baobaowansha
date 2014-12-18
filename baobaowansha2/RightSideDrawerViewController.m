@@ -45,7 +45,7 @@
           @[ @{@"sectionTitle":@"潜能", @"sectionItems":
                    @[@{@"title":@"运动", @"tags":@"运动",@"imgurl":@"basketball.png"},
                      @{@"title":@"认知", @"tags":@"认知",@"imgurl":@"pen.png"},
-                     @{@"title":@"语言", @"tags":@"语言",@"imgurl":@"chrismas.jpg"},
+                     @{@"title":@"语言", @"tags":@"语言",@"imgurl":@"phone"},
                      ]
                },
              
@@ -55,7 +55,7 @@
                      @{@"title":@"雨后", @"tags":@"雨后",@"imgurl":@"rain.png"},
                      @{@"title":@"夏日", @"tags":@"夏日",@"imgurl":@"sun"},
                      @{@"title":@"刮风", @"tags":@"刮风",@"imgurl":@"wind"},
-                     @{@"title":@"炎热", @"tags":@"炎热",@"imgurl":@"chrismas.jpg"}
+                     @{@"title":@"炎热", @"tags":@"炎热",@"imgurl":@"hot"}
                      ]
                },
              @{@"sectionTitle":@"场景", @"sectionItems":
@@ -64,13 +64,13 @@
                      @{@"title":@"公园", @"tags":@"公园",@"imgurl":@"garden"},
                      @{@"title":@"等餐", @"tags":@"等餐",@"imgurl":@"chair"},
                      @{@"title":@"吃饭时", @"tags":@"吃饭时",@"imgurl":@"fork"},
-                     @{@"title":@"逛街时", @"tags":@"逛街时",@"imgurl":@"walk"},
+                     @{@"title":@"逛街时", @"tags":@"逛街时",@"imgurl":@"walking"},
                      ]
                },
              @{@"sectionTitle":@"节日", @"sectionItems":
-                   @[@{@"title":@"圣诞节", @"tags":@"圣诞节",@"imgurl":@"christmasday"},
-                     @{@"title":@"春节", @"tags":@"春节",@"imgurl":@"chrismasday"},
-                     @{@"title":@"万圣节", @"tags":@"万圣节",@"imgurl":@"halloween"},
+                   @[@{@"title":@"圣诞节", @"tags":@"圣诞节",@"imgurl":@"santa"},
+                     @{@"title":@"春节", @"tags":@"春节",@"imgurl":@"home"},
+                     @{@"title":@"万圣节", @"tags":@"万圣节",@"imgurl":@"halloween.png"},
                      @{@"title":@"母亲节", @"tags":@"母亲节",@"imgurl":@"mama"},
                      @{@"title":@"儿童节", @"tags":@"儿童节",@"imgurl":@"childday"},
                      @{@"title":@"端午节", @"tags":@"端午节",@"imgurl":@"duanwu"}
@@ -78,8 +78,8 @@
                },
              @{@"sectionTitle":@"家庭成员", @"sectionItems":
                    @[@{@"title":@"妈妈(爸爸)", @"tags":@"妈妈(爸爸)",@"imgurl":@"baba"},
-                     @{@"title":@"父母", @"tags":@"父母",@"imgurl":@"chrismas.jpg"},
-                     @{@"title":@"全部参与", @"tags":@"全部参与",@"imgurl":@"chrismas.jpg"}
+                     @{@"title":@"父母", @"tags":@"父母",@"imgurl":@"mama2"},
+                     @{@"title":@"全部参与", @"tags":@"全部参与",@"imgurl":@"allparents"}
                      ]
                }
              
@@ -304,12 +304,12 @@
 - (void)carousel:(__unused iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
     NSNumber *item = (self.carouselItems)[(NSUInteger)index];
-    NSLog(@"Tapped view number: %@", item);
+    //NSLog(@"Tapped view number: %@", item);
 }
 
 - (void)carouselCurrentItemIndexDidChange:(__unused iCarousel *)carousel
 {
-    NSLog(@"Index: %@", @(self.carousel.currentItemIndex));
+    //NSLog(@"Index: %@", @(self.carousel.currentItemIndex));
 }
 
 
@@ -373,10 +373,12 @@
     
     NSArray* collections = [self.responseData objectForKey:@"collections"];
     NSArray* items =  [[collections objectAtIndex:indexPath.section] objectForKey:@"sectionItems"];
- 
-    cell.label.text = [[items objectAtIndex:indexPath.row] objectForKey:@"title"];
-    cell.tags = [[items objectAtIndex:indexPath.row] objectForKey:@"tags"];
+// 
+//    cell.label.text = [[items objectAtIndex:indexPath.row] objectForKey:@"title"];
+//    cell.tags = [[items objectAtIndex:indexPath.row] objectForKey:@"tags"];
     
+    [cell setDataWithDict:[items objectAtIndex:indexPath.row]];
+
     if (indexPath.row == 2 && (YES == [[self.sectionFoldFlags objectAtIndex:indexPath.section] boolValue])) {
         cell.label.text = @"更多...";
         cell.tags = @"more";
@@ -486,7 +488,7 @@
 
 - (void)collectionView:(UICollectionView *)colView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Selected item of section:%d, row:%d", indexPath.section, indexPath.row);
+//    NSLog(@"Selected item of section:%d, row:%d", indexPath.section, indexPath.row);
     // TODO: add a selected mark
     CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
     if ([cell isSel]) {
@@ -495,15 +497,19 @@
         [cell setSel:YES];
     }
     
+    
     [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
                                    withCloseAnimation:YES
                                            completion:nil];
-    [self.delegate tagSelected];
+    //点击标签之后，回到主界面，并且刷新
+   
+    [self.delegate tagSelected:cell.tags];
+    
 }
 
 - (void)collectionView:(UICollectionView *)colView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Deselecte at section:%d, row:%d", indexPath.section, indexPath.row);
+//    NSLog(@"Deselecte at section:%d, row:%d", indexPath.section, indexPath.row);
     CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
     [cell setSel:NO];
 }
