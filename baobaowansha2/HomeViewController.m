@@ -218,6 +218,17 @@
     [self.contentViewControllerFirst simulatePullDownRefresh];
     
 }
+
+-(void)tagDeselected{
+    
+    [self selectTabAtIndex:0];
+    
+    self.contentViewControllerFirst.tag = nil;
+    
+    [self.contentViewControllerFirst simulatePullDownRefresh];
+
+    
+}
 #pragma mark - 指示层delegate
 -(void)showHUD:(NSString*)text{
     //初始化HUD
