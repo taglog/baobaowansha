@@ -97,7 +97,7 @@
     
     if(!_homeTableView){
         _homeTableView = [[UITableView alloc] init];
-        _homeTableView.frame = CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height);
+        _homeTableView.frame = CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height - 64);
         _homeTableView.delegate = self;
         _homeTableView.dataSource = self;
         
@@ -227,7 +227,7 @@
 }
 
 -(void)performPullDownRefresh{
-
+    
     _reloading = YES;
     
     UIApplication *app=[UIApplication sharedApplication];
@@ -249,6 +249,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     [manager POST:postRequestUrl parameters:postParam success:^(AFHTTPRequestOperation *operation,id responseObject) {
+        
         NSArray *responseArray = [responseObject valueForKey:@"data"];
         [self.homeTableViewCell removeAllObjects];
         //如果存在数据，那么就初始化tableView
@@ -298,6 +299,7 @@
     
     NSString *postRouter = nil;
     NSDictionary *postParam = nil;
+    
     if(self.tag){
         
         postRouter = @"post/getTableByTag";

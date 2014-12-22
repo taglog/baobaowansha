@@ -493,17 +493,28 @@
     CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
     if ([cell isSel]) {
         [cell setSel:NO];
+        
+        [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
+                                       withCloseAnimation:YES
+                                               completion:nil];
+        
+        [self.delegate tagDeselected];
+
+        
+        
     } else {
         [cell setSel:YES];
+        
+        [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
+                                       withCloseAnimation:YES
+                                               completion:nil];
+        //点击标签之后，回到主界面，并且刷新
+        
+        [self.delegate tagSelected:cell.tags];
     }
     
     
-    [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
-                                   withCloseAnimation:YES
-                                           completion:nil];
-    //点击标签之后，回到主界面，并且刷新
    
-    [self.delegate tagSelected:cell.tags];
     
 }
 
@@ -511,7 +522,10 @@
 {
 //    NSLog(@"Deselecte at section:%d, row:%d", indexPath.section, indexPath.row);
     CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
+    
     [cell setSel:NO];
+    
+    
 }
 
 
