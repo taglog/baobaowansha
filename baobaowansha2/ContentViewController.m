@@ -97,7 +97,7 @@
     
     if(!_homeTableView){
         _homeTableView = [[UITableView alloc] init];
-        _homeTableView.frame = CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height);
+        _homeTableView.frame = CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height - 64);
         _homeTableView.delegate = self;
         _homeTableView.dataSource = self;
         
