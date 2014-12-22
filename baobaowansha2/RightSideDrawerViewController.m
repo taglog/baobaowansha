@@ -37,7 +37,7 @@
     @{@"banner":
           @{@"imgurl":@"chrismas.jpg", @"title":@"圣诞节",
             @"imgurl":@"winter.jpeg", @"title":@"冬天",
-            @"imgurl":@"newyear.png", @"title":@"春节",
+            @"imgurl":@"newyear.jpg", @"title":@"春节",
             @"imgurl":@"halloween.jpeg", @"title":@"万圣节"
             },
       
@@ -111,7 +111,7 @@
     [self.carouselItems addObject:imageView2];
     
     UIImageView *imageView3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
-    imageView3.image = [UIImage imageNamed:@"newyear.png"];
+    imageView3.image = [UIImage imageNamed:@"newyear.jpg"];
     [self.carouselItems addObject:imageView3];
     
     UIImageView *imageView4 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
