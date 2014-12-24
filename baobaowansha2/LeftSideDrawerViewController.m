@@ -27,14 +27,14 @@
     [super viewDidLoad];
     
     self.currentController = @"HomeViewControllerID";
-    self.navHome = self.mm_drawerController.centerViewController;
+    self.navDiscover = self.mm_drawerController.centerViewController;
     
 
     // display parameters: setting to 240 points
     [self.mm_drawerController setMaximumLeftDrawerWidth:200.0];
     
     // opener drawer gesture parameters:
-    self.mm_drawerController.openDrawerGestureModeMask ^= MMOpenDrawerGestureModePanningNavigationBar^MMOpenDrawerGestureModePanningCenterView^MMOpenDrawerGestureModeBezelPanningCenterView;
+    //self.mm_drawerController.openDrawerGestureModeMask ^= MMOpenDrawerGestureModePanningNavigationBar^MMOpenDrawerGestureModePanningCenterView^MMOpenDrawerGestureModeBezelPanningCenterView;
     
     // close drawer gestrure parameters:
     self.mm_drawerController.closeDrawerGestureModeMask ^= MMCloseDrawerGestureModePanningNavigationBar^MMCloseDrawerGestureModePanningCenterView^MMCloseDrawerGestureModeBezelPanningCenterView^MMCloseDrawerGestureModeTapNavigationBar^MMCloseDrawerGestureModeTapCenterView^MMCloseDrawerGestureModePanningDrawerView;
@@ -106,6 +106,11 @@
         imageView.clipsToBounds = YES;
         imageView.backgroundColor = [UIColor colorWithRed:220/255.0f green:87/255.0f blue:116/255.0f alpha:0.8f];
         
+        // 设置可点击
+        imageView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickImage:)];
+        [imageView addGestureRecognizer:singleTap];
+        
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 45, 0, 64)];
         label.text = self.headerWords;
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:52];
@@ -142,7 +147,7 @@
     // Return the number of rows in the section.
     switch (section) {
         case MMDrawerSection1:
-            return 3;
+            return 4;
         case MMDrawerSection2:
             return 2;
         default:
@@ -164,8 +169,10 @@
     switch (indexPath.section) {
         case MMDrawerSection1:
             if(indexPath.row == 0){
-                [cell.textLabel setText:@"首页"];
+                [cell.textLabel setText:@"发现"];
             } else if(indexPath.row == 1) {
+                [cell.textLabel setText:@"分类"];
+            } else if(indexPath.row == 2) {
                 [cell.textLabel setText:@"我的收藏"];
             } else {
                 [cell.textLabel setText:@"我的评论"];
@@ -212,26 +219,51 @@
     switch (indexPath.section) {
         case MMDrawerSection1:{
             if (indexPath.row == 0) {
-                if(self.navHome == nil) {
-                    UIViewController * centerViewController = [[HomeViewController alloc] init];
-                    self.navHome = [[UINavigationController alloc] initWithRootViewController:centerViewController];
+                if(self.navDiscover == nil) {
+                    HomeViewController * centerViewController = [[HomeViewController alloc] init];
+                    
+                    centerViewController.requestURL = @{@"requestRouter":@"post/table"};
+                    self.navDiscover = [[UINavigationController alloc] initWithRootViewController:centerViewController];
                 }
                 
                 if ([self.currentController isEqual: @"HomeViewControllerID"]) {
                     [self.mm_drawerController
-                     setCenterViewController:self.navHome
+                     setCenterViewController:self.navDiscover
                      withCloseAnimation:YES
                      completion:nil];
                 } else {
                     [self.mm_drawerController
-                     setCenterViewController:self.navHome
+                     setCenterViewController:self.navDiscover
                      withFullCloseAnimation:YES
                      completion:nil];
                     self.currentController = @"HomeViewControllerID";
                 }
                 
-                
+            // TODO: 设置分类页面
             } else if (indexPath.row == 1) {
+                if(self.navClass == nil) {
+                    HomeViewController * classViewController = [[HomeViewController alloc] init];
+                    classViewController.requestURL = @{@"requestRouter":@"post/table"};
+                    
+                    self.navClass = [[UINavigationController alloc] initWithRootViewController:classViewController];
+                }
+                
+                if ([self.currentController isEqual: @"ClassViewControllerID"]) {
+                    [self.mm_drawerController
+                     setCenterViewController:self.navClass
+                     withCloseAnimation:YES
+                     completion:nil];
+                } else {
+                    [self.mm_drawerController
+                     setCenterViewController:self.navClass
+                     withFullCloseAnimation:YES
+                     completion:nil];
+                    self.currentController = @"ClassViewControllerID";
+                }
+                
+                
+                
+            } else if (indexPath.row == 2) {
                 if(self.navCollection == nil) {
                     CollectionViewController * collectionViewController = [[CollectionViewController alloc] init];
                     collectionViewController.requestURL = @{@"requestRouter":@"post/mycollection"};
@@ -253,7 +285,7 @@
                 }
                 
                 
-            } else if (indexPath.row == 2){ // row == 1
+            } else if (indexPath.row == 3){ // row == 1
                 if(self.navComment == nil) {
                    CommentViewController * commentViewController = [[CommentViewController alloc] init];
                    commentViewController.requestURL= @{@"requestRouter":@"post/mycomment"};
@@ -323,10 +355,38 @@
         default:
             break;
     }
+    
+    
     [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
+
+-(void)clickImage:(UITapGestureRecognizer *)recognizer
+{
+    NSLog(@"image view is clicked");
+    UIView *imageView = [recognizer view];
+    [imageView setBackgroundColor:[UIColor colorWithRed:220/255.0f green:87/255.0f blue:116/255.0f alpha:0.6f]];
+    //BabyInfoViewController * bbVC = [[BabyInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    
+    if(self.navSetting == nil) {
+        UIViewController * settingViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        self.navSetting = [[UINavigationController alloc] initWithRootViewController:settingViewController];
+    }
+    if ([self.currentController isEqual: @"SettingViewControllerID"]){
+        [self.mm_drawerController
+         setCenterViewController:self.navSetting
+         withCloseAnimation:YES
+         completion:nil];
+    } else {
+        [self.mm_drawerController
+         setCenterViewController:self.navSetting
+         withFullCloseAnimation:YES
+         completion:nil];
+        self.currentController = @"SettingViewControllerID";
+    }
+
+}
 
 @end

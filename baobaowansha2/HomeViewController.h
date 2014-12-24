@@ -10,6 +10,7 @@
 #import "ViewPagerController.h"
 #import "ContentViewController.h"
 #import "RightSideDrawerViewController.h"
+#import "LeftSideDrawerViewController.h"
 @protocol HomeViewDelegate
 
 -(void)leftBarButtonItemClicked;

@@ -28,13 +28,14 @@
     // Override point for customization after application launch
     [[UINavigationBar appearance] setBackgroundColor:[UIColor whiteColor]];
 
-    UIViewController * leftSideDrawerViewController = [[LeftSideDrawerViewController alloc] init];
+    LeftSideDrawerViewController * leftSideDrawerViewController = [[LeftSideDrawerViewController alloc] init];
     RightSideDrawerViewController * rightSideDrawerViewController = [[RightSideDrawerViewController alloc] init];
     
     HomeViewController * centerViewController = [[HomeViewController alloc] init];
     centerViewController.requestURL = @{@"requestRouter":@"post/table"};
     
     rightSideDrawerViewController.delegate = centerViewController;
+    
     
     UINavigationController *centerNavigation = [[UINavigationController alloc] initWithRootViewController:centerViewController];
 
@@ -106,6 +107,7 @@
                                         initWithCenterViewController:centerNavigation
                                         leftDrawerViewController:leftSideDrawerViewController
                                         rightDrawerViewController:rightSideDrawerViewController];
+    
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];

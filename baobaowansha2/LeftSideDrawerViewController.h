@@ -16,10 +16,12 @@ typedef NS_ENUM(NSInteger, MMDrawerSection){
     
 };
 
+
 @interface LeftSideDrawerViewController : BaseSideDrawerViewController
 
 
-@property (nonatomic, retain) UIViewController * navHome;
+@property (nonatomic, retain) UIViewController * navDiscover;
+@property (nonatomic, retain) UIViewController * navClass;
 @property (nonatomic, retain) UIViewController * navCollection;
 @property (nonatomic, retain) UIViewController * navComment;
 @property (nonatomic, retain) UIViewController * navSetting;

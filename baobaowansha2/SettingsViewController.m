@@ -40,7 +40,7 @@
         self.babyInfoVC = [[BabyInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
     }
     
-    [section1 addItem:[RETableViewItem itemWithTitle:@"宝贝信息" accessoryType:UITableViewCellAccessoryDisclosureIndicator selectionHandler:^(RETableViewItem *item) {
+    [section1 addItem:[RETableViewItem itemWithTitle:@"设置宝贝信息" accessoryType:UITableViewCellAccessoryDisclosureIndicator selectionHandler:^(RETableViewItem *item) {
         [item deselectRowAnimated:YES];
         [self.navigationController pushViewController:self.babyInfoVC animated:YES];
     }]];

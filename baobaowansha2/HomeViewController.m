@@ -247,4 +247,9 @@
     [self.HUD dismissAfterDelay:1.0];
     self.isHudShow = NO;
 }
+
+
+
+
+
 @end
