@@ -25,7 +25,7 @@
     [super viewDidLoad];
     
     self.currentController = @"HomeViewControllerID";
-    self.navDiscover = self.mm_drawerController.centerViewController;
+    self.navHome = self.mm_drawerController.centerViewController;
     
 
     // display parameters: setting to 240 points
@@ -221,12 +221,12 @@
                 
                 if ([self.currentController isEqual: @"MainViewControllerID"]) {
                     [self.mm_drawerController
-                     setCenterViewController:self.navDiscover
+                     setCenterViewController:self.navHome
                      withCloseAnimation:YES
                      completion:nil];
                 } else {
                     [self.mm_drawerController
-                     setCenterViewController:self.navDiscover
+                     setCenterViewController:self.navHome
                      withFullCloseAnimation:YES
                      completion:nil];
                     self.currentController = @"MainViewControllerID";
