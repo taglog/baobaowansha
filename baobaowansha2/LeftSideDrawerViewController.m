@@ -9,13 +9,11 @@
 #import "LeftSideDrawerViewController.h"
 #import "MMSideDrawerTableViewCell.h"
 
-
+#import "MainViewController.h"
 #import "HomeViewController.h"
 #import "BabyInfoViewController.h"
-#import "CollectionViewController.h"
 #import "SettingsViewController.h"
 #import "FeedbackViewController.h"
-#import "CommentViewController.h"
 
 @interface LeftSideDrawerViewController ()
 
@@ -63,7 +61,7 @@
         NSDate * babybirthday = [[NSUserDefaults standardUserDefaults] objectForKey:@"babyBirthday"];
         NSTimeInterval intv = -1*babybirthday.timeIntervalSinceNow;
         double inDays = intv/(24*3600);
-        NSLog(@"baby days is %f", inDays);
+        
         if (inDays < 0) {
             [self setHeaderWords:@"0"];
             [self setSubLableWords:@"宝贝周龄"];
@@ -73,7 +71,7 @@
             [self setSubLableWords:@"宝贝周龄"];
         } else if (inDays < 24*30) {
             int inMonths = inDays/30;
-            NSLog(@"in months %d", inMonths);
+           
             [self setHeaderWords:[NSString stringWithFormat:@"%d",inMonths]];
             [self setSubLableWords:@"宝贝月龄"];
         } else {
@@ -170,9 +168,9 @@
         case MMDrawerSection1:
             if(indexPath.row == 0){
                 [cell.textLabel setText:@"发现"];
-            } else if(indexPath.row == 1) {
+            }else if(indexPath.row == 1) {
                 [cell.textLabel setText:@"分类"];
-            } else if(indexPath.row == 2) {
+            }else if(indexPath.row == 2) {
                 [cell.textLabel setText:@"我的收藏"];
             } else {
                 [cell.textLabel setText:@"我的评论"];
@@ -213,20 +211,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"section is %d, row is %d", (int)indexPath.section, (int)indexPath.row);
-    
-    
     switch (indexPath.section) {
         case MMDrawerSection1:{
             if (indexPath.row == 0) {
-                if(self.navDiscover == nil) {
-                    HomeViewController * centerViewController = [[HomeViewController alloc] init];
-                    
-                    centerViewController.requestURL = @{@"requestRouter":@"post/table"};
-                    self.navDiscover = [[UINavigationController alloc] initWithRootViewController:centerViewController];
+                if(self.navHome == nil) {
+                    MainViewController * mainViewController = [[MainViewController alloc] init];
+                    self.navHome = [[UINavigationController alloc] initWithRootViewController:mainViewController];
                 }
                 
-                if ([self.currentController isEqual: @"HomeViewControllerID"]) {
+                if ([self.currentController isEqual: @"MainViewControllerID"]) {
                     [self.mm_drawerController
                      setCenterViewController:self.navDiscover
                      withCloseAnimation:YES
@@ -234,40 +227,40 @@
                 } else {
                     [self.mm_drawerController
                      setCenterViewController:self.navDiscover
+                     withFullCloseAnimation:YES
+                     completion:nil];
+                    self.currentController = @"MainViewControllerID";
+                }
+                
+            // TODO: 设置分类页面
+            } else if (indexPath.row == 1) {
+
+                if(self.navCategory == nil) {
+                    HomeViewController * categoryViewController = [[HomeViewController alloc] init];
+                    categoryViewController.requestURL = @{@"requestRouter":@"post/table"};
+                    categoryViewController.controllerTitle = @"分类";
+                    self.navCategory = [[UINavigationController alloc] initWithRootViewController:categoryViewController];
+                }
+                
+                if ([self.currentController isEqual: @"HomeViewControllerID"]) {
+                    [self.mm_drawerController
+                     setCenterViewController:self.navCategory
+                     withCloseAnimation:YES
+                     completion:nil];
+                } else {
+                    [self.mm_drawerController
+
+                     setCenterViewController:self.navCategory
                      withFullCloseAnimation:YES
                      completion:nil];
                     self.currentController = @"HomeViewControllerID";
                 }
                 
-            // TODO: 设置分类页面
-            } else if (indexPath.row == 1) {
-                if(self.navClass == nil) {
-                    HomeViewController * classViewController = [[HomeViewController alloc] init];
-                    classViewController.requestURL = @{@"requestRouter":@"post/table"};
-                    
-                    self.navClass = [[UINavigationController alloc] initWithRootViewController:classViewController];
-                }
-                
-                if ([self.currentController isEqual: @"ClassViewControllerID"]) {
-                    [self.mm_drawerController
-                     setCenterViewController:self.navClass
-                     withCloseAnimation:YES
-                     completion:nil];
-                } else {
-                    [self.mm_drawerController
-                     setCenterViewController:self.navClass
-                     withFullCloseAnimation:YES
-                     completion:nil];
-                    self.currentController = @"ClassViewControllerID";
-                }
-                
-                
-                
             } else if (indexPath.row == 2) {
                 if(self.navCollection == nil) {
-                    CollectionViewController * collectionViewController = [[CollectionViewController alloc] init];
+                    HomeViewController * collectionViewController = [[HomeViewController alloc] init];
                     collectionViewController.requestURL = @{@"requestRouter":@"post/mycollection"};
-
+                    collectionViewController.controllerTitle = @"我的收藏";
                     self.navCollection = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
                 }
                 
@@ -287,8 +280,9 @@
                 
             } else if (indexPath.row == 3){ // row == 1
                 if(self.navComment == nil) {
-                   CommentViewController * commentViewController = [[CommentViewController alloc] init];
+                   HomeViewController * commentViewController = [[HomeViewController alloc] init];
                    commentViewController.requestURL= @{@"requestRouter":@"post/mycomment"};
+                    commentViewController.controllerTitle = @"评论过的文章";
                     self.navComment = [[UINavigationController alloc] initWithRootViewController:commentViewController];
                 }
                 if ([self.currentController isEqual: @"CommentViewControllerID"]){

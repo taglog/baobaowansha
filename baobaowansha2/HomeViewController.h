@@ -11,15 +11,16 @@
 #import "ContentViewController.h"
 #import "RightSideDrawerViewController.h"
 #import "LeftSideDrawerViewController.h"
+
 @protocol HomeViewDelegate
 
 -(void)leftBarButtonItemClicked;
 
 @end
 
-@interface HomeViewController : ViewPagerController <ViewPagerDataSource, ViewPagerDelegate,ContentViewDelegate,RightSideDrawerDelegate>
-
-@property(nonatomic,strong)NSDictionary *requestURL;
+@interface HomeViewController : ViewPagerController <ViewPagerDataSource, ViewPagerDelegate,ContentViewDelegate>
+@property (nonatomic,strong)NSString *controllerTitle;
+@property (nonatomic,strong)NSDictionary *requestURL;
 @property (nonatomic,assign) id<HomeViewDelegate> leftBarButtonItemClickedDelegate;
 
 @end

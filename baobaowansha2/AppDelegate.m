@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "HomeViewController.h"
+#import "MainViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "LeftSideDrawerViewController.h"
 #import "RightSideDrawerViewController.h"
@@ -31,8 +31,7 @@
     LeftSideDrawerViewController * leftSideDrawerViewController = [[LeftSideDrawerViewController alloc] init];
     RightSideDrawerViewController * rightSideDrawerViewController = [[RightSideDrawerViewController alloc] init];
     
-    HomeViewController * centerViewController = [[HomeViewController alloc] init];
-    centerViewController.requestURL = @{@"requestRouter":@"post/table"};
+    MainViewController* centerViewController = [[MainViewController alloc] init];
     
     rightSideDrawerViewController.delegate = centerViewController;
     

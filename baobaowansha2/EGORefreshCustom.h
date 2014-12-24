@@ -59,7 +59,7 @@ typedef enum{
 @property(nonatomic,assign) BOOL pullDown;
 
 
-@property(nonatomic,retain) UITableView *tableView;
+@property(nonatomic,retain) UIScrollView *scrollView;
 
 @property(nonatomic,strong) UILabel *lastUpdatedLabel;
 
@@ -72,7 +72,7 @@ typedef enum{
 @property(nonatomic,retain)id <EGORefreshDelegate> delegate;
 
 //方法
-- (id)initWithTableView:(UIScrollView *)scrollView position:(EGORefreshPosition)position;
+- (id)initWithScrollView:(UIScrollView *)scrollView position:(EGORefreshPosition)position;
 
 - (void)egoRefreshScrollViewDidScroll:(UIScrollView *)scrollView;
 

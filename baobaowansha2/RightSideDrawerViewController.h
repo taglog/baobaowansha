@@ -8,7 +8,6 @@
 
 #import "UIViewController+MMDrawerController.h"
 #import "MMSideDrawerTableViewCell.h"
-#import "iCarousel.h"
 
 @protocol RightSideDrawerDelegate <NSObject>
 
@@ -19,9 +18,8 @@
 
 
 
-@interface RightSideDrawerViewController : UIViewController <iCarouselDataSource, iCarouselDelegate, UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@interface RightSideDrawerViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate>
 
-@property (nonatomic, strong) iCarousel * carousel;
 @property (nonatomic, strong) UICollectionView * collectionView;
 @property (nonatomic, retain) NSDictionary* responseData;
 @property (nonatomic, retain) NSMutableArray * sectionFoldFlags;

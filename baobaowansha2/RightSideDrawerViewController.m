@@ -13,24 +13,42 @@
 #import "CollectionViewCell.h"
 
 @interface RightSideDrawerViewController ()
-@property (nonatomic, strong) NSMutableArray *carouselItems;
-@property (nonatomic, retain) UIScrollView * scrollView;
 
+@property (nonatomic, retain) UIScrollView * scrollView;
+@property (nonatomic, retain) UISearchBar *tagSearchBar;
+@property (nonatomic, retain) UITableView *tagSearchTableView;
+@property (nonatomic, retain) UIView *tagSelectedView;
+@property (nonatomic, retain) UIButton *tagSelectedButton;
+@property (nonatomic, retain) NSMutableDictionary *tagCellNumberSelected;
+@property (nonatomic, retain) NSMutableArray *tagSearchTableViewCell;
 @end
 
 @implementation RightSideDrawerViewController
 
 
-
-@synthesize carousel;
-@synthesize carouselItems;
 @synthesize collectionView;
 @synthesize scrollView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view.
+    UIColor * viewBackgroundColor;
+    if(OSVersionIsAtLeastiOS7()){
+        viewBackgroundColor = [UIColor colorWithRed:110.0/255.0
+                                              green:113.0/255.0
+                                               blue:115.0/255.0
+                                              alpha:1.0];
+    }
+    else {
+        viewBackgroundColor = [UIColor colorWithRed:77.0/255.0
+                                              green:79.0/255.0
+                                               blue:80.0/255.0
+                                              alpha:1.0];
+    }
+    
+    
+    [self.view setBackgroundColor:viewBackgroundColor];
+
     [self.mm_drawerController setMaximumRightDrawerWidth:240.0];
     
     self.responseData =
@@ -87,54 +105,46 @@
              ]
       };
     
-    //演示的时候不需要折叠
-//    NSArray* collections = [self.responseData objectForKey:@"collections"];
-//    self.sectionFoldFlags = [[NSMutableArray alloc] initWithCapacity:collections.count];
-//    for (int i=0; i<collections.count; i++) {
-//        NSArray* items =  [[collections objectAtIndex:i] objectForKey:@"sectionItems"];
-//        
-//        if([items count]>3){
-//            [self.sectionFoldFlags addObject:[NSNumber numberWithBool:YES]];
-//        }else{
-//            [self.sectionFoldFlags addObject:[NSNumber numberWithBool:NO]];
-//
-//        }
-//    }
+
+   
     
-    self.carouselItems = [NSMutableArray array];
-    UIImageView *imageView1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
-    imageView1.image = [UIImage imageNamed:@"chrismas.jpg"];
-    [self.carouselItems addObject:imageView1];
-    
-    UIImageView *imageView2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
-    imageView2.image = [UIImage imageNamed:@"winter.jpeg"];
-    [self.carouselItems addObject:imageView2];
-    
-    UIImageView *imageView3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
-    imageView3.image = [UIImage imageNamed:@"newyear.jpg"];
-    [self.carouselItems addObject:imageView3];
-    
-    UIImageView *imageView4 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 148)];
-    imageView4.image = [UIImage imageNamed:@"halloween.jpeg"];
-    [self.carouselItems addObject:imageView4];
+   
     
     
+    [self initScrollView];
+    [self initTagSelectedLabel];
+    [self initTagCollectionView];
+ 
+    [self initTagSearchBar];
+    [self initTagSearchTableView];
+   
     
     
-    self.carousel = [[iCarousel alloc] initWithFrame:CGRectMake(0.0, 34.0, self.view.frame.size.width,180)];
-    self.carousel.type = 1;
-    [self.carousel setDelegate:self];
-    [self.carousel setDataSource:self];
-    self.carousel.type = iCarouselTypeLinear;
-    self.carousel.pagingEnabled = YES;
-    self.carousel.clipsToBounds = YES;
-    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(carouselSlide:) userInfo:nil repeats:YES];
+ 
+    
+    
+}
+-(void)initScrollView{
+    
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 240, self.view.frame.size.height)];
     scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
-    [scrollView addSubview:self.carousel];
-    //[self.view addSubview:self.carousel];
+     [self.view addSubview:scrollView];
+}
+-(void)initTagCollectionView{
     
-    [self.carousel setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+    //演示的时候不需要折叠
+    //    NSArray* collections = [self.responseData objectForKey:@"collections"];
+    //    self.sectionFoldFlags = [[NSMutableArray alloc] initWithCapacity:collections.count];
+    //    for (int i=0; i<collections.count; i++) {
+    //        NSArray* items =  [[collections objectAtIndex:i] objectForKey:@"sectionItems"];
+    //
+    //        if([items count]>3){
+    //            [self.sectionFoldFlags addObject:[NSNumber numberWithBool:YES]];
+    //        }else{
+    //            [self.sectionFoldFlags addObject:[NSNumber numberWithBool:NO]];
+    //
+    //        }
+    //    }
     
     
     // add collection view
@@ -143,7 +153,7 @@
     flowLayout.itemSize = CGSizeMake(80, 80);
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.minimumLineSpacing = 0;
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 200, 240, 800) collectionViewLayout:flowLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 74, 240, 800) collectionViewLayout:flowLayout];
     
     [self.collectionView registerClass:[CollectionViewCell class] forCellWithReuseIdentifier:@"ttcell"];
     
@@ -152,165 +162,206 @@
     
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
-    [self.collectionView setBackgroundColor:[UIColor clearColor]];
+    self.collectionView.backgroundColor = [UIColor colorWithRed:110.0/255.0 green:113.0/255.0 blue:115.0/255.0 alpha:1.0];
     [self.collectionView setScrollEnabled:NO];
     
     [scrollView addSubview:self.collectionView];
-    //[self.view addSubview:self.collectionView];
+    
+}
+-(void)initTagSelectedLabel{
+    
+    self.tagSelectedView = [[UIView alloc]initWithFrame:CGRectMake(0, 79, self.view.frame.size.width, 50)];
+    
+    UILabel *tagSelectedLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 60.0,20.0f)];
+    tagSelectedLabel.text = @"已选择 : ";
+    tagSelectedLabel.font = [UIFont systemFontOfSize:13.0];
+    tagSelectedLabel.textColor = [UIColor lightTextColor];
+    [self.tagSelectedView addSubview:tagSelectedLabel];
+    
+    self.tagSelectedButton = [[UIButton alloc]initWithFrame:CGRectMake(65, 0, self.view.frame.size.width - 80, 30)];
+
+    self.tagSelectedButton.titleLabel.font = [UIFont systemFontOfSize:13.0];
+    self.tagSelectedButton.backgroundColor = [UIColor colorWithRed:89.0f/255.0f green:93.0f/255.0f blue:97.0f/255.0f alpha:1.0];
+    self.tagSelectedButton.layer.cornerRadius = 3.0;
+    self.tagSelectedButton.titleLabel.textColor = [UIColor colorWithRed:220/255.0f green:223/255.0f blue:226/255.0f alpha:1.0f];
+    UIImageView *tagRemoveMark = [[UIImageView alloc]initWithFrame:CGRectMake(self.tagSelectedButton.frame.size.width - 26,7,16,16)];
+    tagRemoveMark.tintColor = [UIColor whiteColor];
+    tagRemoveMark.image = [UIImage imageNamed:@"wrong"];
+    tagRemoveMark.tintColor = [UIColor whiteColor];
+    [self.tagSelectedButton addSubview:tagRemoveMark];
+    
+    [self.tagSelectedButton addTarget:self action:@selector(tagSelectedButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.tagSelectedView addSubview:self.tagSelectedButton];
+    
+    [scrollView addSubview:self.tagSelectedView];
+    
+}
+-(void)initTagSearchBar{
+    
+    self.tagSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 24, self.view.frame.size.width, 40)];
+    self.tagSearchBar.placeholder = @"搜索您感兴趣的标签";
+    self.tagSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+    self.tagSearchBar.delegate = self;
+    
+    [scrollView addSubview:self.tagSearchBar];
+
+}
+
+-(void)initTagSearchTableView{
+    
+    self.tagSearchTableViewCell = [[NSMutableArray alloc]init];
+    
+    self.tagSearchTableView = [[UITableView alloc]initWithFrame:CGRectMake(240, 74, self.view.frame.size.width,self.view.frame.size.height)];
+    self.tagSearchTableView.backgroundColor = [UIColor colorWithRed:110.0f/255.0f green:113.0f/255.0f blue:115.0f/255.0f alpha:1.0];
+    self.tagSearchTableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.tagSearchTableView.separatorColor = [UIColor colorWithRed:73.0f/255.0f green:73.0f/255.0f blue:73.0f/255.0f alpha:1.0];
+    self.tagSearchTableView.delegate = self;
+    self.tagSearchTableView.dataSource = self;
+    UIView *tableViewMask = [UIView new];
+    tableViewMask.backgroundColor =[UIColor clearColor];
+    self.tagSearchTableView.tableFooterView = tableViewMask;
     
     
-    UIColor * viewBackgroundColor;
-    if(OSVersionIsAtLeastiOS7()){
-        viewBackgroundColor = [UIColor colorWithRed:110.0/255.0
-                                              green:113.0/255.0
-                                               blue:115.0/255.0
-                                              alpha:1.0];
+    [scrollView addSubview:self.tagSearchTableView];
+    
+}
+
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    self.tagSearchBar.showsCancelButton = YES;
+    
+    scrollView.scrollEnabled = NO;
+    
+    [self.tagSearchBar becomeFirstResponder];
+    NSArray *subViews;
+    if (OSVersionIsAtLeastiOS7) {
+        subViews = [(self.tagSearchBar.subviews[0]) subviews];
     }
     else {
-        viewBackgroundColor = [UIColor colorWithRed:77.0/255.0
-                                              green:79.0/255.0
-                                               blue:80.0/255.0
-                                              alpha:1.0];
+        subViews = self.tagSearchBar.subviews;
     }
     
-    [self.view addSubview:scrollView];
-    [self.view setBackgroundColor:viewBackgroundColor];
+    for (id view in subViews) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            UIButton* cancelbutton = (UIButton* )view;
+            [cancelbutton setTitle:@"取消" forState:UIControlStateNormal];
+            [cancelbutton setTitleColor:[UIColor lightTextColor] forState:UIControlStateNormal];
+            [cancelbutton setTitleColor:[UIColor lightTextColor] forState:UIControlStateSelected];
+            cancelbutton.titleLabel.font = [UIFont systemFontOfSize:15];
+            break;
+        }
+    }
+    self.tagSearchTableViewCell = [NSMutableArray arrayWithArray:@[@"你好",@"我好",@"他好",@"她不好",@"你好",@"我好",@"他好",@"她不好"]];
+    [self.tagSearchTableView reloadData];
     
+    [UIView animateWithDuration:0.2
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut //设置动画类型
+                     animations:^{
+                         //开始动画
+                         [self.tagSearchTableView setFrame:CGRectMake(0, 74, self.view.frame.size.width ,self.view.frame.size.height)];
+                     }
+                     completion:^(BOOL finished){
+                         // 动画结束时的处理
+                     }];
+
+    
+}
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    [self searchBarCancel];
+}
+-(void)searchBarCancel{
+    scrollView.scrollEnabled = YES;
+    self.tagSearchBar.showsCancelButton = NO;
+    [self.tagSearchBar resignFirstResponder];
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionTransitionFlipFromRight //设置动画类型
+                     animations:^{
+                         //开始动画
+                         [self.tagSearchTableView setFrame:CGRectMake(240, 74, self.view.frame.size.width,self.view.frame.size.height)];
+                     }
+                     completion:^(BOOL finished){
+                         // 动画结束时的处理
+                     }];
+}
+#pragma mark - tagSearchTableView delegate
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    // Return the number of rows in the section.
+    return self.tagSearchTableViewCell.count;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    static  NSString *ID = @"taglist";
+    
+    //创建cell
+    UITableViewCell  *cell=[tableView dequeueReusableCellWithIdentifier:ID];
+    if(cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+    }
+    cell.backgroundColor = [UIColor colorWithRed:110.0f/255.0f green:113.0f/255.0f blue:115.0f/255.0f alpha:1.0];
+    cell.textLabel.textColor = [UIColor lightTextColor];
+    if(indexPath.row == 0){
+        cell.textLabel.text = @"热门标签";
+        cell.textLabel.font = [UIFont systemFontOfSize:12.0f];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+    }else{
+        
+        cell.textLabel.text = self.tagSearchTableViewCell[indexPath.row];
+        cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
+        
+    }
+    
+    
+    return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UITableViewCell *cell = [self.tagSearchTableView cellForRowAtIndexPath:indexPath];
+    [self.tagSelectedButton setTitle:cell.textLabel.text forState:UIControlStateNormal];
+    
+    [UIView animateWithDuration:0.4
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut //设置动画类型
+                     animations:^{
+                         //开始动画
+                         [self.collectionView setFrame:CGRectMake(0, 124, self.view.frame.size.width ,self.view.frame.size.height)];
+                     }
+                     completion:^(BOOL finished){
+                         
+                         // 动画结束时的处理
+                         [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
+                                                        withCloseAnimation:YES
+                                                                completion:nil];
+                         //点击标签之后，回到主界面，并且刷新
+                         
+                         [self.delegate tagSelected:cell.textLabel.text];
+                         [self searchBarCancel];
+                     }];
     
     
     
 }
+
+
+
+
+
+
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)carouselSlide:(NSTimer*)timer{
-    static int i = 0;
-    if(i>3)
-        {
-            i=0;
-        }
-    [self.carousel scrollToItemAtIndex:i animated:YES];
-    i++;
-}
-#pragma mark - Table view data source
 
-
-
-
-#pragma mark -
-#pragma mark iCarousel methods
-
-- (NSInteger)numberOfItemsInCarousel:(__unused iCarousel *)carousel
-{
-    return (NSInteger)[self.carouselItems count];
-}
-
-- (UIView *)carousel:(__unused iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
-{
-    UILabel *label = nil;
-    
-    //create new view if no view is available for recycling
-    if (view == nil)
-    {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 34, self.view.frame.size.width, 180)];
-        UIImageView *imageView = [self.carouselItems objectAtIndex:index];
-        [view addSubview:imageView];
-        
-        
-        label = [[UILabel alloc] initWithFrame:view.bounds];
-        label.backgroundColor = [UIColor clearColor];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.font = [label.font fontWithSize:50];
-        label.tag = 1;
-        [view addSubview:label];
-    }
-    else
-    {
-        //get a reference to the label in the recycled view
-        label = (UILabel *)[view viewWithTag:1];
-    }
-    
-    //set item label
-    //remember to always set any properties of your carousel item
-    //views outside of the `if (view == nil) {...}` check otherwise
-    //you'll get weird issues with carousel item content appearing
-    //in the wrong place in the carousel
-    //label.text = [self.carouselItems[(NSUInteger)index] stringValue];
-    
-    return view;
-}
-
-- (NSInteger)numberOfPlaceholdersInCarousel:(__unused iCarousel *)carousel
-{
-    //note: placeholder views are only displayed on some carousels if wrapping is disabled
-    return 2;
-}
-
-
-- (CATransform3D)carousel:(__unused iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
-{
-    //implement 'flip3D' style carousel
-    transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
-    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * self.carousel.itemWidth);
-}
-
-- (CGFloat)carousel:(__unused iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
-{
-    //customize carousel display
-    switch (option)
-    {
-        case iCarouselOptionWrap:
-        {
-            //normally you would hard-code this to YES or NO
-            return YES;
-        }
-        case iCarouselOptionSpacing:
-        {
-            //add a bit of spacing between the item views
-            return value * 1.0f;
-        }
-        case iCarouselOptionFadeMax:
-        {
-            if (self.carousel.type == iCarouselTypeCustom)
-            {
-                //set opacity based on distance from camera
-                return 0.0f;
-            }
-            return value;
-        }
-        case iCarouselOptionShowBackfaces:
-        case iCarouselOptionRadius:
-        case iCarouselOptionAngle:
-        case iCarouselOptionArc:
-        case iCarouselOptionTilt:
-        case iCarouselOptionCount:
-        case iCarouselOptionFadeMin:
-        case iCarouselOptionFadeMinAlpha:
-        case iCarouselOptionFadeRange:
-        case iCarouselOptionOffsetMultiplier:
-        case iCarouselOptionVisibleItems:
-        {
-            return value;
-        }
-    }
-}
-
-#pragma mark -
-#pragma mark iCarousel taps
-
-- (void)carousel:(__unused iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
-{
-    NSNumber *item = (self.carouselItems)[(NSUInteger)index];
-    //NSLog(@"Tapped view number: %@", item);
-}
-
-- (void)carouselCurrentItemIndexDidChange:(__unused iCarousel *)carousel
-{
-    //NSLog(@"Index: %@", @(self.carousel.currentItemIndex));
-}
 
 
 
@@ -416,7 +467,6 @@
 - (void)collectionView:(UICollectionView *)colView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     
     CollectionViewCell* cell = (CollectionViewCell *)[colView cellForItemAtIndexPath:indexPath];
-    NSLog(@"cell tags is %@", cell.tags);
     
     cell.contentView.backgroundColor = [UIColor colorWithRed:217/255.0
                                                        green:217/255.0
@@ -494,23 +544,50 @@
     if ([cell isSel]) {
         [cell setSel:NO];
         
-        [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
-                                       withCloseAnimation:YES
-                                               completion:nil];
-        
-        [self.delegate tagDeselected];
-
+        [UIView animateWithDuration:0.4
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseInOut //设置动画类型
+                         animations:^{
+                             //开始动画
+                             [self.collectionView setFrame:CGRectMake(0, 74, self.view.frame.size.width ,self.view.frame.size.height)];
+                         }
+                         completion:^(BOOL finished){
+                             // 动画结束时的处理
+                             [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
+                                                            withCloseAnimation:YES
+                                                                    completion:nil];
+                             
+                             [self.delegate tagDeselected];
+                         }];
         
         
     } else {
         [cell setSel:YES];
         
-        [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
-                                       withCloseAnimation:YES
-                                               completion:nil];
-        //点击标签之后，回到主界面，并且刷新
+        [self.tagSelectedButton setTitle:cell.tags forState:UIControlStateNormal];
         
-        [self.delegate tagSelected:cell.tags];
+        [UIView animateWithDuration:0.4
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseInOut //设置动画类型
+                         animations:^{
+                             //开始动画
+                             [self.collectionView setFrame:CGRectMake(0, 124, self.view.frame.size.width ,self.view.frame.size.height)];
+                         }
+                         completion:^(BOOL finished){
+                             
+                             self.tagCellNumberSelected = [NSMutableDictionary dictionaryWithObjectsAndKeys:indexPath,@"indexPath",nil];
+                             // 动画结束时的处理
+                             [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
+                                                            withCloseAnimation:YES
+                                                                    completion:nil];
+                             //点击标签之后，回到主界面，并且刷新
+                             
+                             [self.delegate tagSelected:cell.tags];
+                             
+                         }];
+
+        
+        
     }
     
     
@@ -528,6 +605,36 @@
     
 }
 
-
+-(void)tagSelectedButtonClicked{
+    if(self.tagCellNumberSelected){
+        
+        CollectionViewCell* cell = (CollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[self.tagCellNumberSelected valueForKey:@"indexPath"]];
+        
+        if ([cell isSel]) {
+            [cell setSel:NO];
+            self.tagCellNumberSelected = nil;
+            
+            
+        }
+    }
+    [UIView animateWithDuration:0.4
+                           delay:0.0
+                         options:UIViewAnimationOptionCurveEaseInOut //设置动画类型
+                      animations:^{
+                          //开始动画
+                          [self.collectionView setFrame:CGRectMake(0, 74, self.view.frame.size.width ,self.view.frame.size.height)];
+                      }
+                      completion:^(BOOL finished){
+                          // 动画结束时的处理
+                          [self.mm_drawerController setCenterViewController:self.mm_drawerController.centerViewController
+                                                         withCloseAnimation:YES
+                                                                 completion:nil];
+                          
+                          [self.delegate tagDeselected];
+                          
+                      }];
+    
+    
+}
 
 @end
