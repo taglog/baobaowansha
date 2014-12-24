@@ -10,7 +10,6 @@
 #import "ContentViewController.h"
 #import "UIViewController+MMDrawerController.h"
 #import "MMDrawerBarButtonItem.h"
-#import "BabyInfoViewController.h"
 #import "JGProgressHUD.h"
 #import "JGProgressHUDSuccessIndicatorView.h"
 #import <AVOSCloud/AVOSCloud.h>
@@ -40,19 +39,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    self.title =@"宝贝玩啥";
-
+    self.title = self.controllerTitle;
     
-    // TODO: 判断是否已将信息同步，如果从来没有同步过
-    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userHasLogged"];
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"userHasLogged"]) {
-        BabyInfoViewController * bbVC = [[BabyInfoViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        UIBarButtonItem *temporaryBarButtonItem = [[UIBarButtonItem alloc] init];
-        temporaryBarButtonItem.title = @"暂不设置";
-        self.navigationItem.backBarButtonItem = temporaryBarButtonItem;
-        [self.navigationController pushViewController:bbVC animated:YES];
-        
-    }
     //4个标签，需要4个实例
     self.contentViewControllerFirst = [[ContentViewController alloc] initWithURL:self.requestURL type:0];
     self.contentViewControllerFirst.delegate = self;
@@ -67,7 +55,6 @@
     self.dataSource = self;
     self.delegate = self;
     [self setupLeftMenuButton];
-    [self setupRightFilterButton];
     self.isHudShow = NO;
     
 }
@@ -89,13 +76,13 @@
     return 4;
 }
 
-//设置4个按钮的label为：（全部，绘本，玩具，游戏）
+//设置4个按钮的label为：（全部，绘本，玩具，亲子）
 - (UIView *)viewPager:(ViewPagerController *)viewPager viewForTabAtIndex:(NSUInteger)index {
     
     NSString *tabTitle;
     switch(index){
             case 0 :
-                tabTitle = @"推荐";
+                tabTitle = @"全部";
             break;
             case 1 :
                 tabTitle = @"绘本";
@@ -104,7 +91,7 @@
                 tabTitle = @"玩具";
             break;
             case 3 :
-                tabTitle = @"游戏";
+                tabTitle = @"亲子";
             break;
     }
     
@@ -197,39 +184,7 @@
 }
 
 
-- (void)setupRightFilterButton {
-    MMDrawerBarButtonItem * rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
-    [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:YES];
-    rightDrawerButton.tintColor = [UIColor colorWithRed:40.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:1.0];
-    rightDrawerButton.image = [UIImage imageNamed:@"filter.png"];
-}
 
--(void)rightDrawerButtonPress:(id)sender{
-    [self.mm_drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:nil];
-}
-#pragma mark - 标签栏delegate
--(void)tagSelected:(NSString *)string{
-    
-    NSLog(@"%@",string);
-    
-    [self selectTabAtIndex:0];
-
-    self.contentViewControllerFirst.tag = string;
-    
-    [self.contentViewControllerFirst simulatePullDownRefresh];
-    
-}
-
--(void)tagDeselected{
-    
-    [self selectTabAtIndex:0];
-    
-    self.contentViewControllerFirst.tag = nil;
-    
-    [self.contentViewControllerFirst simulatePullDownRefresh];
-
-    
-}
 #pragma mark - 指示层delegate
 -(void)showHUD:(NSString*)text{
     //初始化HUD

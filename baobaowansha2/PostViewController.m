@@ -686,7 +686,7 @@
 //初始化下拉刷新header
 -(void)initRefreshView{
     
-    _refreshFooterView = [[EGORefreshCustom alloc] initWithTableView:_postScrollView position:EGORefreshFooter];
+    _refreshFooterView = [[EGORefreshCustom alloc] initWithScrollView:_postScrollView position:EGORefreshFooter];
     _refreshFooterView.delegate = self;
     _refreshFooterView.frame = CGRectMake(0, _postScrollView.contentSize.height, self.view.frame.size.width, 100.0f);
     [_postScrollView addSubview:_refreshFooterView];

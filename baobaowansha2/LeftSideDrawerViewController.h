@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, MMDrawerSection){
 
 
 @property (nonatomic, retain) UIViewController * navHome;
+@property (nonatomic, retain) UIViewController * navCategory;
 @property (nonatomic, retain) UIViewController * navCollection;
 @property (nonatomic, retain) UIViewController * navComment;
 @property (nonatomic, retain) UIViewController * navSetting;

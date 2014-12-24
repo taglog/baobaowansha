@@ -45,16 +45,16 @@
 
 @synthesize delegate = _delegate;
 
--(id)initWithTableView:(UITableView *)tableView position:(EGORefreshPosition)position{
-    _tableView = tableView;
+-(id)initWithScrollView:(UIScrollView *)scrollView position:(EGORefreshPosition)position{
+    _scrollView = scrollView;
     _position = position;
     
     if (_position == EGORefreshHeader) {
         
-        self = [self initWithFrame:CGRectMake(0.0f, 10.0f - _tableView.bounds.size.height, _tableView.bounds.size.width, _tableView.bounds.size.height)];
+        self = [self initWithFrame:CGRectMake(0.0f, 10.0f - _scrollView.bounds.size.height, _scrollView.bounds.size.width, _scrollView.bounds.size.height)];
     }else{
         
-        self = [self initWithFrame:CGRectMake(0, 0,_tableView.frame.size.width,40.0f)];
+        self = [self initWithFrame:CGRectMake(0, 0,_scrollView.frame.size.width,40.0f)];
     }
     
     return self;
@@ -68,7 +68,7 @@
         //状态label
         UILabel *label = [[UILabel alloc] init];
         if(_position == EGORefreshHeader){
-            label.frame = CGRectMake(0.0f, frame.size.height - 48.0f, self.frame.size.width, 20.0f);
+            label.frame = CGRectMake(0.0f, frame.size.height - 60.0f, self.frame.size.width, 20.0f);
         }
         else{
             label.frame = CGRectMake(0.0f, frame.size.height - 7.0f, self.frame.size.width, 20.0f);
@@ -86,7 +86,7 @@
         //开始加载的指示
         UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         if(_position == EGORefreshHeader){
-            view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 25.0f, 20.0f, 20.0f);
+            view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
         }
         else{
             view.frame = CGRectMake(frame.size.width/2.0f - 10.0f, frame.size.height - 30.0f, 20.0f, 20.0f);

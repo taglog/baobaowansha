@@ -15,8 +15,6 @@
 
 @interface ContentViewController ()
 
-@property (nonatomic,strong)NSDictionary *requestURL;
-
 @property (nonatomic,assign)BOOL reloading;
 
 @property (nonatomic,strong)NSMutableArray *homeTableViewCell;
@@ -28,6 +26,8 @@
 @property (nonatomic,retain)AppDelegate *appDelegate;
 
 @property (nonatomic,strong)UILabel *noDataAlert;
+
+@property (nonatomic,strong)UIView *tableViewMask;
 
 @end
 
@@ -71,26 +71,6 @@
     
 }
 
-
-//如果没有数据，那么要告诉用户表是空的
--(void)showNoDataAlert{
-    
-    
-    
-    UIView *tableViewMask = [UIView new];
-    tableViewMask.backgroundColor =[UIColor clearColor];
-    _homeTableView.tableFooterView = tableViewMask;
-    self.noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, 164, self.view.frame.size.width, 40.0f)];
-    self.noDataAlert.text = @"暂时没有内容哦~";
-    self.noDataAlert.textAlignment = NSTextAlignmentCenter;
-    self.noDataAlert.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
-    self.noDataAlert.textAlignment = NSTextAlignmentCenter;
-    self.noDataAlert.font = [UIFont systemFontOfSize:14.0f];
-    [_homeTableView addSubview:self.noDataAlert];
-    
-}
-
-
 //初始化tableView
 -(void)initTableView{
     
@@ -101,9 +81,9 @@
         _homeTableView.delegate = self;
         _homeTableView.dataSource = self;
         
-        UIView *tableViewMask = [UIView new];
-        tableViewMask.backgroundColor =[UIColor clearColor];
-        _homeTableView.tableFooterView = tableViewMask;
+        self.tableViewMask = [UIView new];
+        self.tableViewMask.backgroundColor =[UIColor clearColor];
+        _homeTableView.tableFooterView = self.tableViewMask;
         
         [_homeTableView setSeparatorInset:UIEdgeInsetsZero];
     }
@@ -117,7 +97,7 @@
     
     //初始化headerView
     if(!_refreshHeaderView){
-        _refreshHeaderView = [[EGORefreshCustom alloc] initWithTableView:_homeTableView position:EGORefreshHeader ];
+        _refreshHeaderView = [[EGORefreshCustom alloc] initWithScrollView:_homeTableView position:EGORefreshHeader ];
         _refreshHeaderView.delegate = self;
         
         [_homeTableView addSubview:_refreshHeaderView];
@@ -129,7 +109,7 @@
     
     if(!_refreshFooterView){
         
-        _refreshFooterView = [[EGORefreshCustom alloc] initWithTableView:_homeTableView position:EGORefreshFooter];
+        _refreshFooterView = [[EGORefreshCustom alloc] initWithScrollView:_homeTableView position:EGORefreshFooter];
         _refreshFooterView.delegate = self;
         
         _homeTableView.tableFooterView = _refreshFooterView;
@@ -137,6 +117,24 @@
     
 }
 
+//如果没有数据，那么要告诉用户表是空的
+-(void)showNoDataAlert{
+    
+    
+    
+    self.tableViewMask = [UIView new];
+    self.tableViewMask.backgroundColor =[UIColor clearColor];
+    _homeTableView.tableFooterView = self.tableViewMask;
+    
+    self.noDataAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, 164, self.view.frame.size.width, 40.0f)];
+    self.noDataAlert.text = @"暂时没有内容哦~";
+    self.noDataAlert.textAlignment = NSTextAlignmentCenter;
+    self.noDataAlert.textColor = [UIColor colorWithRed:102.0f/255.0f green:102.0f/255.0f blue:102.0f/255.0f alpha:1.0f];
+    self.noDataAlert.textAlignment = NSTextAlignmentCenter;
+    self.noDataAlert.font = [UIFont systemFontOfSize:14.0f];
+    [_homeTableView addSubview:self.noDataAlert];
+    
+}
 
 #pragma mark - tableView dataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -234,16 +232,8 @@
     app.networkActivityIndicatorVisible=!app.networkActivityIndicatorVisible;
     NSString *postRouter = nil;
     NSDictionary *postParam = nil;
-    if(self.tag){
-        
-        postRouter = @"post/getTableByTag";
-        
-        postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",self.tag,@"tag",nil];
-    }else{
-        
         postRouter = [self.requestURL valueForKey:@"requestRouter"];
         postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:1],@"p",nil];
-    }
     
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -254,22 +244,30 @@
         [self.homeTableViewCell removeAllObjects];
         //如果存在数据，那么就初始化tableView
         if(responseArray != (id)[NSNull null] ){
+            if(self.noDataAlert){
+                self.noDataAlert.hidden = YES;
+                [self.noDataAlert removeFromSuperview];
+            }
             
-            [self.noDataAlert removeFromSuperview];
             for(NSDictionary *responseDict in responseArray){
                 [self.homeTableViewCell addObject:responseDict];
             }
-            if([self.homeTableViewCell count]>5){
+            if([self.homeTableViewCell count]>4){
+                if(self.tableViewMask){
+                    self.tableViewMask = nil;
+                    [self.tableViewMask removeFromSuperview];
+                }
                 [self initRefreshFooterView];
+                
             }else{
                 //去除分割线
-                UIView *tableViewMask = [UIView new];
-                tableViewMask.backgroundColor =[UIColor clearColor];
-                _homeTableView.tableFooterView = tableViewMask;
+                _homeTableView.tableFooterView = self.tableViewMask;
+
             }
             
+            
         }else{
-            [self.delegate showHUD:@"没有内容~"];
+            [self.delegate showHUD:@"没有内容~"];            
             [self.delegate dismissHUD];
             [self showNoDataAlert];
         }
@@ -299,19 +297,11 @@
     
     NSString *postRouter = nil;
     NSDictionary *postParam = nil;
-    
-    if(self.tag){
-        
-        postRouter = @"post/getTableByTag";
-        
-        postParam = [NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:p],@"p",self.tag,@"tag",nil];
 
-    }else{
         
         postRouter = [self.requestURL valueForKey:@"requestRouter"];
         postParam =[NSDictionary dictionaryWithObjectsAndKeys:self.appDelegate.generatedUserID,@"userIdStr",[NSNumber numberWithInteger:self.type],@"type",[NSNumber numberWithInt:p],@"p",nil];
 
-    }
     
     NSString *postRequestUrl = [self.appDelegate.rootURL stringByAppendingString:postRouter];
     
