@@ -55,7 +55,7 @@
     @{@"banner":
           @{@"imgurl":@"chrismas.jpg", @"title":@"圣诞节",
             @"imgurl":@"winter.jpeg", @"title":@"冬天",
-            @"imgurl":@"newyear.png", @"title":@"春节",
+            @"imgurl":@"newyear.jpg", @"title":@"春节",
             @"imgurl":@"halloween.jpeg", @"title":@"万圣节"
             },
       
@@ -117,6 +117,7 @@
  
     [self initTagSearchBar];
     [self initTagSearchTableView];
+   
     
     
  
@@ -230,9 +231,9 @@
     self.tagSearchBar.showsCancelButton = YES;
     
     scrollView.scrollEnabled = NO;
-    NSArray *subViews;
-    [self.tagSearchBar becomeFirstResponder];
     
+    [self.tagSearchBar becomeFirstResponder];
+    NSArray *subViews;
     if (OSVersionIsAtLeastiOS7) {
         subViews = [(self.tagSearchBar.subviews[0]) subviews];
     }

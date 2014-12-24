@@ -64,9 +64,9 @@
 {
     self.bSel = bs;
     if (bs) {
-        self.badgeView.image = [UIImage imageNamed:@"check.png"];
+        self.badgeView.image = [UIImage imageNamed:@"checked.png"];
     } else {
-        self.badgeView.image = [UIImage imageNamed:@""];
+        self.badgeView.image = [UIImage imageNamed:@"unchecked.png"];
     }
 }
 

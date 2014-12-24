@@ -161,7 +161,7 @@
         _homeTableView.dataSource = self;
         _homeTableView.scrollEnabled = NO;
         
-        self.tableViewMask = [UIView ];
+        self.tableViewMask = [[UIView alloc]init];
         self.tableViewMask.backgroundColor =[UIColor clearColor];
         _homeTableView.tableFooterView = self.tableViewMask;
         
